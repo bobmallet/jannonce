@@ -7,11 +7,42 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+        <title>about</title>
     </head>
     <body>
         <?php
-        // put your code here
+        include './menu/adminMenu.html';
         ?>
+
+        <div class="panel-info col-lg-3 pull-left">
+            <div class = "panel-heading">
+                <h3 class = "panel-title">A propos du site</h3>
+            </div>
+            <div class="panel-body">
+                xgxcgxf
+            </div>
+        </div>
+
+        <div class="panel-info col-lg-9 pull-right">
+            <div class = "panel-heading">
+                <h3 class = "panel-title">F.A.Q</h3>
+            </div>
+            <div class="panel-body">
+                gdfgdxgdgdxygdfgx
+            </div>
+        </div>
+
+        <div class="panel-info col-lg-3 pull-left">
+            <div class = "panel-heading">
+                <h3 class = "panel-title">Auteur</h3>
+            </div>
+            <div class="panel-body">
+                Nom   : ZAFFINO Kevin
+                <br/>
+                email : kevin.zffn@eduge.ch
+            </div>
+        </div>
     </body>
 </html>

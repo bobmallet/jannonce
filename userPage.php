@@ -16,7 +16,10 @@ and open the template in the editor.
         include './menu/adminMenu.html';
         ?>
 
-        <div class="panel" id='information'>
+        <div class="panel-info" id='information'>
+            <div class = "panel-heading">
+                <h3 class = "panel-title">Information personnelle</h3>
+            </div>
             <div class="panel-body">
 
                 <div class="pull-left col-lg-2">
@@ -28,16 +31,17 @@ and open the template in the editor.
                 </div>
                 <div class="col-lg-4">
 
-
                     <div id='description'>
                         Nom: Nom
                         <br/>
                         Prenom : Prenom
                         <br/>
                         Genre : Homme
+                        <br/><br/><br/>
+                        <a href="register.php" class="btn btn-warning" role="button">Modifier les informations</a>
                     </div>
 
-                    
+
                 </div>
                 <div id="info" class="pull-right col-lg-4">
                     <div class="panel-default">
@@ -60,6 +64,8 @@ and open the template in the editor.
                 </div>
 
             </div>
+
+
         </div>
 
         <!--

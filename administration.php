@@ -7,11 +7,13 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8">
-        <title></title>
+                <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+        <title>Administration</title>
     </head>
     <body>
         <?php
-        // put your code here
+        include './menu/adminMenu.html';
         ?>
     </body>
 </html>
