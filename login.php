@@ -36,7 +36,7 @@ and open the template in the editor.
                                 </div>                              
                             </div>
                             <button type="submit" class="btn btn-success" name="submit">Connexion</button>
-                            <a href="#" class="btn btn-primary" role="button">Pas encore inscrit ?</a>
+                            <a href="register.php" class="btn btn-primary" role="button">Pas encore inscrit ?</a>
                         </form>
                     </div>
                 </div>
