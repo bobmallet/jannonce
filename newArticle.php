@@ -49,6 +49,8 @@ and open the template in the editor.
                     <label for='adressVisible'>
                         Adresse visible : <input type="checkbox" id='adressVisible'/>                        
                     </label>
+                    <br/>
+                    <button type="submit" class="btn btn-success" name="submit">Envoyer</button>
 
                 </form>
 
