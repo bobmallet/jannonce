@@ -7,11 +7,127 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>test</title>
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+        <title>Accueil</title>
     </head>
     <body>
         <?php
-        // put your code here
+        include './menu/adminMenu.html';
         ?>
+        <div class="container">
+            <div>
+                <a href="#" class="btn btn-info" role="button">Nouvelle annonce</a>
+                <br/><br/>
+            </div>
+            <div id="articles">
+                <ul class="media-list forum">
+                    <!-- Forum Post -->
+                    <li class="media well">
+
+                        <div class="pull-left col-lg-2">
+                            <a href="#" class="thumbnail">
+                                <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
+                            </a>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <b>Libelle </b>
+                            <br/><br/>
+                            <p>Debut description sdfsrvwscfewrgsexarewf...</p>
+                        </div>
+                        
+                        
+                        <div class="col-lg-4">
+                            Createur de l'annonce : Prenom N.
+                            <br/><br/>
+                            Le 00/00/0000
+                            <br/><br/>
+                            Prix : 000
+                        </div>
+                    </li>
+                    <!-- Forum Post END -->
+                     <!-- Forum Post -->
+                    <li class="media well">
+
+                        <div class="pull-left col-lg-2">
+                            <a href="#" class="thumbnail">
+                                <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
+                            </a>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <b>Libelle </b>
+                            <br/><br/>
+                            <p>Debut description sdfsrvwscfewrgsexarewf...</p>
+                        </div>
+                        
+                        
+                        <div class="col-lg-4">
+                            Createur de l'annonce : Prenom N.
+                            <br/><br/>
+                            Le 00/00/0000
+                            <br/><br/>
+                            Prix : 000
+                        </div>
+                    </li>
+                    <!-- Forum Post END -->
+                     <!-- Forum Post -->
+                    <li class="media well">
+
+                        <div class="pull-left col-lg-2">
+                            <a href="#" class="thumbnail">
+                                <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
+                            </a>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <b>Libelle </b>
+                            <br/><br/>
+                            <p>Debut description sdfsrvwscfewrgsexarewf...</p>
+                        </div>
+                        
+                        
+                        <div class="col-lg-4">
+                            Createur de l'annonce : Prenom N.
+                            <br/><br/>
+                            Le 00/00/0000
+                            <br/><br/>
+                            Prix : 000
+                        </div>
+                    </li>
+                    <!-- Forum Post END -->
+                     <!-- Forum Post -->
+                    <li class="media well">
+
+                        <div class="pull-left col-lg-2">
+                            <a href="#" class="thumbnail">
+                                <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
+                            </a>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <b>Libelle </b>
+                            <br/><br/>
+                            <p>Debut description sdfsrvwscfewrgsexarewf...</p>
+                        </div>
+                        
+                        
+                        <div class="col-lg-4">
+                            Createur de l'annonce : Prenom N.
+                            <br/><br/>
+                            Le 00/00/0000
+                            <br/><br/>
+                            Prix : 000
+                        </div>
+                    </li>
+                    <!-- Forum Post END -->
+
+
+
+
+                </ul>
+            </div>
+        </div>
     </body>
 </html>

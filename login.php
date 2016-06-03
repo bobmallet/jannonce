@@ -8,7 +8,6 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="CSS/font-awesome/css/font-awesome.css">
         <title>login</title>
     </head>
     <body>
