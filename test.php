@@ -8,7 +8,7 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <title></title>
+        <title>test</title>
     </head>
     <body>
         <?php
