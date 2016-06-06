@@ -1,3 +1,6 @@
+<?php
+require_once './phpScript/inc.all.php';
+?>
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -38,10 +41,10 @@ and open the template in the editor.
                         <br/>
                         Genre : Homme
                         <br/><br/><br/>
-                        <a href="register.php" class="btn btn-warning" role="button">Modifier les informations</a>
+                        <a href="register.php?edit=true" class="btn btn-warning" role="button">Modifier les informations</a>
                     </div>
                 </div>
-                
+
                 <div id="info" class="pull-right col-lg-4">
                     <div class="panel-default">
                         <div class = "panel-heading">

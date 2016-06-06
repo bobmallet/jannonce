@@ -12,7 +12,7 @@ require_once './phpScript/mysql.inc.php';
  * @staticvar type $dbc
  * @return \PDO
  */
-function myDatabase() {
+function &myDatabase() {
     static $dbc = null;
 
     if ($dbc == null) {
@@ -40,37 +40,82 @@ function addAdress($data) {
     static $ps_adress = null;
     static $ps_id = null;
 
-    $sql_adress = 'insert into adress (adress.country,adress.city,adress.street) values (:country,:city,:street);';
-    $sql_id = 'select id from adress where country = :country and city = :city and street = :street';
+    $sql_adress = 'insert into adress (adress.city,adress.street,adress.country_iso) values (:city,:street,:iso);';
+    $sql_id = 'SELECT LAST_INSERT_ID()';
 
     if ($ps_adress == null) {
         $ps_adress = myDatabase()->prepare($sql_adress);
     }
-
     if ($ps_id == null) {
         $ps_id = myDatabase()->prepare($sql_id);
     }
 
-    try {
-        $ps_adress->bindParam(':country', $data['country'], PDO::PARAM_STR);
+    try {  
         $ps_adress->bindParam(':city', $data['city'], PDO::PARAM_STR);
         $ps_adress->bindParam(':street', $data['street'], PDO::PARAM_STR);
+        $ps_adress->bindParam(':iso', $data['iso'], PDO::PARAM_STR);
         $ps_adress->execute();
 
-        $ps_id->bindParam(':country', $data['country'], PDO::PARAM_STR);
-        $ps_id->bindParam(':city', $data['city'], PDO::PARAM_STR);
-        $ps_id->bindParam(':street', $data['street'], PDO::PARAM_STR);
-        $isok = $ps_id->execute();
-        $isok = $ps_id->fetchAll(PDO::FETCH_NUM);
+        $ps_id->execute();
+        $last_id = $ps_id->fetchAll(PDO::FETCH_NUM);
+        
+        return $last_id[0][0];
+
+        /*
+          $ps_id->bindParam(':country', $data['country'], PDO::PARAM_STR);
+          $ps_id->bindParam(':city', $data['city'], PDO::PARAM_STR);
+          $ps_id->bindParam(':street', $data['street'], PDO::PARAM_STR);
+          $isok = $ps_id->execute();
+          $isok = $ps_id->fetchAll(PDO::FETCH_NUM);
+          $isok = $isok[0][0];
+         * */
     } catch (PDOException $e) {
-        $isok[0][0] = null;
+        $isok = null;
     }
-    return $isok[0][0];
+    return $isok;
 }
 
+function addAddress($country,$city,$street) {
+    static $ps_adress = null;
+    static $ps_id = null;
+
+    $sql_adress = 'insert into adress (adress.city,adress.street,adress.country_iso) values (:city,:street,:iso);';
+
+    if ($ps_adress == null) {
+        $ps_adress = myDatabase()->prepare($sql_adress);
+    }
+    if ($ps_id == null) {
+        $ps_id = myDatabase()->prepare('SELECT LAST_INSERT_ID()');
+    }
+
+    try {  
+        $ps_adress->bindParam(':city', $city, PDO::PARAM_STR);
+        $ps_adress->bindParam(':street', $street, PDO::PARAM_STR);
+        $ps_adress->bindParam(':iso', $country, PDO::PARAM_STR);
+        $ps_adress->execute();
+
+        $ps_id->execute();
+        $last_id = $ps_id->fetchAll(PDO::FETCH_NUM);
+        
+        return $last_id[0][0];
+
+        /*
+          $ps_id->bindParam(':country', $data['country'], PDO::PARAM_STR);
+          $ps_id->bindParam(':city', $data['city'], PDO::PARAM_STR);
+          $ps_id->bindParam(':street', $data['street'], PDO::PARAM_STR);
+          $isok = $ps_id->execute();
+          $isok = $ps_id->fetchAll(PDO::FETCH_NUM);
+          $isok = $isok[0][0];
+         * */
+    } catch (PDOException $e) {
+        $isok = null;
+    }
+    return $isok;
+}
+
+
 function addUser($data) {
-
-
+    
     static $ps_user = null;
 
 
@@ -84,7 +129,6 @@ function addUser($data) {
 
     $id_adress = intval(addAdress($data));
     //$id_image = intval(imageUpload());
-    $id_image = 4;
 
     try {
 
@@ -94,13 +138,66 @@ function addUser($data) {
         $ps_user->bindParam(':mail', $data['mail'], PDO::PARAM_STR);
         $ps_user->bindParam(':phone', $data['phone'], PDO::PARAM_STR);
         $ps_user->bindParam(':password', $data['password'], PDO::PARAM_STR);
-        $ps_user->bindParam(':idimage', $id_image, PDO::PARAM_INT);
+        $ps_user->bindParam(':idimage', $data['idimage'], PDO::PARAM_INT);
         $ps_user->bindParam(':idadress', $id_adress, PDO::PARAM_INT);
 
         //$ps_user->bindParam(':country', $data['country'], PDO::PARAM_STR);
         //$ps_user->bindParam(':city', $data['city'], PDO::PARAM_STR);
         //$ps_user->bindParam(':street', $data['street'], PDO::PARAM_STR);
-        
+
+
+        $isok = $ps_user->execute();
+    } catch (PDOException $e) {
+        $isok = false;
+    }
+    return $isok;
+}
+
+/**
+ * Insére un nouvel utilisateur dans la base de données
+ * @param type $lastName    Le nom de famille
+ * @param type $firstName   Le prénom
+ * @param type $gender      Le genre
+ * @param type $mail        Le email
+ * @param type $pwd         Le mot de passe pas encore crypté
+ * @param type $phone       
+ * @param type $country
+ * @param type $city
+ * @param type $street
+ * @param type $image
+ * @return boolean  True si correctement ajouté, autrement False.
+ */
+function insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street, $image=DEFAULT_IMAGE_ID) {
+    
+    static $ps_user = null;
+
+
+    $sql_user = 'insert into users (users.firstname,users.lastname,users.gender,users.mail,users.phone,users.banned,users.password,users.id_Images,users.id_Adress) values (:firstname,:lastname,:gender,:mail,:phone,0,:password,:idimage,:idadress);';
+
+
+
+    if ($ps_user == null) {
+        $ps_user = myDatabase()->prepare($sql_user);
+    }
+
+    $id_adress = intval(addAddress($country,$city,$street));
+    //$id_image = intval(imageUpload());
+
+    try {
+
+        $ps_user->bindParam(':firstname', $firstName, PDO::PARAM_STR);
+        $ps_user->bindParam(':lastname', $lastName, PDO::PARAM_STR);
+        $ps_user->bindParam(':gender', $gender, PDO::PARAM_INT);
+        $ps_user->bindParam(':mail', $mail, PDO::PARAM_STR);
+        $ps_user->bindParam(':phone', $phone, PDO::PARAM_STR);
+        $ps_user->bindParam(':password', $pwd, PDO::PARAM_STR);
+        $ps_user->bindParam(':idimage', $image, PDO::PARAM_INT);
+        $ps_user->bindParam(':idadress', $id_adress, PDO::PARAM_INT);
+
+        //$ps_user->bindParam(':country', $data['country'], PDO::PARAM_STR);
+        //$ps_user->bindParam(':city', $data['city'], PDO::PARAM_STR);
+        //$ps_user->bindParam(':street', $data['street'], PDO::PARAM_STR);
+
 
         $isok = $ps_user->execute();
     } catch (PDOException $e) {
@@ -190,7 +287,7 @@ function unbanUser($id) {
     return $isok;
 }
 
-function logOut (){
+function logOut() {
     session_destroy();
     header("Location: index.php");
 }
@@ -330,21 +427,13 @@ function listArticles() {
     return $isok;
 }
 
-
-
 //gestion des commentaires
-
-
-
-
 // Upload Constants
 define('INPUT', 'imgupload');
-define('TARGET', './img/');   // Repertoire cible
+define('TARGET', './img/');     // Repertoire cible
 define('MAX_SIZE', 10000000);   // Taille max en octets du fichier
 define('WIDTH_MAX', 5000);      // Largeur max de l'image en pixels
 define('HEIGHT_MAX', 5000);     // Hauteur max de l'image en pixels
-
-
 
 /**
  * Insert une image dans la base de donnée et retourne son id
@@ -434,7 +523,7 @@ function imageUpload() {
                     if (isset($_FILES[INPUT]['error']) && UPLOAD_ERR_OK === $_FILES[INPUT]['error']) {
 
                         $imageName = uniqid() . '.' . $ext;
-                       
+
 
                         if (move_uploaded_file($_FILES[INPUT]['tmp_name'], TARGET . $imageName)) {
                             $path = TARGET . $imageName;
@@ -442,22 +531,22 @@ function imageUpload() {
                             //$error = 'Upload réussi !';
 //return TRUE;
                         } else {
-                            $error = 'Problème lors de l\'upload !';
+                            return $error = 'Problème lors de l\'upload !';
                         }
                     } else {
-                        $error = 'Une erreur interne a empêché l\'upload de l\'image';
+                        return $error = 'Une erreur interne a empêché l\'upload de l\'image';
                     }
                 } else {
-                    $error = 'Erreur dans les dimensions de l\'image !';
+                    return $error = 'Erreur dans les dimensions de l\'image !';
                 }
             } else {
-                $error = 'Le fichier à uploader n\'est pas une image !';
+                return $error = 'Le fichier à uploader n\'est pas une image !';
             }
         } else {
-            $error = 'L\'extension du fichier est incorrecte !';
+            return $error = 'L\'extension du fichier est incorrecte !';
         }
     } else {
-        $error = 'Image non renseignée!';
+        return $error = 'Image non renseignée!';
     }
 }
 
@@ -522,3 +611,31 @@ function Array2Html($anArray, $assoc = false) {
     return $output;
 }
 
+function getAllCountry() {
+    static $ps = null;
+
+    $sql = 'select * from country order by name';
+
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+        $isok = $ps->execute();
+        $isok = $isok = $ps->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        $isok = false;
+    }
+    return $isok;
+}
+
+function selectCountry() {
+    $output = "\n<select name=\"country\" class=\"form-control\" id=\"country\">";
+    foreach (getAllCountry() as $value) {
+        $output .="\n<option value=\"" . $value['iso'] . "\">" . $value['name'] . "</option>";
+    }
+
+    $output .= "\n</select>";
+
+    return $output;
+}

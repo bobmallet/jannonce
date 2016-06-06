@@ -12,11 +12,12 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-        include './phpScript/function.php';
+        require_once './phpScript/inc.all.php';
         $data;
         $data['country'] = "country";
         $data['city'] = "city";
         $data['street'] = "street";
+        $data['iso'] = "AD";
         $data['firstname'] = "firstname";
         $data['lastname'] = "lastname";
         $data['gender'] = 0;
@@ -26,20 +27,15 @@ and open the template in the editor.
 
         //addUser($data);
         //var_dump (addAdress($data));
+        //var_dump(addAddress($data['iso'],$data['city'],$data['street']));
+        //print selectCountry();
         
-        if(isset($_REQUEST['submit'])){
-            var_dump($_FILES);
-        }
+        addUser($data);
         
         
         ?>
 
-        
-        <form action="#" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" multiple/>
-            <input type="submit" name="submit"/>
-        </form>
-        
+
         
 
     </body>
