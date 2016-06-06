@@ -12,13 +12,23 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-        include './menu/defaultMenu.html';        
-        echo 'default';
-        include './menu/authMenu.html';
-        echo 'auth';
-        include './menu/adminMenu.html';
-        echo 'admin';
+        include './phpScript/function.php';
+        $data;
+        $data['country'] = "country";
+        $data['city'] = "city";
+        $data['street'] = "street";
+        $data['firstname'] = "firstname";
+        $data['lastname'] = "lastname";
+        $data['gender'] = 0;
+        $data['mail'] = "mail";
+        $data['phone'] = "phone";
+        $data['password'] = "Super";
+
+        addUser($data);
+        //var_dump (addAdress($data));
         ?>
-        
+
+
+
     </body>
 </html>

@@ -14,6 +14,23 @@ define('DB_PASSWORD', '');
 
 //gestion des session
 session_start();
+
 if (!isset($_SESSION["logged"])) {
     $_SESSION["logged"] = FALSE;
+}
+
+if (!isset($_SESSION["privilege"])) {
+    $_SESSION["privilege"] = NULL;
+}
+
+if (!isset($_SESSION["uid"])) {
+    $_SESSION["logged"] = NULL;
+}
+
+if (!isset($_SESSION["uname"])) {
+    $_SESSION["logged"] = FALSE;
+}
+
+if (!isset($_SESSION["img"])) {
+    $_SESSION["img"] = NULL;
 }
