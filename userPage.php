@@ -40,9 +40,8 @@ and open the template in the editor.
                         <br/><br/><br/>
                         <a href="register.php" class="btn btn-warning" role="button">Modifier les informations</a>
                     </div>
-
-
                 </div>
+                
                 <div id="info" class="pull-right col-lg-4">
                     <div class="panel-default">
                         <div class = "panel-heading">
@@ -93,14 +92,6 @@ and open the template in the editor.
         </div>
 
         -->
-
-
-
-
-
-
-
-
 
         <div id="articles" class = "panel panel-primary">
             <div class = "panel-heading">

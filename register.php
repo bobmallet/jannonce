@@ -14,6 +14,10 @@ and open the template in the editor.
     <body>
         <?php
         include './menu/defaultMenu.html';
+        
+        if(isset($_REQUEST['submit'])){
+            var_dump($_FILES);
+        }
         ?>
                 <div class="container" style="margin-top:30px">
                     <div class="col-md-5 col-md-offset-3">
@@ -22,7 +26,7 @@ and open the template in the editor.
                                 <h3 class = "panel-title">Inscription</h3>
                             </div>
                             <div class="panel-body">
-                                <form role="form" method="get" action="#">
+                                <form role="form" method="post" action="#" enctype="multipart/form-data">
                                     <label for="lastname">Nom :
                                         <input type="text" class="form-control" id='lastname'>
                                     </label>
@@ -64,7 +68,7 @@ and open the template in the editor.
 
 
                                     <label for="image">Image de profil :
-                                        <input type="file" class="form-control" id='image'>
+                                        <input type="file" name="image" class="form-control" id='image'/>
                                     </label>
                                     <br/>
                                     <button type="submit" class="btn btn-success" name="submit">Valider</button>

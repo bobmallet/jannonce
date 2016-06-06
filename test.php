@@ -24,11 +24,23 @@ and open the template in the editor.
         $data['phone'] = "phone";
         $data['password'] = "Super";
 
-        addUser($data);
+        //addUser($data);
         //var_dump (addAdress($data));
+        
+        if(isset($_REQUEST['submit'])){
+            var_dump($_FILES);
+        }
+        
+        
         ?>
 
-
+        
+        <form action="#" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" multiple/>
+            <input type="submit" name="submit"/>
+        </form>
+        
+        
 
     </body>
 </html>
