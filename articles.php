@@ -73,7 +73,7 @@ and open the template in the editor.
                                 <img class="avatar img-circle img-thumbnail" src="./img/Koala.jpg"
                                      width="64" alt="Generic placeholder image">
                                 <br/>
-                                <strong><a href="user.html">Prenom N.</a></strong>
+                                <strong><a href="user.html"><?php echo $_SESSION['uname']."<br/>"; ?></a></strong>
                                 <small>Membre</small>
                                 <br>
 
@@ -96,10 +96,10 @@ and open the template in the editor.
                         <!-- Forum Post -->
                         <li class="media well">
                             <div class="pull-left user-info col-lg-1" href="#">
-                                <img class="avatar img-circle img-thumbnail" src="http://snipplicious.com/images/guest.png"
+                                <img class="avatar img-circle img-thumbnail" src="./img/Koala.jpg"
                                      width="64" alt="Generic placeholder image">
                                 <br/>
-                                <strong><a href="user.html">Prenom N.</a></strong>
+                                <strong><a href="user.html"><?php echo $_SESSION['uname']."<br/>"; ?></a></strong>
                                 <small>Membre</small>
                                 <br>
 
@@ -122,10 +122,10 @@ and open the template in the editor.
                         <!-- Forum Post -->
                         <li class="media well">
                             <div class="pull-left user-info col-lg-1" href="#">
-                                <img class="avatar img-circle img-thumbnail" src="http://snipplicious.com/images/guest.png"
+                                <img class="avatar img-circle img-thumbnail" src="./img/Koala.jpg"
                                      width="64" alt="Generic placeholder image">
                                 <br/>
-                                <strong><a href="user.html">Prenom N.</a></strong>
+                                <strong><a href="user.html"><?php echo $_SESSION['uname']."<br/>"; ?></a></strong>
                                 <small>Membre</small>
                                 <br>
 
