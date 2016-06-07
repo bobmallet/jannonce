@@ -22,24 +22,26 @@ and open the template in the editor.
         if (isset($_REQUEST['login'])) {
             $mail = filter_input(INPUT_POST, 'mail');
             $pwd = filter_input(INPUT_POST, 'pwd');
-           
-            
-            
+
+
+
             if (login($mail, $pwd)) {
                 $userinfo = getUserInfo(login($mail, $pwd));
-               //var_dump($userinfo);
+                $adress = $userinfo['street'] . " " . $userinfo['city'] . ", " . $userinfo['country'];
+                //var_dump($userinfo);
                 setPrivilege(intval($userinfo['privilege']));
                 setImagePath($userinfo['path']);
                 setUserID(intval($userinfo['id']));
                 setUserName(formatUserName($userinfo['firstname'], $userinfo['lastname']));
+                setUserMail($mail);
+                setUserTel($userinfo['phone']);
+                setUserAdress($adress);
                 setLogged();
-                
+
                 header('Location: index.php');
             } else {
                 $error = "Identifiants incorrect";
             }
-             
-             
         }
         ?>
         <div class="container" style="margin-top:30px">

@@ -28,9 +28,9 @@ function &myDatabase() {
 }
 
 //Gestion Utilisateurs
-    
 
-function addAddress($country,$city,$street) {
+
+function addAddress($country, $city, $street) {
     static $ps_adress = null;
     static $ps_id = null;
 
@@ -43,7 +43,7 @@ function addAddress($country,$city,$street) {
         $ps_id = myDatabase()->prepare('SELECT LAST_INSERT_ID()');
     }
 
-    try {  
+    try {
         $ps_adress->bindParam(':city', $city, PDO::PARAM_STR);
         $ps_adress->bindParam(':street', $street, PDO::PARAM_STR);
         $ps_adress->bindParam(':iso', $country, PDO::PARAM_STR);
@@ -51,7 +51,7 @@ function addAddress($country,$city,$street) {
 
         $ps_id->execute();
         $last_id = $ps_id->fetchAll(PDO::FETCH_NUM);
-        
+
         return $last_id[0][0];
 
         /*
@@ -68,8 +68,6 @@ function addAddress($country,$city,$street) {
     return $isok;
 }
 
-
-
 /**
  * Insére un nouvel utilisateur dans la base de données
  * @param type $lastName    Le nom de famille
@@ -84,8 +82,8 @@ function addAddress($country,$city,$street) {
  * @param type $image
  * @return boolean  True si correctement ajouté, autrement False.
  */
-function insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street, $image=DEFAULT_IMAGE_ID) {
-    
+function insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street, $image = DEFAULT_IMAGE_ID) {
+
     static $ps_user = null;
 
 
@@ -97,7 +95,7 @@ function insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $countr
         $ps_user = myDatabase()->prepare($sql_user);
     }
 
-    $id_adress = intval(addAddress($country,$city,$street));
+    $id_adress = intval(addAddress($country, $city, $street));
     //$id_image = intval(imageUpload());
     $pwd_sha1 = sha1($pwd);
     $priv = 2;
@@ -131,7 +129,7 @@ function insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $countr
  * @param type $data
  * @return boolean  retourne l'id de l'utilisateur si il existe, sinon retourne FALSE
  */
-function login($mail,$pwd) {
+function login($mail, $pwd) {
     static $ps = null;
 
     $sql = 'select users.id, users.password from users where users.mail = :mail';
@@ -141,12 +139,12 @@ function login($mail,$pwd) {
     }
 
     $pwd_sha1 = sha1($pwd);
-    
+
     try {
         $ps->bindParam(':mail', $mail, PDO::PARAM_STR);
         $isok = $ps->execute();
-        $isok = $ps->fetchAll(PDO::FETCH_ASSOC);        
-        
+        $isok = $ps->fetchAll(PDO::FETCH_ASSOC);
+
         if ($isok[0]['password'] == $pwd_sha1) {
             $isok = intval($isok[0]['id']);
         }
@@ -182,6 +180,12 @@ function getUserInfo($id) {
     return $isok;
 }
 
+/**
+ * Retourne les nom et le prenom avec le format "Prenom N."
+ * @param type $firstname
+ * @param type $lastname
+ * @return (string) format Prenom N.
+ */
 function formatUserName($firstname, $lastname) {
     return ucfirst($firstname) . " " . substr(ucfirst($lastname), 0, 1) . ".";
 }
@@ -224,12 +228,26 @@ function logOut() {
 //gestion des annonces
 
 
-function insertArticle($name,$description,$price,$date,$uid,$mailvisible,$phonevisible,$adressvisible){
+
+/**
+ * Insert un nouvel article dans la base de donnée
+ * @staticvar type $ps
+ * @param type $name
+ * @param type $description
+ * @param type $price
+ * @param type $date
+ * @param type $uid
+ * @param type $mailvisible
+ * @param type $phonevisible
+ * @param type $adressvisible
+ * @return boolean
+ */
+function insertArticle($name, $description, $price, $date, $uid, $mailvisible, $phonevisible, $adressvisible) {
     static $ps = null;
-    
+
     $sql = 'insert into articles (name,description,price,state,creationdate,banned,id_Users,mailvisible,phonevisible,adressvisible) values (:name,:description,:price,1,:date,0,:uid,:mvis,:pvis,:avis)';
 
-    
+
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
     }
@@ -243,47 +261,55 @@ function insertArticle($name,$description,$price,$date,$uid,$mailvisible,$phonev
         $ps->bindParam(':mvis', $mailvisible, PDO::PARAM_INT);
         $ps->bindParam(':pvis', $phonevisible, PDO::PARAM_INT);
         $ps->bindParam(':avis', $adressvisible, PDO::PARAM_INT);
-               
-        
+
+
         $isok = $ps->execute();
-        
     } catch (PDOException $e) {
         $isok = false;
     }
     return $isok;
-    
-    
-    
 }
 
-//Retourne ud code html pour afficher un article
-function articleFormat($data,$imgpath){
+
+/**
+ * Retourne ud code html pour afficher un article
+ * @param type $data
+ * @param type $imgpath
+ * @return string
+ */
+function articleFormat($data, $imgpath) {
     $output = "\n<li class=\"media well\">";
     $output .= "\n<div class=\"pull-left col-lg-2\">";
-    $output .= "\n<a href=\"articles.php?idarticle=".$data['id']."\" class=\"thumbnail\">";
-    $output .= "<img alt=\"Image\" src=\"".$imgpath."\">";
+    $output .= "\n<a href=\"articles.php?idarticle=" . $data['id'] . "\" class=\"thumbnail\">";
+    $output .= "<img alt=\"Image\" src=\"" . $imgpath . "\">";
     $output .= "\n</a>";
     $output .= "\n</div>";
     $output .= "<div class=\"col-lg-6\">";
-    $output .= "\n<b>".$data['name']."</b>";
+    $output .= "\n<b>" . $data['name'] . "</b>";
     $output .= "<br/><br/>";
-    $output .= "\n<p>".$data['description']."</p>";
+    $output .= "\n<p>" . $data['description'] . "</p>";
     $output .= "\n</div>";
     $output .= "\n<div class=\"col-lg-4\">";
     $output .= "\nCréateur de l'annonce : ";
     $output .= "\n<br/><br/>";
-    $output .= "\nLe ".$data['creationdate'];
+    $output .= "\nLe " . $data['creationdate'];
     $output .= "\n<br/><br/>";
-    $output .= "\nPrix : ".$data['price'];
+    $output .= "\nPrix : " . $data['price'];
     $output .= "\n</div>";
     $output .= "\n</li>";
     $output .= "\n</li>";
-    
+
     return $output;
-    
 }
 
-//image des articles en fonction de l'id de l'article
+
+
+/**
+ * Retourne image des articles en fonction de l'id de l'article
+ * @staticvar type $ps
+ * @param type $idarticle
+ * @return boolean
+ */
 function articleImages($idarticle) {
     static $ps = null;
     $sql = 'SELECT path FROM images where images.id_articles = :id';
@@ -417,13 +443,136 @@ function listArticles() {
     return $isok;
 }
 
+function articleInfo($id) {
+    static $ps = null;
+    $sql = 'select * from articles where id = :id';
+
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+        $ps->bindParam(':id', $id, PDO::PARAM_INT);
+
+        $isok = $ps->execute();
+        $isok = $ps->fetchAll(PDO::FETCH_ASSOC);
+        $isok = $isok[0];
+    } catch (PDOException $e) {
+        $isok = false;
+    }
+
+    return $isok;
+}
+
 //gestion des commentaires
-// Upload Constants
-define('INPUT', 'imgupload');
-define('TARGET', './img/');     // Repertoire cible
-define('MAX_SIZE', 10000000);   // Taille max en octets du fichier
-define('WIDTH_MAX', 5000);      // Largeur max de l'image en pixels
-define('HEIGHT_MAX', 5000);     // Hauteur max de l'image en pixels
+function addComment($uid, $aid, $date, $com) {
+    static $ps = null;
+    $sql = "insert into comments (comments.id_Users,comments.id_articles,comments.date_com,comments.comm,comments.state,comments.banned) values (:uid,:aid,:date,:com,1,0)";
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+        $ps->bindParam(':uid', $uid, PDO::PARAM_STR);
+        $ps->bindParam(':aid', $aid, PDO::PARAM_STR);
+        $ps->bindParam(':date', $date, PDO::PARAM_STR);
+        $ps->bindParam(':com', $com, PDO::PARAM_STR);
+
+        $isok = $ps->execute();
+    } catch (PDOException $e) {
+        $isok = false;
+    }
+    return $isok;
+}
+
+function getArticleComments($aid) {
+    static $ps = null;
+    $sql = "select * from comments where id_articles = :id and comments.banned = 0";
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+        $ps->bindParam(':id', $aid, PDO::PARAM_INT);
+        $isok = $ps->execute();
+        $isok = $isok = $ps->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        $isok = false;
+    }
+
+    return $isok;
+}
+
+function commentFormat($data) {
+    $uid = intval($data['id_Users']);
+    $userinfo = getUserInfo($uid);
+    if ($userinfo['privilege'] == "2") {
+        $priv = "Admin";
+    } else {
+        $priv = "Membre";
+    }
+
+    if ($data['state'] == "1") {
+        $comment = $data['comm'];
+    } else {
+        $comment = "Commentaire en attente de modération";
+    }
+
+    $output = "    \n<li class=\"media well\">
+                            \n<div class=\"pull-left user-info col-lg-1\">
+                               \n <img class=\"avatar img-circle img-thumbnail\" src=\"" . $userinfo['path'] . "\"
+                                     \nwidth=\"64\" alt=\"Generic placeholder image\">
+                                \n<br/>
+                                \n<strong><a href=\"user.html\">" . formatUserName($userinfo['firstname'], $userinfo['lastname']) . "</a></strong>
+                               \n <br/><small>" . $priv . "</small>
+                               \n <br>
+
+                            \n</div>
+                           \n <div class=\"media-body\">" .
+            $comment
+            . "\n </div>
+                            \n<div id='postOptions' class=\"media-right\">
+                                " . $data['date_com'] . "
+                                \n<br/>"
+            .
+            "\n<form action=\"#\" method=\"post\">
+                                    <input type=\"hidden\" name=\"comstate\" value=\"" . $data['state'] . "\"/>
+                                    <input type=\"hidden\" name=\"idcom\" value=\"" . $data['id'] . "\"/>
+                                    <input type=\"submit\" name=\"state\" class=\"btn btn-warning\" value=\"!\" />
+                                    <input type=\"submit\" name=\"ban\" class=\"btn btn-danger\" value=\"X\"/>
+                                </form>"
+            .
+            //\n<a href=\"#\"><span class=\"input-group-addon\"><i class=\"glyphicon glyphicon-exclamation-sign\"></i></span></a>
+            //\n<br/>
+            //\n<a href=\"#\"><span class=\"input-group-addon\"><i class=\"glyphicon glyphicon-remove-sign\"></i></span></a>
+
+
+
+            "\n</div>
+                        \n</li>";
+
+    return $output;
+}
+
+function changeComState($idcomment, $state) {
+    static $ps = null;
+
+    $sql = 'update comments set comments.state = :state where comments.id = :id';
+
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+        $ps->bindParam(':id', $idcomment, PDO::PARAM_INT);
+        $ps->bindParam(':state', $state, PDO::PARAM_INT);
+        $isok = $ps->execute();
+    } catch (PDOException $e) {
+        $isok = false;
+    }
+
+    return $isok;
+}
 
 /**
  * Insert une image dans la base de donnée et retourne son id

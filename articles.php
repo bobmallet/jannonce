@@ -1,5 +1,13 @@
 <?php
 require_once './phpScript/inc.all.php';
+
+$aid = intval($_REQUEST['idarticle']);
+$articleinfo = articleInfo($aid);
+$banned = intval($articleinfo['banned']);
+
+if ($banned) {
+    header('Location: index.php');
+}
 ?>
 <!DOCTYPE html>
 <!--
@@ -14,12 +22,55 @@ and open the template in the editor.
         <title>Annonce</title>
     </head>
     <body>
+
+        <style>
+            .media-right {
+                width: 400px ;
+            }
+        </style>
+
+
+
         <?php
         include './menu/showmenu.php';
         $aid = intval($_REQUEST['idarticle']);
-               
-        
-        
+
+        $articleinfo = articleInfo($aid);
+        $userinfo = getUserInfo(intval($articleinfo['id_Users']));
+
+        $state = intval($articleinfo['state']);
+        //var_dump($userinfo);
+        //var_dump($articleinfo);
+
+        $vmail = intval($articleinfo['mailvisible']);
+        $vphone = intval($articleinfo['phonevisible']);
+        $vadress = intval($articleinfo['adressvisible']);
+
+        if (isset($_REQUEST['post'])) {
+            $com = filter_input(INPUT_POST, 'txt');
+            $date = date("Y-m-d H:i:s");
+            addComment(getUserID(), $aid, $date, $com);
+            header("refresh:0");
+        }
+
+        if (isset($_REQUEST['state'])) {
+            //var_dump($_REQUEST['idcom']);
+            //var_dump(explode(",",$_REQUEST['idcom'] ));
+            //$ucom = intval(explode(",",$_REQUEST['idcom'])[0]);
+            //$acom = intval(explode(",",$_REQUEST['idcom'])[1]);
+            $idcom = intval($_REQUEST['idcom']);
+            $comstate = intval($_REQUEST['comstate']);
+
+
+            if ($comstate == 1) {
+                $reversestate = 0;
+            } else {
+                $reversestate = 1;
+            }
+
+            changeComState($idcom, $reversestate);
+            header("refresh:0");
+        }
         ?>
         <div class="panel" id='article'>
             <div class="panel-body">
@@ -28,33 +79,43 @@ and open the template in the editor.
                     </iframe>
                 </div>
                 <div class="col-lg-4">
-                    <label for="description">Libelle ddddddddd</label>
+                    <label for="description"><?php echo $articleinfo['name']; ?></label>
 
                     <div id='description'>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        quis nostrud exercitation Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        quis nostrud exercitation
+                        <?php echo $articleinfo['description']; ?>
                     </div>
 
                     <br/><br/>
-                    <label for="description">Prix : 0000</label>
+                    <label for="description">Prix : <?php echo $articleinfo['price']; ?></label>
                 </div>
                 <div id="info" class="pull-right col-lg-4">
                     Createur del'annonce : <?php echo $_SESSION['uname'] ?>
                     <br/>
-                    Le : 00/00/0000
+                    Le : <?php echo $articleinfo['creationdate']; ?>
                     <br/><br/>
+                    <?php
+                    if ($vphone) {
+                        echo 'Tel. : ' . getUserTel() . '<br/>';
+                    }
 
-                    Tel. :
-                    <br/>
-                    E-mail :
-                    <br/>
-                    Adresse :
+                    if ($vmail) {
+                        echo 'E-mail : ' . getUserMail() . '<br/>';
+                    }
+
+                    if ($vadress) {
+                        echo 'Addresse : ' . getUserAdress() . '<br/>';
+                    }
+                    ?>
+
                     <br/><br/><br/>
 
-                    Etat de l'annonce : Ouvert
+                    Etat de l'annonce : <?php
+                    if ($state) {
+                        echo 'Ouvert';
+                    } else {
+                        echo 'Fermé';
+                    }
+                    ?>
                 </div>
 
             </div>
@@ -67,79 +128,75 @@ and open the template in the editor.
             <div class = "panel-body">
                 <div id='comments' class="col-lg-12">
                     <ul class="media-list forum">
+                        <?php
+                        foreach (getArticleComments($aid) as $value) {
+                            print commentFormat($value);
+                        }
+                        ?>
                         <!-- Forum Post -->
-                        <li class="media well">
-                            <div class="pull-left user-info col-lg-1" href="#">
-                                <img class="avatar img-circle img-thumbnail" src="./img/Koala.jpg"
-                                     width="64" alt="Generic placeholder image">
-                                <br/>
-                                <strong><a href="user.html"><?php echo $_SESSION['uname']."<br/>"; ?></a></strong>
-                                <small>Membre</small>
-                                <br>
-
-                            </div>
-                            <div class="media-body">
-
-                                <!-- Post Text -->
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.qqqqq
-                                <!-- Post Text EMD -->
-                            </div>
-                            <div id='postOptions' class="media-right">
-                                00/00/0000
-                                <br/>
-                                <a href="#"><span class="input-group-addon"><i class="glyphicon glyphicon-exclamation-sign"></i></span></a>
-                                <br/>
-                                <a href="#"><span class="input-group-addon"><i class="glyphicon glyphicon-remove-sign"></i></span></a>
-                            </div>
-                        </li>
+                        <!--
+                                                <li class="media well">
+                                                    <div class="pull-left user-info col-lg-1">
+                                                        <img class="avatar img-circle img-thumbnail" src="./img/Koala.jpg"
+                                                             width="64" alt="Generic placeholder image">
+                                                        <br/>
+                                                        <strong><a href="user.html"><?php echo $_SESSION['uname'] . "<br/>"; ?></a></strong>
+                                                        <small>Membre</small>
+                                                        <br>
+                        
+                                                    </div>
+                                                    <div class="media-body">
+                        
+                        
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.qqqqq
+                        
+                                                    </div>
+                                                    <div id='postOptions' class="media-right">
+                                                        2016-06-07 13:46:28
+                                                        <br/>
+                                                        
+                                                        <a href="#"><span class="input-group-addon"><i class="glyphicon glyphicon-exclamation-sign"></i></span></a>
+                                                        <br/>
+                                                        <a href="#"><span class="input-group-addon"><i class="glyphicon glyphicon-remove-sign"></i></span></a>
+                                                        
+                                                        <form action="#" method="post">
+                                                            <input type="hidden" name="idcom" value="2"/>
+                                                            <input type="submit" name="state" class="btn btn-warning" value="!" />
+                                                            <input type="submit" name="ban" class="btn btn-danger" value="X"/>
+                                                        </form>
+                                                        
+                                                    </div>
+                                                </li>
+                        -->
                         <!-- Forum Post END -->
-                        <!-- Forum Post -->
-                        <li class="media well">
-                            <div class="pull-left user-info col-lg-1" href="#">
-                                <img class="avatar img-circle img-thumbnail" src="./img/Koala.jpg"
-                                     width="64" alt="Generic placeholder image">
-                                <br/>
-                                <strong><a href="user.html"><?php echo $_SESSION['uname']."<br/>"; ?></a></strong>
-                                <small>Membre</small>
-                                <br>
 
-                            </div>
-                            <div class="media-body">
 
-                                <!-- Post Text -->
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.qqqqq
-                                <!-- Post Text EMD -->
-                            </div>
-                            <div id='postOptions' class="media-right">
-                                00/00/0000
-                                <br/>
-                                <a href="#"><span class="input-group-addon"><i class="glyphicon glyphicon-exclamation-sign"></i></span></a>
-                                <br/>
-                                <a href="#"><span class="input-group-addon"><i class="glyphicon glyphicon-remove-sign"></i></span></a>
-                            </div>
-                        </li>
-                        <!-- Forum Post END -->
-                        <!-- Forum Post -->
-                        <li class="media well">
-                            <div class="pull-left user-info col-lg-1" href="#">
-                                <img class="avatar img-circle img-thumbnail" src="./img/Koala.jpg"
-                                     width="64" alt="Generic placeholder image">
-                                <br/>
-                                <strong><a href="user.html"><?php echo $_SESSION['uname']."<br/>"; ?></a></strong>
-                                <small>Membre</small>
-                                <br>
 
-                            </div>
-                            <div class="media-right">
-                                <form role="form" action="#">                            
-                                    <textarea id='txt' rows="5" cols="100" maxlength="500"></textarea>
+                        <?php if (getPrivilege() != PRIV_UNKNOWN) { ?>
+                            <!-- Forum Add -->
+
+                            <li class="media well">
+                                <div class="pull-left user-info col-lg-1" href="#">
+                                    <img class="avatar img-circle img-thumbnail" src="./img/Koala.jpg"
+                                         width="64" alt="Generic placeholder image">
                                     <br/>
-                                    <button type="submit" class="btn btn-success" name="submit">Envoyer</button>
-                                </form>
+                                    <strong><a href="user.html"><?php echo $_SESSION['uname'] . "<br/>"; ?></a></strong>
+                                    <small>Membre</small>
+                                    <br>
 
-                            </div>
-                        </li>
-                        <!-- Forum Post END -->
+                                </div>
+                                <div class="media-right">
+                                    <form role="form" action="#" method="post">                            
+                                        <textarea name='txt' rows="5" cols="100" maxlength="500"></textarea>
+                                        <br/>
+                                        <button type="submit" class="btn btn-success" name="post">Envoyer</button>
+                                    </form>
+
+                                </div>
+                            </li>
+                            <!-- Forum Post END -->
+                        <?php } ?>
+
 
                     </ul>
                 </div>

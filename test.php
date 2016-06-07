@@ -14,10 +14,11 @@ and open the template in the editor.
         <?php
         require_once './phpScript/inc.all.php';
 
-        if (isset($_REQUEST['submit'])) {
-            
-        }
+        //var_dump(getArticleComments(2));
 
+        foreach (getArticleComments(2) as $value){
+            print commentFormat($value);
+        }
         //        
         //insertUser("mallet", "bob", 0, "bob.mallet@gmail.com", "Super", "phone number", "AF", "city 17", "street 17");
         //var_dump(login("bob.mallet@gmail.com", "Super"));
@@ -25,12 +26,18 @@ and open the template in the editor.
         //var_dump(articleImages(2));
         // var_dump(getAllArticles());
 
+        //var_dump(articleInfo(2));
+        /*
         foreach (listArticles() as $value) {
             $path = articleImages(intval($value['id']))[0]['path'];
             print articleFormat($value, $path);
         }
-
+*/
         //articleFormat($data, $imgpath)
+        
+        
+        
+        
         ?>
 
 

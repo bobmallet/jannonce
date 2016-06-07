@@ -1,73 +1,117 @@
 <?php
+
 session_start();
 ?>
 
 <?php
-/* 
+
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 require_once './phpScript/constants.php';
 
- 
- /**
-  * Est-ce que l'utilisateur est loggé
-  * @return {boolean}   True is loggé, autrement false
-  */
- function isLogged(){
-     return (isset($_SESSION["logged"])) ? $_SESSION["logged"] : false;
- }
- 
- function setLogged(){
-     $_SESSION['logged'] = true;
- }
- 
- 
- function getPrivilege(){
-     return (isset($_SESSION["privilege"])) ? $_SESSION["privilege"] : PRIV_UNKNOWN;
- }
- 
- function setPrivilege($value){
-     $_SESSION["privilege"] = $value;
- }
- 
- 
- function setImagePath($path){
-     $_SESSION['image'] = $path;
- }
- 
- function getImagePath(){
-     return (isset($_SESSION["image"])) ? $_SESSION["image"] : NULL;
- }
- 
- 
- 
- function isAdmin(){
-     return getPrivilege() == PRIV_ADMIN;
- }
- 
- 
-  function isUser(){
-     return getPrivilege() == PRIV_USER;
- }
+/**
+ * Est-ce que l'utilisateur est loggé
+ * @return {boolean}   True is loggé, autrement false
+ */
+function isLogged() {
+    return (isset($_SESSION["logged"])) ? $_SESSION["logged"] : false;
+}
 
- 
- function getUserID(){
-     return (isset($_SESSION["uid"])) ? $_SESSION["uid"] : -1;
- }
- 
- function setUserID($uid){
-     $_SESSION["uid"] = $uid;
- }
+/**
+ * Definis l'etat "logged"
+ */
+function setLogged() {
+    $_SESSION['logged'] = true;
+}
 
- 
- function getUserName(){
-     return (isset($_SESSION["uname"])) ? $_SESSION["uname"] : "";
- }
- 
- function setUserName($name){
-     $_SESSION["uname"] = $name;
- }
- 
- 
+/**
+ * Recupere le niveau de privilège de l'utilisateur
+ * @return (int)
+ */
+function getPrivilege() {
+    return (isset($_SESSION["privilege"])) ? $_SESSION["privilege"] : PRIV_UNKNOWN;
+}
+
+/**
+ * Assigne le nieau de privilege en session
+ * @param (int) $value
+ */
+function setPrivilege($value) {
+    $_SESSION["privilege"] = $value;
+}
+
+/**
+ * Assigne le chemin de l'avatar de l'utilisateur en session
+ * @param (string) $path
+ */
+function setImagePath($path) {
+    $_SESSION['image'] = $path;
+}
+
+/**
+ * Retourne le chemin de l'avatar de l'utilisateur contenu en session
+ * @return (string)
+ */
+function getImagePath() {
+    return (isset($_SESSION["image"])) ? $_SESSION["image"] : NULL;
+}
+
+/**
+ * Est-ce que l'utilisateur est un admin
+ * @return (bool) TRUE si il est admin, sinon FALSE
+ */
+function isAdmin() {
+    return getPrivilege() == PRIV_ADMIN;
+}
+
+/**
+ * Est-ce que l'utilisateur est un simple utilisateur
+ * @return (bool) TRUE si oui, sinon FALSE
+ */
+function isUser() {
+    return getPrivilege() == PRIV_USER;
+}
+
+/**
+ * Recupere l'id utilisateur contenu en session
+ * @return (int)
+ */
+function getUserID() {
+    return (isset($_SESSION["uid"])) ? $_SESSION["uid"] : -1;
+}
+
+function setUserID($uid) {
+    $_SESSION["uid"] = $uid;
+}
+
+function getUserName() {
+    return (isset($_SESSION["uname"])) ? $_SESSION["uname"] : "";
+}
+
+function setUserName($name) {
+    $_SESSION["uname"] = $name;
+}
+
+function getUserMail() {
+    return (isset($_SESSION["umail"])) ? $_SESSION["umail"] : "";
+}
+function setUserMail($mail) {
+    $_SESSION['umail'] = $mail;
+}
+
+function getUserTel() {
+    return (isset($_SESSION["utel"])) ? $_SESSION["utel"] : "";
+}
+function setUserTel($tel) {
+    $_SESSION['utel'] = $tel;
+}
+
+function getUserAdress() {
+    return (isset($_SESSION["uadress"])) ? $_SESSION["uadress"] : "";
+}
+function setUserAdress($mail) {
+    $_SESSION['uadress'] = $mail;
+}
