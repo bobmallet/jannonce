@@ -19,6 +19,10 @@ require_once './phpScript/constants.php';
      return (isset($_SESSION["logged"])) ? $_SESSION["logged"] : false;
  }
  
+ function setLogged(){
+     $_SESSION['logged'] = true;
+ }
+ 
  
  function getPrivilege(){
      return (isset($_SESSION["privilege"])) ? $_SESSION["privilege"] : PRIV_UNKNOWN;
@@ -27,6 +31,16 @@ require_once './phpScript/constants.php';
  function setPrivilege($value){
      $_SESSION["privilege"] = $value;
  }
+ 
+ 
+ function setImagePath($path){
+     $_SESSION['image'] = $path;
+ }
+ 
+ function getImagePath(){
+     return (isset($_SESSION["image"])) ? $_SESSION["image"] : NULL;
+ }
+ 
  
  
  function isAdmin(){
@@ -55,3 +69,5 @@ require_once './phpScript/constants.php';
  function setUserName($name){
      $_SESSION["uname"] = $name;
  }
+ 
+ 

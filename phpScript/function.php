@@ -28,52 +28,7 @@ function &myDatabase() {
 }
 
 //Gestion Utilisateurs
-
-/**
- * Ajoute l'adresse dans la base
- * @staticvar type $ps_adress
- * @staticvar type $ps_id
- * @param type $data  => data['country']; data['city']; data['street']
- * @return int
- */
-function addAdress($data) {
-    static $ps_adress = null;
-    static $ps_id = null;
-
-    $sql_adress = 'insert into adress (adress.city,adress.street,adress.country_iso) values (:city,:street,:iso);';
-    $sql_id = 'SELECT LAST_INSERT_ID()';
-
-    if ($ps_adress == null) {
-        $ps_adress = myDatabase()->prepare($sql_adress);
-    }
-    if ($ps_id == null) {
-        $ps_id = myDatabase()->prepare($sql_id);
-    }
-
-    try {  
-        $ps_adress->bindParam(':city', $data['city'], PDO::PARAM_STR);
-        $ps_adress->bindParam(':street', $data['street'], PDO::PARAM_STR);
-        $ps_adress->bindParam(':iso', $data['iso'], PDO::PARAM_STR);
-        $ps_adress->execute();
-
-        $ps_id->execute();
-        $last_id = $ps_id->fetchAll(PDO::FETCH_NUM);
-        
-        return $last_id[0][0];
-
-        /*
-          $ps_id->bindParam(':country', $data['country'], PDO::PARAM_STR);
-          $ps_id->bindParam(':city', $data['city'], PDO::PARAM_STR);
-          $ps_id->bindParam(':street', $data['street'], PDO::PARAM_STR);
-          $isok = $ps_id->execute();
-          $isok = $ps_id->fetchAll(PDO::FETCH_NUM);
-          $isok = $isok[0][0];
-         * */
-    } catch (PDOException $e) {
-        $isok = null;
-    }
-    return $isok;
-}
+    
 
 function addAddress($country,$city,$street) {
     static $ps_adress = null;
@@ -114,44 +69,6 @@ function addAddress($country,$city,$street) {
 }
 
 
-function addUser($data) {
-    
-    static $ps_user = null;
-
-
-    $sql_user = 'insert into users (users.firstname,users.lastname,users.gender,users.mail,users.phone,users.banned,users.password,users.id_Images,users.id_Adress) values (:firstname,:lastname,:gender,:mail,:phone,0,:password,:idimage,:idadress);';
-
-
-
-    if ($ps_user == null) {
-        $ps_user = myDatabase()->prepare($sql_user);
-    }
-
-    $id_adress = intval(addAdress($data));
-    //$id_image = intval(imageUpload());
-
-    try {
-
-        $ps_user->bindParam(':firstname', $data['firstname'], PDO::PARAM_STR);
-        $ps_user->bindParam(':lastname', $data['lastname'], PDO::PARAM_STR);
-        $ps_user->bindParam(':gender', $data['gender'], PDO::PARAM_INT);
-        $ps_user->bindParam(':mail', $data['mail'], PDO::PARAM_STR);
-        $ps_user->bindParam(':phone', $data['phone'], PDO::PARAM_STR);
-        $ps_user->bindParam(':password', $data['password'], PDO::PARAM_STR);
-        $ps_user->bindParam(':idimage', $data['idimage'], PDO::PARAM_INT);
-        $ps_user->bindParam(':idadress', $id_adress, PDO::PARAM_INT);
-
-        //$ps_user->bindParam(':country', $data['country'], PDO::PARAM_STR);
-        //$ps_user->bindParam(':city', $data['city'], PDO::PARAM_STR);
-        //$ps_user->bindParam(':street', $data['street'], PDO::PARAM_STR);
-
-
-        $isok = $ps_user->execute();
-    } catch (PDOException $e) {
-        $isok = false;
-    }
-    return $isok;
-}
 
 /**
  * Insére un nouvel utilisateur dans la base de données
@@ -172,7 +89,7 @@ function insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $countr
     static $ps_user = null;
 
 
-    $sql_user = 'insert into users (users.firstname,users.lastname,users.gender,users.mail,users.phone,users.banned,users.password,users.id_Images,users.id_Adress) values (:firstname,:lastname,:gender,:mail,:phone,0,:password,:idimage,:idadress);';
+    $sql_user = 'insert into users (users.firstname,users.lastname,users.gender,users.mail,users.phone,users.banned,users.password,users.id_Images,users.id_Adress, users.privilege) values (:firstname,:lastname,:gender,:mail,:phone,0,:password,:idimage,:idadress, :privilege);';
 
 
 
@@ -182,7 +99,8 @@ function insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $countr
 
     $id_adress = intval(addAddress($country,$city,$street));
     //$id_image = intval(imageUpload());
-
+    $pwd_sha1 = sha1($pwd);
+    $priv = 2;
     try {
 
         $ps_user->bindParam(':firstname', $firstName, PDO::PARAM_STR);
@@ -190,9 +108,10 @@ function insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $countr
         $ps_user->bindParam(':gender', $gender, PDO::PARAM_INT);
         $ps_user->bindParam(':mail', $mail, PDO::PARAM_STR);
         $ps_user->bindParam(':phone', $phone, PDO::PARAM_STR);
-        $ps_user->bindParam(':password', $pwd, PDO::PARAM_STR);
+        $ps_user->bindParam(':password', $pwd_sha1, PDO::PARAM_STR);
         $ps_user->bindParam(':idimage', $image, PDO::PARAM_INT);
         $ps_user->bindParam(':idadress', $id_adress, PDO::PARAM_INT);
+        $ps_user->bindParam(':privilege', $priv, PDO::PARAM_INT);
 
         //$ps_user->bindParam(':country', $data['country'], PDO::PARAM_STR);
         //$ps_user->bindParam(':city', $data['city'], PDO::PARAM_STR);
@@ -206,26 +125,35 @@ function insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $countr
     return $isok;
 }
 
-function login($data) {
+/**
+ * Verification des identifiants de l'utilisateur 
+ * @staticvar type $ps
+ * @param type $data
+ * @return boolean  retourne l'id de l'utilisateur si il existe, sinon retourne FALSE
+ */
+function login($mail,$pwd) {
     static $ps = null;
 
-    $sql = 'select users.password from users where users.mail = :mail';
+    $sql = 'select users.id, users.password from users where users.mail = :mail';
 
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
     }
 
+    $pwd_sha1 = sha1($pwd);
+    
     try {
-        $ps->bindParam(':mail', $data['mail'], PDO::PARAM_STR);
+        $ps->bindParam(':mail', $mail, PDO::PARAM_STR);
         $isok = $ps->execute();
-        $isok = $ps->fetchAll(PDO::FETCH_ASSOC);
-        if ($isok[0]['password'] == $data['password']) {
-            return true;
+        $isok = $ps->fetchAll(PDO::FETCH_ASSOC);        
+        
+        if ($isok[0]['password'] == $pwd_sha1) {
+            $isok = intval($isok[0]['id']);
         }
     } catch (PDOException $e) {
         $isok = false;
     }
-    return false;
+    return $isok;
 }
 
 /**
@@ -236,7 +164,7 @@ function login($data) {
  */
 function getUserInfo($id) {
     static $ps = null;
-    $sql = 'select * from users_view where users_view.id = :id';
+    $sql = 'select * from user_info where user_info.id = :id';
 
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
@@ -247,10 +175,11 @@ function getUserInfo($id) {
 
         $isok = $ps->execute();
         $isok = $ps->fetchAll(PDO::FETCH_ASSOC);
+        $isok = $isok[0];
     } catch (PDOException $e) {
         $isok = false;
     }
-    return $isok[0];
+    return $isok;
 }
 
 function formatUserName($firstname, $lastname) {
@@ -293,6 +222,42 @@ function logOut() {
 }
 
 //gestion des annonces
+
+
+function insertArticle($name,$description,$price,$date,$uid,$mailvisible,$phonevisible,$adressvisible){
+    static $ps = null;
+    
+    $sql = 'insert into articles (name,description,price,state,creationdate,banned,id_Users,mailvisible,phonevisible,adressvisible) values (:name,:description,:price,1,:date,0,:uid,:mvis,:pvis,:avis)';
+
+    
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+        $ps->bindParam(':name', $name, PDO::PARAM_STR);
+        $ps->bindParam(':description', $description, PDO::PARAM_STR);
+        $ps->bindParam(':price', $price, PDO::PARAM_STR);
+        $ps->bindParam(':date', $date, PDO::PARAM_STR);
+        $ps->bindParam(':uid', $uid, PDO::PARAM_INT);
+        $ps->bindParam(':mvis', $mailvisible, PDO::PARAM_INT);
+        $ps->bindParam(':pvis', $phonevisible, PDO::PARAM_INT);
+        $ps->bindParam(':avis', $adressvisible, PDO::PARAM_INT);
+               
+        
+        $isok = $ps->execute();
+        
+    } catch (PDOException $e) {
+        $isok = false;
+    }
+    return $isok;
+    
+    
+    
+}
+
+
+
 //image des articles en fonction de l'id de l'article
 function articleImages($idarticle) {
     static $ps = null;

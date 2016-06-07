@@ -1,3 +1,6 @@
+<?php
+require_once './phpScript/inc.all.php';
+?>
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -13,18 +16,42 @@ and open the template in the editor.
     <body>
         <?php
         include './menu/defaultMenu.html';
+
+        $error = "";
+
+        if (isset($_REQUEST['login'])) {
+            $mail = filter_input(INPUT_POST, 'mail');
+            $pwd = filter_input(INPUT_POST, 'pwd');
+           
+            
+            
+            if (login($mail, $pwd)) {
+                $userinfo = getUserInfo(login($mail, $pwd));
+               //var_dump($userinfo);
+                setPrivilege(intval($userinfo['privilege']));
+                setImagePath($userinfo['path']);
+                setUserID(intval($userinfo['id']));
+                setLogged();
+                
+                header('Location: index.php');
+            } else {
+                $error = "Identifiants incorrect";
+            }
+             
+             
+        }
         ?>
         <div class="container" style="margin-top:30px">
             <div class="col-md-4 col-md-offset-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <form role="form" method="get" action="#">
+                        <form role="form" method="post" action="#">
                             <div class="form-group">
                                 <label for="mail" class="sr-only">Email address</label>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                     <input type="email" class="form-control" id="mail"
-                                           placeholder="Entrez votre adresse email" name="uid">
+                                           placeholder="Entrez votre adresse email" name="mail">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -35,7 +62,7 @@ and open the template in the editor.
                                            placeholder="Mot de passe" name="pwd">
                                 </div>                              
                             </div>
-                            <button type="submit" class="btn btn-success" name="submit">Connexion</button>
+                            <button type="submit" class="btn btn-success" name="login">Connexion</button>
                             <a href="register.php" class="btn btn-primary" role="button">Pas encore inscrit ?</a>
                         </form>
                     </div>

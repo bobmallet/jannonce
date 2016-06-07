@@ -9,7 +9,7 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="CSS/font-awesome/css/font-awesome.css">
-        <title>login</title>
+        <title>register</title>
     </head>
     <body>
         <?php
@@ -29,23 +29,7 @@ and open the template in the editor.
             $street = filter_input(INPUT_POST, 'street');
             $gender = filter_input(INPUT_POST, 'gender');
 
-            //$id_image = intval(imageUpload());
-            $id_image = 5;
-
-
-            $data['lastname'] = $lastName;
-            $data['firstname'] = $firstName;
-            $data['gender'] = intval($gender);
-            $data['mail'] = $mail;
-            $data['phone'] = $phone;
-            $data['password'] = $pwd;
-            $data['idimage'] = $id_image;
-            //$data['idadress'] = $id_adress;
-
-            //var_dump($data);
-            //addAdress($data);
-            
-            //addUser($data);
+            //insertion avec l'image par defaut pour l'instant
             insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street);
         }
         ?>
