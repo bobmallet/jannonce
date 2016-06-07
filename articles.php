@@ -71,6 +71,14 @@ and open the template in the editor.
             changeComState($idcom, $reversestate);
             header("refresh:0");
         }
+        
+        if(isset($_REQUEST['ban'])){
+            $idcom = intval($_REQUEST['idcom']);
+            banComment($idcom);
+            header("refresh:0");
+        }
+        
+        
         ?>
         <div class="panel" id='article'>
             <div class="panel-body">
@@ -187,7 +195,7 @@ and open the template in the editor.
                                 </div>
                                 <div class="media-right">
                                     <form role="form" action="#" method="post">                            
-                                        <textarea name='txt' rows="5" cols="100" maxlength="500"></textarea>
+                                        <textarea name='txt' rows="5" cols="100" maxlength="500" required></textarea>
                                         <br/>
                                         <button type="submit" class="btn btn-success" name="post">Envoyer</button>
                                     </form>

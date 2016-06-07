@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 ?>
 
@@ -83,35 +82,74 @@ function getUserID() {
     return (isset($_SESSION["uid"])) ? $_SESSION["uid"] : -1;
 }
 
+/**
+ * Assigne l'id de l'utilisateur en session
+ * @param type $uid
+ */
 function setUserID($uid) {
     $_SESSION["uid"] = $uid;
 }
 
+/**
+ * Retourne le nom de l'utilisateur enregistré en session
+ * @return type
+ */
 function getUserName() {
     return (isset($_SESSION["uname"])) ? $_SESSION["uname"] : "";
 }
 
+/**
+ * Assigne le nom d'utilisateur a une variable de session
+ * @param type $name
+ */
 function setUserName($name) {
     $_SESSION["uname"] = $name;
 }
 
+/**
+ * Retourne le mail de l'utilisateur
+ * @return type
+ */
 function getUserMail() {
     return (isset($_SESSION["umail"])) ? $_SESSION["umail"] : "";
 }
+
+/**
+ * Assigne le mails de l'utilisateur dans une variable de session
+ * @param type $mail
+ */
 function setUserMail($mail) {
     $_SESSION['umail'] = $mail;
 }
 
+/**
+ * Recupere le numero de l'utilisateur
+ * @return type
+ */
 function getUserTel() {
     return (isset($_SESSION["utel"])) ? $_SESSION["utel"] : "";
 }
+
+/**
+ * Assigne le numero de l'utilisateur dans une variable de session
+ * @param type $tel
+ */
 function setUserTel($tel) {
     $_SESSION['utel'] = $tel;
 }
 
+/**
+ * Recupere l'adresse de l'utilisateur
+ * @return type
+ */
 function getUserAdress() {
     return (isset($_SESSION["uadress"])) ? $_SESSION["uadress"] : "";
 }
+
+/**
+ * Assigne l'adresse de l'utilisateur dans une variable de session
+ * @param type $mail
+ */
 function setUserAdress($mail) {
     $_SESSION['uadress'] = $mail;
 }

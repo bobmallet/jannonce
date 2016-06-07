@@ -574,6 +574,27 @@ function changeComState($idcomment, $state) {
     return $isok;
 }
 
+function banComment($idcomment){
+    static $ps = null;
+
+    $sql = 'update comments set comments.banned = 1 where comments.id = :id';
+
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+        $ps->bindParam(':id', $idcomment, PDO::PARAM_INT);
+        $isok = $ps->execute();
+    } catch (PDOException $e) {
+        $isok = false;
+    }
+
+    return $isok;
+}
+
+
+
 /**
  * Insert une image dans la base de donnée et retourne son id
  * @staticvar type $ps_image
