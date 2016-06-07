@@ -1,3 +1,6 @@
+<?php
+require_once './phpScript/inc.all.php';
+?>
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -12,16 +15,17 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-        include './menu/adminMenu.html';
+        include './menu/showmenu.php';
+        $aid = intval($_REQUEST['idarticle']);
+               
+        
+        
         ?>
         <div class="panel" id='article'>
             <div class="panel-body">
                 <div class="pull-left col-lg-4">
-                    <a href="#" class="thumbnail">
-                        <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
-                    </a>
-
-
+                    <iframe src="articleImages.php?id=<?php echo $aid; ?>" width="100%" height="400">                        
+                    </iframe>
                 </div>
                 <div class="col-lg-4">
                     <label for="description">Libelle ddddddddd</label>
@@ -38,7 +42,7 @@ and open the template in the editor.
                     <label for="description">Prix : 0000</label>
                 </div>
                 <div id="info" class="pull-right col-lg-4">
-                    Createur del'annonce : Prenom N.
+                    Createur del'annonce : <?php echo $_SESSION['uname'] ?>
                     <br/>
                     Le : 00/00/0000
                     <br/><br/>
@@ -66,7 +70,7 @@ and open the template in the editor.
                         <!-- Forum Post -->
                         <li class="media well">
                             <div class="pull-left user-info col-lg-1" href="#">
-                                <img class="avatar img-circle img-thumbnail" src="http://snipplicious.com/images/guest.png"
+                                <img class="avatar img-circle img-thumbnail" src="./img/Koala.jpg"
                                      width="64" alt="Generic placeholder image">
                                 <br/>
                                 <strong><a href="user.html">Prenom N.</a></strong>

@@ -21,12 +21,93 @@ and open the template in the editor.
         ?>
         <div class="container">
             <div>
-                <a href="#" class="btn btn-info" role="button">Nouvelle annonce</a>
+                <a href="newArticle.php" class="btn btn-info" role="button">Nouvelle annonce</a>
                 <br/><br/>
             </div>
             <div id="articles">
                 <ul class="media-list forum">
-                    <!-- Forum Post -->
+                    <?php
+                    foreach (listArticles() as $value) {
+                        $path = articleImages(intval($value['id']))[0]['path'];
+                        print articleFormat($value, $path);
+                    }
+                    ?>
+
+
+                    <!--
+                    
+                    <li class="media well">
+
+                        <div class="pull-left col-lg-2">
+                            <a href="#" class="thumbnail">
+                                <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
+                            </a>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <b>Libelle </b>
+                            <br/><br/>
+                            <p>Debut description sdfsrvwscfewrgsexarewf...</p>
+                        </div>
+                        
+                        
+                        <div class="col-lg-4">
+                            Createur de l'annonce : Prenom N.
+                            <br/><br/>
+                            Le 00/00/0000
+                            <br/><br/>
+                            Prix : 000
+                        </div>
+                    </li>
+                    
+                    <li class="media well">
+
+                        <div class="pull-left col-lg-2">
+                            <a href="#" class="thumbnail">
+                                <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
+                            </a>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <b>Libelle </b>
+                            <br/><br/>
+                            <p>Debut description sdfsrvwscfewrgsexarewf...</p>
+                        </div>
+                        
+                        
+                        <div class="col-lg-4">
+                            Createur de l'annonce : Prenom N.
+                            <br/><br/>
+                            Le 00/00/0000
+                            <br/><br/>
+                            Prix : 000
+                        </div>
+                    </li>
+                    
+                    <li class="media well">
+
+                        <div class="pull-left col-lg-2">
+                            <a href="#" class="thumbnail">
+                                <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
+                            </a>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <b>Libelle </b>
+                            <br/><br/>
+                            <p>Debut description sdfsrvwscfewrgsexarewf...</p>
+                        </div>
+                        
+                        
+                        <div class="col-lg-4">
+                            Createur de l'annonce : Prenom N.
+                            <br/><br/>
+                            Le 00/00/0000
+                            <br/><br/>
+                            Prix : 000
+                        </div>
+                    </li>
+                    
                     <li class="media well">
 
                         <div class="pull-left col-lg-2">
@@ -51,83 +132,8 @@ and open the template in the editor.
                         </div>
                     </li>
                     <!-- Forum Post END -->
-                     <!-- Forum Post -->
-                    <li class="media well">
 
-                        <div class="pull-left col-lg-2">
-                            <a href="#" class="thumbnail">
-                                <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
-                            </a>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <b>Libelle </b>
-                            <br/><br/>
-                            <p>Debut description sdfsrvwscfewrgsexarewf...</p>
-                        </div>
-                        
-                        
-                        <div class="col-lg-4">
-                            Createur de l'annonce : Prenom N.
-                            <br/><br/>
-                            Le 00/00/0000
-                            <br/><br/>
-                            Prix : 000
-                        </div>
-                    </li>
-                    <!-- Forum Post END -->
-                     <!-- Forum Post -->
-                    <li class="media well">
-
-                        <div class="pull-left col-lg-2">
-                            <a href="#" class="thumbnail">
-                                <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
-                            </a>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <b>Libelle </b>
-                            <br/><br/>
-                            <p>Debut description sdfsrvwscfewrgsexarewf...</p>
-                        </div>
-                        
-                        
-                        <div class="col-lg-4">
-                            Createur de l'annonce : Prenom N.
-                            <br/><br/>
-                            Le 00/00/0000
-                            <br/><br/>
-                            Prix : 000
-                        </div>
-                    </li>
-                    <!-- Forum Post END -->
-                     <!-- Forum Post -->
-                    <li class="media well">
-
-                        <div class="pull-left col-lg-2">
-                            <a href="#" class="thumbnail">
-                                <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
-                            </a>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <b>Libelle </b>
-                            <br/><br/>
-                            <p>Debut description sdfsrvwscfewrgsexarewf...</p>
-                        </div>
-                        
-                        
-                        <div class="col-lg-4">
-                            Createur de l'annonce : Prenom N.
-                            <br/><br/>
-                            Le 00/00/0000
-                            <br/><br/>
-                            Prix : 000
-                        </div>
-                    </li>
-                    <!-- Forum Post END -->
-
-
+                    -->
 
 
                 </ul>

@@ -256,7 +256,32 @@ function insertArticle($name,$description,$price,$date,$uid,$mailvisible,$phonev
     
 }
 
-
+//Retourne ud code html pour afficher un article
+function articleFormat($data,$imgpath){
+    $output = "\n<li class=\"media well\">";
+    $output .= "\n<div class=\"pull-left col-lg-2\">";
+    $output .= "\n<a href=\"articles.php?idarticle=".$data['id']."\" class=\"thumbnail\">";
+    $output .= "<img alt=\"Image\" src=\"".$imgpath."\">";
+    $output .= "\n</a>";
+    $output .= "\n</div>";
+    $output .= "<div class=\"col-lg-6\">";
+    $output .= "\n<b>".$data['name']."</b>";
+    $output .= "<br/><br/>";
+    $output .= "\n<p>".$data['description']."</p>";
+    $output .= "\n</div>";
+    $output .= "\n<div class=\"col-lg-4\">";
+    $output .= "\nCréateur de l'annonce : ";
+    $output .= "\n<br/><br/>";
+    $output .= "\nLe ".$data['creationdate'];
+    $output .= "\n<br/><br/>";
+    $output .= "\nPrix : ".$data['price'];
+    $output .= "\n</div>";
+    $output .= "\n</li>";
+    $output .= "\n</li>";
+    
+    return $output;
+    
+}
 
 //image des articles en fonction de l'id de l'article
 function articleImages($idarticle) {

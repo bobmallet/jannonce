@@ -14,7 +14,7 @@ and open the template in the editor.
     <body>
         <?php
         require_once './phpScript/inc.all.php';
-        include './menu/defaultMenu.html';
+        include './menu/showmenu.php';
 
         // Si on a appuyé sur le bouton Valider
         if (isset($_REQUEST['register'])) {

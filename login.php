@@ -15,7 +15,7 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-        include './menu/defaultMenu.html';
+        include './menu/showmenu.php';
 
         $error = "";
 
@@ -31,6 +31,7 @@ and open the template in the editor.
                 setPrivilege(intval($userinfo['privilege']));
                 setImagePath($userinfo['path']);
                 setUserID(intval($userinfo['id']));
+                setUserName(formatUserName($userinfo['firstname'], $userinfo['lastname']));
                 setLogged();
                 
                 header('Location: index.php');

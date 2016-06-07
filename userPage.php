@@ -19,7 +19,7 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-        include './menu/adminMenu.html';
+        include './menu/showmenu.php';
         $userinfo = getUserInfo($_SESSION['uid']);
         //var_dump($userinfo);
         ?>
