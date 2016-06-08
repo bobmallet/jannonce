@@ -38,8 +38,7 @@ and open the template in the editor.
             $article_id = insertArticle($name, $description, $price, $date, $uid, $mvis, $pvis, $avis);
 
             $id_image = intval(imageUpload());
-            insertArticleImage($article_id, $id_image);
-            //$header = 'articles.php?idarticle=' . insertArticleImage($article_id, $id_image);
+            insertArticleImage($article_id, $id_image);            
             header('Location: articles.php?idarticle='.$article_id);
         }
         ?>

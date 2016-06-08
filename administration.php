@@ -1,5 +1,8 @@
 <?php
 require_once './phpScript/inc.all.php';
+if(getPrivilege() != PRIV_ADMIN){
+    header('Location: index.php');
+}
 ?>
 <!DOCTYPE html>
 <!--

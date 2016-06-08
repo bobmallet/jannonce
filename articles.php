@@ -33,19 +33,25 @@ and open the template in the editor.
 
         <?php
         include './menu/showmenu.php';
+        
         $aid = intval($_REQUEST['idarticle']);
-
+        $articlecreator = intval(articleInfo($aid)['id_Users']);
         $articleinfo = articleInfo($aid);
         $userinfo = getUserInfo(intval($articleinfo['id_Users']));
 
         $state = intval($articleinfo['state']);
-        //var_dump($userinfo);
-        //var_dump($articleinfo);
+
 
         $vmail = intval($articleinfo['mailvisible']);
         $vphone = intval($articleinfo['phonevisible']);
         $vadress = intval($articleinfo['adressvisible']);
 
+        if(isset($_REQUEST['changestate'])){
+            openCloseArticle($aid);
+            header('Location: #');
+        }
+        
+        
         if (isset($_REQUEST['post'])) {
             $com = filter_input(INPUT_POST, 'txt');
             $date = date("Y-m-d H:i:s");
@@ -71,14 +77,12 @@ and open the template in the editor.
             changeComState($idcom, $reversestate);
             header("refresh:0");
         }
-        
-        if(isset($_REQUEST['ban'])){
+
+        if (isset($_REQUEST['ban'])) {
             $idcom = intval($_REQUEST['idcom']);
             banComment($idcom);
             header("refresh:0");
         }
-        
-        
         ?>
         <div class="panel" id='article'>
             <div class="panel-body">
@@ -97,21 +101,21 @@ and open the template in the editor.
                     <label for="description">Prix : <?php echo $articleinfo['price']; ?></label>
                 </div>
                 <div id="info" class="pull-right col-lg-4">
-                    Createur del'annonce : <?php echo $_SESSION['uname'] ?>
+                    Createur del'annonce : <?php echo getUserInfo(intval($articleinfo['id_Users']))['firstname']; ?>
                     <br/>
                     Le : <?php echo $articleinfo['creationdate']; ?>
                     <br/><br/>
                     <?php
                     if ($vphone) {
-                        echo 'Tel. : ' . getUserTel() . '<br/>';
+                        echo 'Tel. : ' . $userinfo['phone'] . '<br/>';
                     }
 
                     if ($vmail) {
-                        echo 'E-mail : ' . getUserMail() . '<br/>';
+                        echo 'E-mail : ' . $userinfo['mail'] . '<br/>';
                     }
 
                     if ($vadress) {
-                        echo 'Addresse : ' . getUserAdress() . '<br/>';
+                        echo 'Addresse : ' . $userinfo['country'] . '<br/>';
                     }
                     ?>
 
@@ -124,6 +128,14 @@ and open the template in the editor.
                         echo 'Fermé';
                     }
                     ?>
+
+
+                    <?php if (getUserID() == $articlecreator) { ?>
+                        <form action="#" method="post">
+                            <input type="hidden" name="id" value="<?php echo $aid; ?>"/>
+                            <button type="submit" class="btn btn-success" name="changestate">Ouvrir/Fermer</button>
+                        </form>
+                    <?php } ?>
                 </div>
 
             </div>
@@ -137,52 +149,14 @@ and open the template in the editor.
                 <div id='comments' class="col-lg-12">
                     <ul class="media-list forum">
                         <?php
-                        $articlecreator = intval(articleInfo($aid)['id_Users']);
                         foreach (getArticleComments($aid) as $value) {
-                            print commentFormat($value,$articlecreator);
+                            print commentFormat($value, $articlecreator);
                         }
                         ?>
-                        <!-- Forum Post -->
-                        <!--
-                                                <li class="media well">
-                                                    <div class="pull-left user-info col-lg-1">
-                                                        <img class="avatar img-circle img-thumbnail" src="./img/Koala.jpg"
-                                                             width="64" alt="Generic placeholder image">
-                                                        <br/>
-                                                        <strong><a href="user.html"><?php echo $_SESSION['uname'] . "<br/>"; ?></a></strong>
-                                                        <small>Membre</small>
-                                                        <br>
-                        
-                                                    </div>
-                                                    <div class="media-body">
-                        
-                        
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero.qqqqq
-                        
-                                                    </div>
-                                                    <div id='postOptions' class="media-right">
-                                                        2016-06-07 13:46:28
-                                                        <br/>
-                                                        
-                                                        <a href="#"><span class="input-group-addon"><i class="glyphicon glyphicon-exclamation-sign"></i></span></a>
-                                                        <br/>
-                                                        <a href="#"><span class="input-group-addon"><i class="glyphicon glyphicon-remove-sign"></i></span></a>
-                                                        
-                                                        <form action="#" method="post">
-                                                            <input type="hidden" name="idcom" value="2"/>
-                                                            <input type="submit" name="state" class="btn btn-warning" value="!" />
-                                                            <input type="submit" name="ban" class="btn btn-danger" value="X"/>
-                                                        </form>
-                                                        
-                                                    </div>
-                                                </li>
-                        -->
-                        <!-- Forum Post END -->
 
 
 
-                        <?php if (getPrivilege() != PRIV_UNKNOWN) { ?>
-                            <!-- Forum Add -->
+                        <?php if (getPrivilege() != PRIV_UNKNOWN && $state == 1) { ?>
 
                             <li class="media well">
                                 <div class="pull-left user-info col-lg-1" href="#">
@@ -202,8 +176,7 @@ and open the template in the editor.
                                     </form>
 
                                 </div>
-                            </li>
-                            <!-- Forum Post END -->
+                            </li>                           
                         <?php } ?>
 
 

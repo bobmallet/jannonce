@@ -152,9 +152,12 @@ function login($mail, $pwd) {
         $ps->bindParam(':mail', $mail, PDO::PARAM_STR);
         $isok = $ps->execute();
         $isok = $ps->fetchAll(PDO::FETCH_ASSOC);
-
-        if ($isok[0]['password'] == $pwd_sha1) {
-            $isok = intval($isok[0]['id']);
+        if (isset($isok[0])) {
+            if ($isok[0]['password'] == $pwd_sha1) {
+                $isok = intval($isok[0]['id']);
+            }
+        } else {
+            $isok = FALSE;
         }
     } catch (PDOException $e) {
         $isok = false;
@@ -483,41 +486,23 @@ function articleImages($idarticle) {
     return $isok;
 }
 
-function closeArticle($idarticle) {
+function openCloseArticle($aid) {
+    $banstate = articleInfo($aid)['state'];
+    $finalestate = ($banstate == "0") ? 1 : 0;
+
     static $ps = null;
 
-    $sql = 'update articles set articles.state = 0 where articles.id = :id';
-
+    $sql = 'UPDATE `articles` SET `state` = :state WHERE `id` = :id';
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
     }
-
     try {
-        $ps->bindParam(':id', $idarticle, PDO::PARAM_INT);
+        $ps->bindParam(':state', $finalestate, PDO::PARAM_INT);
+        $ps->bindParam(':id', $aid, PDO::PARAM_INT);
         $isok = $ps->execute();
     } catch (PDOException $e) {
         $isok = false;
     }
-
-    return $isok;
-}
-
-function openArticle($idarticle) {
-    static $ps = null;
-
-    $sql = 'update articles set articles.state = 1 where articles.id = :id';
-
-    if ($ps == null) {
-        $ps = myDatabase()->prepare($sql);
-    }
-
-    try {
-        $ps->bindParam(':id', $idarticle, PDO::PARAM_INT);
-        $isok = $ps->execute();
-    } catch (PDOException $e) {
-        $isok = false;
-    }
-
     return $isok;
 }
 
@@ -566,7 +551,6 @@ function getAllArticles() {
 
     return $isok;
 }
-
 
 /**
  * Recupere tous les articles qui sont actif et non bannis
@@ -650,10 +634,9 @@ function articleInfo($id) {
  * @param type $desc
  * @return type
  */
-function descriptionSize($desc){
-    return substr($desc, 0, 50)."..."; 
+function descriptionSize($desc) {
+    return substr($desc, 0, 50) . "...";
 }
-
 
 //gestion des commentaires
 
@@ -716,10 +699,10 @@ function getArticleComments($aid) {
  * @param type $creatorid
  * @return string
  */
-function commentFormat($data,$creatorid) {
+function commentFormat($data, $creatorid) {
     $uid = intval($data['id_Users']);
     $userinfo = getUserInfo($uid);
-    
+
     if ($userinfo['privilege'] == "2") {
         $priv = "Admin";
     } else {
@@ -735,7 +718,7 @@ function commentFormat($data,$creatorid) {
 
     $btn = "";
 
-    if (getUserID()==$creatorid) {
+    if (getUserID() == $creatorid) {
         $btn .= "<input type=\"submit\" name=\"state\" class=\"btn btn-warning\" value=\"!\" />";
     }
 

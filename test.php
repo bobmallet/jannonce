@@ -12,34 +12,34 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-        
         require_once './phpScript/inc.all.php';
         //session_destroy();
         //var_dump(getArticleComments(2));
-
         //        
         //insertUser("mallet", "bob", 0, "bob.mallet@gmail.com", "Super", "phone number", "AF", "city 17", "street 17");
         //var_dump(login("bob.mallet@gmail.com", "Super"));
         //var_dump(getUserInfo(9));
         //var_dump(articleImages(2));
         // var_dump(getAllArticles());
-
         //var_dump(articleInfo(2));
         /*
-        foreach (listArticles() as $value) {
-            $path = articleImages(intval($value['id']))[0]['path'];
-            print articleFormat($value, $path);
-        }
-*/
+          foreach (listArticles() as $value) {
+          $path = articleImages(intval($value['id']))[0]['path'];
+          print articleFormat($value, $path);
+          }
+         */
         //articleFormat($data, $imgpath)
-
         //insertArticleImage(9, 17);
         //banUnbanUser(15);
         //var_dump(articleInfo(11));
         //banunbanArticle(11);
-        var_dump(articleInfo(15));
+        //var_dump(articleInfo(15));
+        var_dump(articleInfo(17));
+        openCloseArticle(17);
         ?>
 
+
+        
 
     </body>
 </html>
