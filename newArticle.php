@@ -1,5 +1,10 @@
 <?php
 require './phpScript/inc.all.php';
+
+if(getPrivilege()== PRIV_UNKNOWN){
+    header('Location: index.php');
+}
+
 ?>
 <!DOCTYPE html>
 <!--

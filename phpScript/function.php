@@ -29,7 +29,15 @@ function &myDatabase() {
 
 //Gestion Utilisateurs
 
-
+/**
+ * Ajoute une adresse dans la base
+ * @staticvar type $ps_adress
+ * @staticvar type $ps_id
+ * @param type $country
+ * @param type $city
+ * @param type $street
+ * @return type
+ */
 function addAddress($country, $city, $street) {
     static $ps_adress = null;
     static $ps_id = null;
@@ -190,6 +198,12 @@ function formatUserName($firstname, $lastname) {
     return ucfirst($firstname) . " " . substr(ucfirst($lastname), 0, 1) . ".";
 }
 
+/**
+ * Inverse l'etat de bannissement de l'utilisateur
+ * @staticvar type $ps
+ * @param type $uid
+ * @return boolean
+ */
 function banUnbanUser($uid) {
     $banstate = getUserInfo($uid)['banned'];
     $finalestate = ($banstate == "0") ? 1 : 0;
@@ -210,6 +224,18 @@ function banUnbanUser($uid) {
     return $isok;
 }
 
+/**
+ * Modifie les informations de l'utilisateur
+ * @staticvar type $ps
+ * @param type $lastName
+ * @param type $firstName
+ * @param type $gender
+ * @param type $mail
+ * @param type $pwd
+ * @param type $phone
+ * @param type $id
+ * @return boolean
+ */
 function updateUserInfo($lastName, $firstName, $gender, $mail, $pwd, $phone, $id) {
     static $ps = null;
 
@@ -235,6 +261,13 @@ function updateUserInfo($lastName, $firstName, $gender, $mail, $pwd, $phone, $id
     return $isok;
 }
 
+/**
+ * Modifie le chemin de l'avatar de l'utilisateur
+ * @staticvar type $ps
+ * @param type $id
+ * @param type $path
+ * @return boolean
+ */
 function updateUserImage($id, $path) {
     static $ps = null;
 
@@ -255,6 +288,15 @@ function updateUserImage($id, $path) {
     return $isok;
 }
 
+/**
+ * Modifie l'adresse d'un utilisateur
+ * @staticvar type $ps
+ * @param type $id
+ * @param type $countryiso
+ * @param type $city
+ * @param type $street
+ * @return boolean
+ */
 function updateUserAdress($id, $countryiso, $city, $street) {
     static $ps = null;
 
@@ -279,6 +321,11 @@ function updateUserAdress($id, $countryiso, $city, $street) {
     return $isok;
 }
 
+/**
+ * Retourne un tableau avec tous les utilisateurss
+ * @staticvar type $ps
+ * @return array
+ */
 function getAllUser() {
     static $ps = null;
 
@@ -397,7 +444,7 @@ function articleFormat($data, $imgpath) {
     $output .= "<div class=\"col-lg-6\">";
     $output .= "\n<b>" . $data['name'] . "</b>";
     $output .= "<br/><br/>";
-    $output .= "\n<p>" . $data['description'] . "</p>";
+    $output .= "\n<p>" . descriptionSize($data['description']) . "</p>";
     $output .= "\n</div>";
     $output .= "\n<div class=\"col-lg-4\">";
     $output .= "\nCréateur de l'annonce : ";
@@ -496,6 +543,11 @@ function banunbanArticle($aid) {
     return $isok;
 }
 
+/**
+ * Recupere tous les annonces de la base
+ * @staticvar type $ps
+ * @return boolean
+ */
 function getAllArticles() {
     static $ps = null;
 
@@ -515,11 +567,16 @@ function getAllArticles() {
     return $isok;
 }
 
-//article actif et non bannis
+
+/**
+ * Recupere tous les articles qui sont actif et non bannis
+ * @staticvar type $ps
+ * @return boolean
+ */
 function listArticles() {
     static $ps = null;
 
-    $sql = 'SELECT * FROM articles where state = 1 and banned = 0 order by creationdate';
+    $sql = 'SELECT * FROM articles where state = 1 and banned = 0 order by creationdate DESC';
 
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
@@ -561,6 +618,12 @@ function getUserArticles($uid) {
     return $isok;
 }
 
+/**
+ * Retourne les informations d'un article
+ * @staticvar type $ps
+ * @param type $id
+ * @return boolean
+ */
 function articleInfo($id) {
     static $ps = null;
     $sql = 'select * from articles where id = :id';
@@ -582,7 +645,27 @@ function articleInfo($id) {
     return $isok;
 }
 
+/**
+ * Retourne un string d'un certain nombre de charactère
+ * @param type $desc
+ * @return type
+ */
+function descriptionSize($desc){
+    return substr($desc, 0, 50)."..."; 
+}
+
+
 //gestion des commentaires
+
+/**
+ * Ajoute un commentaire dans la base
+ * @staticvar type $ps
+ * @param type $uid
+ * @param type $aid
+ * @param type $date
+ * @param type $com
+ * @return boolean
+ */
 function addComment($uid, $aid, $date, $com) {
     static $ps = null;
     $sql = "insert into comments (comments.id_Users,comments.id_articles,comments.date_com,comments.comm,comments.state,comments.banned) values (:uid,:aid,:date,:com,1,0)";
@@ -603,6 +686,12 @@ function addComment($uid, $aid, $date, $com) {
     return $isok;
 }
 
+/**
+ * Recupere les commentaires d'une annonce
+ * @staticvar type $ps
+ * @param type $aid
+ * @return boolean
+ */
 function getArticleComments($aid) {
     static $ps = null;
     $sql = "select * from comments where id_articles = :id and comments.banned = 0";
@@ -621,6 +710,12 @@ function getArticleComments($aid) {
     return $isok;
 }
 
+/**
+ * Retourne du code html pout afficher le ocmmentaire
+ * @param type $data
+ * @param type $creatorid
+ * @return string
+ */
 function commentFormat($data,$creatorid) {
     $uid = intval($data['id_Users']);
     $userinfo = getUserInfo($uid);
@@ -683,6 +778,13 @@ function commentFormat($data,$creatorid) {
     return $output;
 }
 
+/**
+ * Inverse l'etat du commentaire (en attente de moderation ou non)
+ * @staticvar type $ps
+ * @param type $idcomment
+ * @param type $state
+ * @return boolean
+ */
 function changeComState($idcomment, $state) {
     static $ps = null;
 
@@ -703,6 +805,12 @@ function changeComState($idcomment, $state) {
     return $isok;
 }
 
+/**
+ * Bannis un commentaire
+ * @staticvar type $ps
+ * @param type $idcomment
+ * @return boolean
+ */
 function banComment($idcomment) {
     static $ps = null;
 
@@ -898,6 +1006,11 @@ function Array2Html($anArray, $assoc = false) {
     return $output;
 }
 
+/**
+ * Récupere tous les pays
+ * @staticvar type $ps
+ * @return boolean
+ */
 function getAllCountry() {
     static $ps = null;
 
@@ -916,6 +1029,11 @@ function getAllCountry() {
     return $isok;
 }
 
+/**
+ * Retourne du code html pout faire un select avec tous les pays
+ * @param type $selectedcountry
+ * @return string
+ */
 function selectCountry($selectedcountry = null) {
     $output = "\n<select name=\"country\" class=\"form-control\" id=\"country\">";
     foreach (getAllCountry() as $value) {
