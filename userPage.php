@@ -1,6 +1,6 @@
 <?php
 require_once './phpScript/inc.all.php';
-if(!isLogged()){
+if (!isLogged()) {
     header('Location: index.php');
 }
 ?>
@@ -41,16 +41,14 @@ and open the template in the editor.
 
                     <div id='description'>
                         <?php
-                                echo 'Nom: '.$userinfo['lastname'];
-                                echo '<br/>';
-                                echo 'Prenom: '.$userinfo['firstname'];
-                                echo '<br/>';
-                                echo 'Genre : '.$userinfo['gender'];
-                                echo '<br/><br/><br/>';
+                        echo 'Nom: ' . $userinfo['lastname'];
+                        echo '<br/>';
+                        echo 'Prenom: ' . $userinfo['firstname'];
+                        echo '<br/>';
+                        echo 'Genre : ' . $userinfo['gender'];
+                        echo '<br/><br/><br/>';
                         ?>
-                        
-                        <br/>
-                        Genre : Homme
+
                         <br/><br/><br/>
                         <a href="modification.php" class="btn btn-warning" role="button">Modifier les informations</a>
                     </div>
@@ -67,7 +65,7 @@ and open the template in the editor.
                             <br/>
                             E-mail : <?php echo $userinfo['mail']; ?>
                             <br/>
-                            Adresse : <?php echo  '<br/>'.$userinfo['street']. " " . $userinfo['city']. ", ".$userinfo['country']; ?>
+                            Adresse : <?php echo '<br/>' . $userinfo['street'] . " " . $userinfo['city'] . ", " . $userinfo['country']; ?>
                             <br/><br/><br/>
                         </div>
                     </div>
@@ -84,7 +82,14 @@ and open the template in the editor.
             </div>
             <div class = "panel-body">
                 <ul class="media-list forum">
+                    <?php
+                    foreach (getUserArticles(getUserID()) as $value) {
+                        $path = articleImages(intval($value['id']))[0]['path'];
+                        print articleFormat($value, $path);
+                    }
+                    ?>
                     <!-- Forum Post -->
+                    <!--
                     <li class="media well">
 
                         <div class="pull-left col-lg-2">
@@ -108,8 +113,7 @@ and open the template in the editor.
                             Prix : 000
                         </div>
                     </li>
-                    <!-- Forum Post END -->
-                    <!-- Forum Post -->
+
                     <li class="media well">
 
                         <div class="pull-left col-lg-2">
@@ -133,8 +137,7 @@ and open the template in the editor.
                             Prix : 000
                         </div>
                     </li>
-                    <!-- Forum Post END -->
-                    <!-- Forum Post -->
+
                     <li class="media well">
 
                         <div class="pull-left col-lg-2">
@@ -158,8 +161,7 @@ and open the template in the editor.
                             Prix : 000
                         </div>
                     </li>
-                    <!-- Forum Post END -->
-                    <!-- Forum Post -->
+
                     <li class="media well">
 
                         <div class="pull-left col-lg-2">
@@ -183,7 +185,7 @@ and open the template in the editor.
                             Prix : 000
                         </div>
                     </li>
-                    <!-- Forum Post END -->
+                    -->
 
                 </ul>
             </div>

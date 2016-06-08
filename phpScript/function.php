@@ -96,9 +96,9 @@ function insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $countr
     }
 
     $id_adress = intval(addAddress($country, $city, $street));
-    //$id_image = intval(imageUpload());
+
     $pwd_sha1 = sha1($pwd);
-    $priv = 2;
+    $priv = PRIV_USER;
     try {
 
         $ps_user->bindParam(':firstname', $firstName, PDO::PARAM_STR);
@@ -190,14 +190,19 @@ function formatUserName($firstname, $lastname) {
     return ucfirst($firstname) . " " . substr(ucfirst($lastname), 0, 1) . ".";
 }
 
-function banUser($id) {
+function banUnbanUser($uid) {
+    $banstate = getUserInfo($uid)['banned'];
+    $finalestate = ($banstate == "0") ? 1 : 0;
+
     static $ps = null;
-    $sql = 'UPDATE `users` SET `banned` = 1 WHERE `id` = :id';
+
+    $sql = 'UPDATE `users` SET `banned` = :ban WHERE `id` = :id';
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
     }
     try {
-        $ps->bindParam(':id', $id, PDO::PARAM_INT);
+        $ps->bindParam(':ban', $finalestate, PDO::PARAM_INT);
+        $ps->bindParam(':id', $uid, PDO::PARAM_INT);
         $isok = $ps->execute();
     } catch (PDOException $e) {
         $isok = false;
@@ -205,29 +210,127 @@ function banUser($id) {
     return $isok;
 }
 
-function unbanUser($id) {
+/*
+  function banUser($id) {
+  static $ps = null;
+  $sql = 'UPDATE `users` SET `banned` = 1 WHERE `id` = :id';
+  if ($ps == null) {
+  $ps = myDatabase()->prepare($sql);
+  }
+  try {
+  $ps->bindParam(':id', $id, PDO::PARAM_INT);
+  $isok = $ps->execute();
+  } catch (PDOException $e) {
+  $isok = false;
+  }
+  return $isok;
+  }
+
+  function unbanUser($id) {
+  static $ps = null;
+  $sql = 'UPDATE `users` SET `banned` = 0 WHERE `id` = :id';
+  if ($ps == null) {
+  $ps = myDatabase()->prepare($sql);
+  }
+  try {
+  $ps->bindParam(':id', $id, PDO::PARAM_INT);
+  $isok = $ps->execute();
+  } catch (PDOException $e) {
+  $isok = false;
+  }
+  return $isok;
+  }
+ */
+
+function updateUserInfo($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street, $id) {
     static $ps = null;
-    $sql = 'UPDATE `users` SET `banned` = 0 WHERE `id` = :id';
+
+    $sql = "update users set users.firstname = :firstname and users.lastname = :lastname and users.gender = :gender and users.mail = :mail and users.phone = :phone where users.id = :id";
+
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
     }
+
     try {
-        $ps->bindParam(':id', $id, PDO::PARAM_INT);
-        $isok = $ps->execute();
+        $ps_user->bindParam(':firstname', $firstName, PDO::PARAM_STR);
+        $ps_user->bindParam(':lastname', $lastName, PDO::PARAM_STR);
+        $ps_user->bindParam(':gender', $gender, PDO::PARAM_INT);
+        $ps_user->bindParam(':mail', $mail, PDO::PARAM_STR);
+        $ps_user->bindParam(':phone', $phone, PDO::PARAM_STR);
+
+        $ps_user->bindParam(':id', $id, PDO::PARAM_INT);
+
+        $isok = $ps_user->execute();
     } catch (PDOException $e) {
         $isok = false;
     }
     return $isok;
 }
 
-function logOut() {
-    session_destroy();
-    header("Location: index.php");
+function updateUserImage($id, $path) {
+    static $ps = null;
+
+    $sql = "update images set images.path = :path where images.id = :id";
+
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+        $ps_user->bindParam(':path', $city, PDO::PARAM_STR);
+        $ps_user->bindParam(':id', $id, PDO::PARAM_INT);
+
+        $isok = $ps_user->execute();
+    } catch (PDOException $e) {
+        $isok = false;
+    }
+    return $isok;
+}
+
+function updateUserAdress($id, $countryiso, $city, $street) {
+    static $ps = null;
+
+    $sql = "update adress set adress.city = :city and adress.street = :street and adress.country_iso = :iso where adress.id = :id";
+
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+
+        $ps_user->bindParam(':city', $city, PDO::PARAM_STR);
+        $ps_user->bindParam(':street', $street, PDO::PARAM_STR);
+        $ps_user->bindParam(':iso', $countryiso, PDO::PARAM_STR);
+        $ps_user->bindParam(':id', $id, PDO::PARAM_INT);
+
+
+        $isok = $ps_user->execute();
+    } catch (PDOException $e) {
+        $isok = false;
+    }
+    return $isok;
+}
+
+function getAllUser() {
+    static $ps = null;
+
+    $sql = "SELECT id, firstname as Prenom,lastname as Nom,mail, banned as Bannis FROM user_info;";
+
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+        $isok = $ps->execute();
+        $isok = $isok = $ps->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        $isok = false;
+    }
+
+    return $isok;
 }
 
 //gestion des annonces
-
-
 
 /**
  * Insert un nouvel article dans la base de donnée
@@ -244,6 +347,8 @@ function logOut() {
  */
 function insertArticle($name, $description, $price, $date, $uid, $mailvisible, $phonevisible, $adressvisible) {
     static $ps = null;
+    static $ps_id = null;
+
 
     $sql = 'insert into articles (name,description,price,state,creationdate,banned,id_Users,mailvisible,phonevisible,adressvisible) values (:name,:description,:price,1,:date,0,:uid,:mvis,:pvis,:avis)';
 
@@ -251,6 +356,11 @@ function insertArticle($name, $description, $price, $date, $uid, $mailvisible, $
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
     }
+
+    if ($ps_id == null) {
+        $ps_id = myDatabase()->prepare('SELECT LAST_INSERT_ID()');
+    }
+
 
     try {
         $ps->bindParam(':name', $name, PDO::PARAM_STR);
@@ -264,12 +374,44 @@ function insertArticle($name, $description, $price, $date, $uid, $mailvisible, $
 
 
         $isok = $ps->execute();
+
+        $ps_id->execute();
+        $last_id = $ps_id->fetchAll(PDO::FETCH_NUM);
+
+        return intval($last_id[0][0]);
     } catch (PDOException $e) {
         $isok = false;
     }
     return $isok;
 }
 
+/**
+ * Insert une image de l'article dans la base de données
+ * @staticvar type $ps
+ * @param type $aid
+ * @param type $iid
+ * @return boolean
+ */
+function insertArticleImage($aid, $iid) {
+
+    static $ps = null;
+
+    $sql = "update images set images.id_articles = :articleid where images.id = :imageid";
+
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+        $ps->bindParam(':articleid', $aid, PDO::PARAM_INT);
+        $ps->bindParam(':imageid', $iid, PDO::PARAM_INT);
+        $isok = $ps->execute();
+    } catch (PDOException $e) {
+        $isok = false;
+    }
+
+    return $isok;
+}
 
 /**
  * Retourne ud code html pour afficher un article
@@ -301,8 +443,6 @@ function articleFormat($data, $imgpath) {
 
     return $output;
 }
-
-
 
 /**
  * Retourne image des articles en fonction de l'id de l'article
@@ -366,48 +506,70 @@ function openArticle($idarticle) {
     return $isok;
 }
 
-function banArticle($idarticle) {
+function banunbanArticle($aid) {
+    $banstate = articleInfo($aid)['banned'];
+    $finalestate = ($banstate == "0") ? 1 : 0;
+
     static $ps = null;
 
-    $sql = 'update articles set articles.banned = 1 where articles.id = :id';
-
+    $sql = 'UPDATE `articles` SET `banned` = :ban WHERE `id` = :id';
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
     }
-
     try {
-        $ps->bindParam(':id', $idarticle, PDO::PARAM_INT);
+        $ps->bindParam(':ban', $finalestate, PDO::PARAM_INT);
+        $ps->bindParam(':id', $uid, PDO::PARAM_INT);
         $isok = $ps->execute();
     } catch (PDOException $e) {
         $isok = false;
     }
-
     return $isok;
 }
 
-function unbanArticle($idarticle) {
-    static $ps = null;
+/*
+  function banArticle($idarticle) {
+  static $ps = null;
 
-    $sql = 'update articles set articles.banned = 0 where articles.id = :id';
+  $sql = 'update articles set articles.banned = 1 where articles.id = :id';
 
-    if ($ps == null) {
-        $ps = myDatabase()->prepare($sql);
-    }
+  if ($ps == null) {
+  $ps = myDatabase()->prepare($sql);
+  }
 
-    try {
-        $ps->bindParam(':id', $idarticle, PDO::PARAM_INT);
-        $isok = $ps->execute();
-    } catch (PDOException $e) {
-        $isok = false;
-    }
+  try {
+  $ps->bindParam(':id', $idarticle, PDO::PARAM_INT);
+  $isok = $ps->execute();
+  } catch (PDOException $e) {
+  $isok = false;
+  }
 
-    return $isok;
-}
+  return $isok;
+  }
+
+  function unbanArticle($idarticle) {
+  static $ps = null;
+
+  $sql = 'update articles set articles.banned = 0 where articles.id = :id';
+
+  if ($ps == null) {
+  $ps = myDatabase()->prepare($sql);
+  }
+
+  try {
+  $ps->bindParam(':id', $idarticle, PDO::PARAM_INT);
+  $isok = $ps->execute();
+  } catch (PDOException $e) {
+  $isok = false;
+  }
+
+  return $isok;
+  }
+ */
 
 function getAllArticles() {
     static $ps = null;
 
-    $sql = 'select * from articles';
+    $sql = 'select id, name as Libelle,description,price as Prix,state as Etat,creationdate as "Date de creation",banned as Bannis from articles';
 
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
@@ -434,6 +596,32 @@ function listArticles() {
     }
 
     try {
+        $isok = $ps->execute();
+        $isok = $isok = $ps->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        $isok = false;
+    }
+
+    return $isok;
+}
+
+/**
+ * Recupere toute les annonces d'un utilisateru en particulier
+ * @staticvar type $ps
+ * @param type $uid
+ * @return boolean
+ */
+function getUserArticles($uid) {
+    static $ps = null;
+
+    $sql = 'SELECT * FROM articles where banned = 0 and articles.id_Users = :id order by creationdate';
+
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+        $ps->bindParam(':id', $uid, PDO::PARAM_INT);
         $isok = $ps->execute();
         $isok = $isok = $ps->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
@@ -574,7 +762,7 @@ function changeComState($idcomment, $state) {
     return $isok;
 }
 
-function banComment($idcomment){
+function banComment($idcomment) {
     static $ps = null;
 
     $sql = 'update comments set comments.banned = 1 where comments.id = :id';
@@ -592,8 +780,6 @@ function banComment($idcomment){
 
     return $isok;
 }
-
-
 
 /**
  * Insert une image dans la base de donnée et retourne son id
@@ -789,10 +975,19 @@ function getAllCountry() {
     return $isok;
 }
 
-function selectCountry() {
+function selectCountry($selectedcountry = null) {
     $output = "\n<select name=\"country\" class=\"form-control\" id=\"country\">";
     foreach (getAllCountry() as $value) {
-        $output .="\n<option value=\"" . $value['iso'] . "\">" . $value['name'] . "</option>";
+
+        if ($selectedcountry == $value['name']) {
+            $selected = "selected";
+        } else {
+            $selected = "";
+        }
+
+
+
+        $output .="\n<option value=\"" . $value['iso'] . "\"" . $selected . ">" . $value['name'] . "</option>";
     }
 
     $output .= "\n</select>";

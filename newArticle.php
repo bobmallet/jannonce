@@ -30,8 +30,13 @@ and open the template in the editor.
             $pvis = (isset($_POST["phoneVisible"])) ? TRUE : FALSE;
             $avis = (isset($_POST["adressVisible"])) ? TRUE : FALSE;
             
-            insertArticle($name, $description, $price, $date, $uid, $mvis, $pvis, $avis);
-                   
+            $article_id = insertArticle($name, $description, $price, $date, $uid, $mvis, $pvis, $avis);
+                
+            $id_image = intval(imageUpload());
+            insertArticleImage($article_id, $id_image);
+                
+     
+            
         }
         ?>
         <div class="panel panel-default">
@@ -39,7 +44,7 @@ and open the template in the editor.
                 <h3 class = "panel-title">Nouvelle annonce</h3>
             </div>
             <div class="panel-body">
-                <form action="#" method="post">
+                <form action="#" method="post" enctype="multipart/form-data">
                     <label for="title">Libelle :
                         <input type="text" class="form-control" name='name'/>
                     </label>
@@ -53,7 +58,7 @@ and open the template in the editor.
                     </label>
                     <br/>
                     <label for="image">Image(s) :
-                        <input type="file" name='image'/>
+                        <input type="file" name="<?php echo INPUT; ?>"/>
                     </label>
                     <br/>
 
@@ -70,7 +75,6 @@ and open the template in the editor.
                     </label>
                     <br/>
                     <button type="submit" class="btn btn-success" name="submit">Envoyer</button>
-
                 </form>
 
             </div>

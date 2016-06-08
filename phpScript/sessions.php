@@ -153,3 +153,7 @@ function getUserAdress() {
 function setUserAdress($mail) {
     $_SESSION['uadress'] = $mail;
 }
+
+function destroySession(){
+    session_destroy();
+}

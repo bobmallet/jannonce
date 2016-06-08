@@ -12,13 +12,11 @@ and open the template in the editor.
     </head>
     <body>
         <?php
+        
         require_once './phpScript/inc.all.php';
-
+        //session_destroy();
         //var_dump(getArticleComments(2));
 
-        foreach (getArticleComments(2) as $value){
-            print commentFormat($value);
-        }
         //        
         //insertUser("mallet", "bob", 0, "bob.mallet@gmail.com", "Super", "phone number", "AF", "city 17", "street 17");
         //var_dump(login("bob.mallet@gmail.com", "Super"));
@@ -34,13 +32,12 @@ and open the template in the editor.
         }
 */
         //articleFormat($data, $imgpath)
-        
-        
-        
+
+        //insertArticleImage(9, 17);
+        //banUnbanUser(15);
+        var_dump(articleInfo(11));
         
         ?>
-
-
 
 
     </body>

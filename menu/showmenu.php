@@ -17,3 +17,8 @@ case 2:
     include './menu/adminMenu.html';
     break;
 }
+
+if(isset($_REQUEST['logout'])){
+    destroySession();
+    header('Location: index.php');
+}

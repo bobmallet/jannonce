@@ -1,3 +1,11 @@
+<?php
+require_once './phpScript/inc.all.php';
+
+if(isLogged()){
+    header('Location: index.php');
+}
+?>
+
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -13,24 +21,27 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-        require_once './phpScript/inc.all.php';
+        
         include './menu/showmenu.php';
 
         // Si on a appuyé sur le bouton Valider
         if (isset($_REQUEST['register'])) {
+            //var_dump($_FILES);
+            
+              $lastName = filter_input(INPUT_POST, 'lastname');
+              $firstName = filter_input(INPUT_POST, 'firstname');
+              $mail = filter_input(INPUT_POST, 'mail');
+              $pwd = filter_input(INPUT_POST, 'pwd');
+              $phone = filter_input(INPUT_POST, 'phone');
+              $country = filter_input(INPUT_POST, 'country');
+              $city = filter_input(INPUT_POST, 'city');
+              $street = filter_input(INPUT_POST, 'street');
+              $gender = filter_input(INPUT_POST, 'gender');
+              $id_image = intval(imageUpload());
+              
+              insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street,$id_image);
 
-            $lastName = filter_input(INPUT_POST, 'lastname');
-            $firstName = filter_input(INPUT_POST, 'firstname');
-            $mail = filter_input(INPUT_POST, 'mail');
-            $pwd = filter_input(INPUT_POST, 'pwd');
-            $phone = filter_input(INPUT_POST, 'phone');
-            $country = filter_input(INPUT_POST, 'country');
-            $city = filter_input(INPUT_POST, 'city');
-            $street = filter_input(INPUT_POST, 'street');
-            $gender = filter_input(INPUT_POST, 'gender');
-
-            //insertion avec l'image par defaut pour l'instant
-            insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street);
+             header('Location: login.php');
         }
         ?>
         <div class="container" style="margin-top:30px">
@@ -63,7 +74,7 @@ and open the template in the editor.
                                     <!--<label for="country">Pays :
                                         <input type="text" class="form-control" id='country'>
                                     </label>-->
-                                    <?php 
+                                    <?php
                                     echo selectCountry();
                                     ?>
                                     <label for="city">Ville :
@@ -85,7 +96,7 @@ and open the template in the editor.
 
 
                             <label for="image">Image de profil :
-                                <input type="file" name="image" class="form-control" name="image" id='image'/>
+                                <input type="file" class="form-control" name="<?php echo INPUT; ?>" id='image'/>
                             </label>
                             <br/>
                             <button type="submit" class="btn btn-success" name="register">Valider</button>
