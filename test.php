@@ -35,8 +35,8 @@ and open the template in the editor.
 
         //insertArticleImage(9, 17);
         //banUnbanUser(15);
-        var_dump(articleInfo(11));
-        
+        //var_dump(articleInfo(11));
+        //banunbanArticle(11);
         ?>
 
 

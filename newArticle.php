@@ -34,8 +34,7 @@ and open the template in the editor.
                 
             $id_image = intval(imageUpload());
             insertArticleImage($article_id, $id_image);
-                
-     
+                   
             
         }
         ?>

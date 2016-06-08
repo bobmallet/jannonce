@@ -210,57 +210,25 @@ function banUnbanUser($uid) {
     return $isok;
 }
 
-/*
-  function banUser($id) {
-  static $ps = null;
-  $sql = 'UPDATE `users` SET `banned` = 1 WHERE `id` = :id';
-  if ($ps == null) {
-  $ps = myDatabase()->prepare($sql);
-  }
-  try {
-  $ps->bindParam(':id', $id, PDO::PARAM_INT);
-  $isok = $ps->execute();
-  } catch (PDOException $e) {
-  $isok = false;
-  }
-  return $isok;
-  }
-
-  function unbanUser($id) {
-  static $ps = null;
-  $sql = 'UPDATE `users` SET `banned` = 0 WHERE `id` = :id';
-  if ($ps == null) {
-  $ps = myDatabase()->prepare($sql);
-  }
-  try {
-  $ps->bindParam(':id', $id, PDO::PARAM_INT);
-  $isok = $ps->execute();
-  } catch (PDOException $e) {
-  $isok = false;
-  }
-  return $isok;
-  }
- */
-
-function updateUserInfo($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street, $id) {
+function updateUserInfo($lastName, $firstName, $gender, $mail, $pwd, $phone,$id) {
     static $ps = null;
 
-    $sql = "update users set users.firstname = :firstname and users.lastname = :lastname and users.gender = :gender and users.mail = :mail and users.phone = :phone where users.id = :id";
+    $sql = "update users set users.firstname = :firstname ,users.lastname = :lastname ,users.gender = :gender ,users.mail = :mail ,users.phone = :phone where users.id = :id";
 
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
     }
 
     try {
-        $ps_user->bindParam(':firstname', $firstName, PDO::PARAM_STR);
-        $ps_user->bindParam(':lastname', $lastName, PDO::PARAM_STR);
-        $ps_user->bindParam(':gender', $gender, PDO::PARAM_INT);
-        $ps_user->bindParam(':mail', $mail, PDO::PARAM_STR);
-        $ps_user->bindParam(':phone', $phone, PDO::PARAM_STR);
+        $ps->bindParam(':firstname', $firstName, PDO::PARAM_STR);
+        $ps->bindParam(':lastname', $lastName, PDO::PARAM_STR);
+        $ps->bindParam(':gender', $gender, PDO::PARAM_INT);
+        $ps->bindParam(':mail', $mail, PDO::PARAM_STR);
+        $ps->bindParam(':phone', $phone, PDO::PARAM_STR);
 
-        $ps_user->bindParam(':id', $id, PDO::PARAM_INT);
+        $ps->bindParam(':id', $id, PDO::PARAM_INT);
 
-        $isok = $ps_user->execute();
+        $isok = $ps->execute();
     } catch (PDOException $e) {
         $isok = false;
     }
@@ -290,7 +258,7 @@ function updateUserImage($id, $path) {
 function updateUserAdress($id, $countryiso, $city, $street) {
     static $ps = null;
 
-    $sql = "update adress set adress.city = :city and adress.street = :street and adress.country_iso = :iso where adress.id = :id";
+    $sql = "update adress set adress.city = :city ,adress.street = :street ,adress.country_iso = :iso where adress.id = :id";
 
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
@@ -298,13 +266,13 @@ function updateUserAdress($id, $countryiso, $city, $street) {
 
     try {
 
-        $ps_user->bindParam(':city', $city, PDO::PARAM_STR);
-        $ps_user->bindParam(':street', $street, PDO::PARAM_STR);
-        $ps_user->bindParam(':iso', $countryiso, PDO::PARAM_STR);
-        $ps_user->bindParam(':id', $id, PDO::PARAM_INT);
+        $ps->bindParam(':city', $city, PDO::PARAM_STR);
+        $ps->bindParam(':street', $street, PDO::PARAM_STR);
+        $ps->bindParam(':iso', $countryiso, PDO::PARAM_STR);
+        $ps->bindParam(':id', $id, PDO::PARAM_INT);
 
 
-        $isok = $ps_user->execute();
+        $isok = $ps->execute();
     } catch (PDOException $e) {
         $isok = false;
     }
@@ -508,63 +476,25 @@ function openArticle($idarticle) {
 
 function banunbanArticle($aid) {
     $banstate = articleInfo($aid)['banned'];
+
     $finalestate = ($banstate == "0") ? 1 : 0;
 
     static $ps = null;
 
-    $sql = 'UPDATE `articles` SET `banned` = :ban WHERE `id` = :id';
+    $sql = "UPDATE `articles` SET `banned` = :ban WHERE `id` = :id";
+
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
     }
     try {
         $ps->bindParam(':ban', $finalestate, PDO::PARAM_INT);
-        $ps->bindParam(':id', $uid, PDO::PARAM_INT);
+        $ps->bindParam(':id', $aid, PDO::PARAM_INT);
         $isok = $ps->execute();
     } catch (PDOException $e) {
         $isok = false;
     }
     return $isok;
 }
-
-/*
-  function banArticle($idarticle) {
-  static $ps = null;
-
-  $sql = 'update articles set articles.banned = 1 where articles.id = :id';
-
-  if ($ps == null) {
-  $ps = myDatabase()->prepare($sql);
-  }
-
-  try {
-  $ps->bindParam(':id', $idarticle, PDO::PARAM_INT);
-  $isok = $ps->execute();
-  } catch (PDOException $e) {
-  $isok = false;
-  }
-
-  return $isok;
-  }
-
-  function unbanArticle($idarticle) {
-  static $ps = null;
-
-  $sql = 'update articles set articles.banned = 0 where articles.id = :id';
-
-  if ($ps == null) {
-  $ps = myDatabase()->prepare($sql);
-  }
-
-  try {
-  $ps->bindParam(':id', $idarticle, PDO::PARAM_INT);
-  $isok = $ps->execute();
-  } catch (PDOException $e) {
-  $isok = false;
-  }
-
-  return $isok;
-  }
- */
 
 function getAllArticles() {
     static $ps = null;

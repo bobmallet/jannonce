@@ -22,6 +22,8 @@ and open the template in the editor.
         <?php
         include './menu/showmenu.php';
         var_dump(getUserInfo(getUserID()));
+        //var_dump($_POST);
+
         $data = getUserInfo(getUserID());
 
         // Si on a appuyé sur le bouton Valider
@@ -37,8 +39,9 @@ and open the template in the editor.
             $street = filter_input(INPUT_POST, 'street');
             $gender = intval(filter_input(INPUT_POST, 'gender'));
             updateUserAdress(intval($data['id_Adress']), $country, $city, $street);
-            updateUserInfo($lastName, $firstName, $gender, $mail, $pwd, $phone, $id);
+            updateUserInfo($lastName, $firstName, $gender, $mail, $pwd, $phone, getUserID());
             //updateUserImage(intval($data['id_Images']), $path);
+            header('Location: modification.php');
         }
         ?>
         <div class="container" style="margin-top:30px">
@@ -73,9 +76,9 @@ and open the template in the editor.
                                     <!--<label for="country">Pays :
                                         <input type="text" class="form-control" id='country'>
                                     </label>-->
-<?php
-echo selectCountry($data['country']);
-?>
+                                    <?php
+                                    echo selectCountry($data['country']);
+                                    ?>
                                     <label for="city">Ville :
                                         <input type="text" class="form-control" name="city" id='city' value="<?php echo $data['city']; ?>">
                                     </label>
@@ -88,15 +91,15 @@ echo selectCountry($data['country']);
                             <label for="gender">Genre :
                                 <select name="gender" class="form-control" name="gender" id="gender">
                                     <option value="1" <?php
-if ($data['gender'] == "1") {
-    echo 'selected';
-}
-?>>Homme</option>
+                                    if ($data['gender'] == "1") {
+                                        echo 'selected';
+                                    }
+                                    ?>>Homme</option>
                                     <option value="0" <?php
-if ($data['gender'] == "1") {
-    echo 'selected';
-}
-?>>Femme</option>
+                                    if ($data['gender'] == "1") {
+                                        echo 'selected';
+                                    }
+                                    ?>>Femme</option>
                                 </select>
                             </label>
                             <br/>

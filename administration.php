@@ -25,49 +25,65 @@ and open the template in the editor.
 
 
         <?php
-        $users = getAllUser();
-
-        $edit = '<a href="?user=true" class="btn btn-primary" role="button">Ban/Unban</a>';
-
-
-
-
-        for ($i = 0; $i < count($users); $i++) {
-            $edit = '<form action="#" method="post">
-                                <input type="hidden" name="uid" value="' . $users[$i]['id'] . '"/>
-                                <input type="submit" name="banuser" class="btn btn-primary" value="Ban/Unban"/>
-                        </form>';
-
-            $users[$i]['Edition'] = $edit;
-        }
-
-        print Array2Html($users, true);
-
-
-
-
-        $articles = getAllArticles();
-
-
-
-        for ($i = 0; $i < count($articles); $i++) {
-            $edit = '<form action="#" method="post">
-                                <input type="hidden" name="aid" value="' . $articles[$i]['id'] . '"/>
-                                <input type="submit" name="banarticle" class="btn btn-primary" value="Ban/Unban"/>
-                        </form>';
-            $articles[$i]['Edition'] = $edit;
-        }
-
-        print Array2Html($articles, true);
-
-
         if (isset($_REQUEST['banuser'])) {
             $uid = intval($_REQUEST['uid']);
             banUnbanUser($uid);
             header('Location: administration.php');
         }
 
-
+        if (isset($_REQUEST['banarticle'])) {
+            $aid = intval($_REQUEST['aid']);
+            banunbanArticle($aid);
+            header('Location: administration.php');
+        }
         ?>
+
+        <div id="articles" class = "panel panel-primary">
+            <div class = "panel-heading">
+                <h3 class = "panel-title">Utilisateurs</h3>
+            </div>
+            <div class = "panel-body">
+                <ul class="media-list forum">
+                    <?php
+                    $users = getAllUser();
+
+                    for ($i = 0; $i < count($users); $i++) {
+                        $edit = '<form action="#" method="post">
+                                <input type="hidden" name="uid" value="' . $users[$i]['id'] . '"/>
+                                <input type="submit" name="banuser" class="btn btn-primary" value="Ban/Unban"/>
+                        </form>';
+
+                        $users[$i]['Edition'] = $edit;
+                    }
+
+                    print Array2Html($users, true);
+                    ?>
+
+                </ul>
+            </div>
+        </div>
+
+        <div id="articles" class = "panel panel-primary">
+            <div class = "panel-heading">
+                <h3 class = "panel-title">Annonces</h3>
+            </div>
+            <div class = "panel-body">
+                <ul class="media-list forum">
+                    <?php
+                    $articles = getAllArticles();
+                    for ($i = 0; $i < count($articles); $i++) {
+                        $edit = '<form action="#" method="post">
+                                <input type="hidden" name="aid" value="' . $articles[$i]['id'] . '"/>
+                                <input type="submit" name="banarticle" class="btn btn-primary" value="Ban/Unban"/>
+                        </form>';
+                        $articles[$i]['Edition'] = $edit;
+                    }
+
+                    print Array2Html($articles, true);
+                    ?>
+
+                </ul>
+            </div>
+        </div>
     </body>
 </html>
