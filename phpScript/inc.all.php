@@ -11,7 +11,7 @@ require_once './phpScript/sessions.php';
 // Les fonctions
 require_once './phpScript/function.php';
 //Le controleur
-require_once './controller.php';
+require_once './phpScript/controller.php';
 
 ?>
 

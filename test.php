@@ -37,6 +37,7 @@ and open the template in the editor.
         //banUnbanUser(15);
         //var_dump(articleInfo(11));
         //banunbanArticle(11);
+        var_dump(articleInfo(15));
         ?>
 
 

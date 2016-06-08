@@ -137,8 +137,9 @@ and open the template in the editor.
                 <div id='comments' class="col-lg-12">
                     <ul class="media-list forum">
                         <?php
+                        $articlecreator = intval(articleInfo($aid)['id_Users']);
                         foreach (getArticleComments($aid) as $value) {
-                            print commentFormat($value);
+                            print commentFormat($value,$articlecreator);
                         }
                         ?>
                         <!-- Forum Post -->
@@ -185,7 +186,7 @@ and open the template in the editor.
 
                             <li class="media well">
                                 <div class="pull-left user-info col-lg-1" href="#">
-                                    <img class="avatar img-circle img-thumbnail" src="./img/Koala.jpg"
+                                    <img class="avatar img-circle img-thumbnail" src="<?php echo getImagePath(); ?>"
                                          width="64" alt="Generic placeholder image">
                                     <br/>
                                     <strong><a href="user.html"><?php echo $_SESSION['uname'] . "<br/>"; ?></a></strong>

@@ -210,7 +210,7 @@ function banUnbanUser($uid) {
     return $isok;
 }
 
-function updateUserInfo($lastName, $firstName, $gender, $mail, $pwd, $phone,$id) {
+function updateUserInfo($lastName, $firstName, $gender, $mail, $pwd, $phone, $id) {
     static $ps = null;
 
     $sql = "update users set users.firstname = :firstname ,users.lastname = :lastname ,users.gender = :gender ,users.mail = :mail ,users.phone = :phone where users.id = :id";
@@ -382,7 +382,7 @@ function insertArticleImage($aid, $iid) {
 }
 
 /**
- * Retourne ud code html pour afficher un article
+ * Retourne du code html pour afficher un article
  * @param type $data
  * @param type $imgpath
  * @return string
@@ -621,9 +621,10 @@ function getArticleComments($aid) {
     return $isok;
 }
 
-function commentFormat($data) {
+function commentFormat($data,$creatorid) {
     $uid = intval($data['id_Users']);
     $userinfo = getUserInfo($uid);
+    
     if ($userinfo['privilege'] == "2") {
         $priv = "Admin";
     } else {
@@ -634,6 +635,17 @@ function commentFormat($data) {
         $comment = $data['comm'];
     } else {
         $comment = "Commentaire en attente de modération";
+    }
+
+
+    $btn = "";
+
+    if (getUserID()==$creatorid) {
+        $btn .= "<input type=\"submit\" name=\"state\" class=\"btn btn-warning\" value=\"!\" />";
+    }
+
+    if (getPrivilege() == PRIV_ADMIN) {
+        $btn .= "<input type=\"submit\" name=\"ban\" class=\"btn btn-danger\" value=\"X\"/>";
     }
 
     $output = "    \n<li class=\"media well\">
@@ -655,10 +667,9 @@ function commentFormat($data) {
             .
             "\n<form action=\"#\" method=\"post\">
                                     <input type=\"hidden\" name=\"comstate\" value=\"" . $data['state'] . "\"/>
-                                    <input type=\"hidden\" name=\"idcom\" value=\"" . $data['id'] . "\"/>
-                                    <input type=\"submit\" name=\"state\" class=\"btn btn-warning\" value=\"!\" />
-                                    <input type=\"submit\" name=\"ban\" class=\"btn btn-danger\" value=\"X\"/>
-                                </form>"
+                                    <input type=\"hidden\" name=\"idcom\" value=\"" . $data['id'] . "\"/>"
+            . $btn .
+            "</form>"
             .
             //\n<a href=\"#\"><span class=\"input-group-addon\"><i class=\"glyphicon glyphicon-exclamation-sign\"></i></span></a>
             //\n<br/>

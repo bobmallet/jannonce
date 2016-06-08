@@ -7,14 +7,12 @@ require_once './phpScript/inc.all.php';
  * and open the template in the editor.
  */
 
-
+/*
 if (isset($_REQUEST['register'])) {
     checkRegister();
 }
 
-function checkLogin() {
-    
-}
+
 
 function checkRegister() {
     $lastName = filter_input(INPUT_POST, 'lastname');
@@ -56,3 +54,4 @@ function checkRegister() {
 function checkNewArticle() {
     
 }
+*/

@@ -23,7 +23,7 @@ and open the template in the editor.
             $mail = filter_input(INPUT_POST, 'mail');
             $pwd = filter_input(INPUT_POST, 'pwd');
 
-
+            //checkLogin($mail,$pwd);
 
             if (login($mail, $pwd)) {
                 $userinfo = getUserInfo(login($mail, $pwd));
@@ -42,6 +42,8 @@ and open the template in the editor.
             } else {
                 $error = "Identifiants incorrect";
             }
+
+ 
         }
         ?>
         <div class="container" style="margin-top:30px">

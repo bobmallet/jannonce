@@ -22,20 +22,20 @@ and open the template in the editor.
             $name = filter_input(INPUT_POST, 'name');
             $description = filter_input(INPUT_POST, 'description');
             $price = filter_input(INPUT_POST, 'price');
-            $images="";
+            $images = "";
             $date = date('Y-m-d H:i:s');
             $uid = getUserID();
-            
+
             $mvis = (isset($_POST["mailVisible"])) ? TRUE : FALSE;
             $pvis = (isset($_POST["phoneVisible"])) ? TRUE : FALSE;
             $avis = (isset($_POST["adressVisible"])) ? TRUE : FALSE;
-            
+
             $article_id = insertArticle($name, $description, $price, $date, $uid, $mvis, $pvis, $avis);
-                
+
             $id_image = intval(imageUpload());
             insertArticleImage($article_id, $id_image);
-                   
-            
+            //$header = 'articles.php?idarticle=' . insertArticleImage($article_id, $id_image);
+            header('Location: articles.php?idarticle='.$article_id);
         }
         ?>
         <div class="panel panel-default">
