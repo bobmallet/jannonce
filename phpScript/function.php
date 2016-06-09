@@ -332,7 +332,7 @@ function updateUserAdress($id, $countryiso, $city, $street) {
 function getAllUser() {
     static $ps = null;
 
-    $sql = "SELECT id, firstname as Prenom,lastname as Nom,mail, banned as Bannis FROM user_info;";
+    $sql = "SELECT id, firstname as Prenom,lastname as Nom,mail, banned as Bannis FROM user_info WHERE privilege=1;";
 
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
