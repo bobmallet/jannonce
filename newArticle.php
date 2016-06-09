@@ -18,6 +18,12 @@ and open the template in the editor.
 
         <title>Nouvelle annonce</title>
     </head>
+    <style>
+        .panel{
+            width: 75%;
+
+        }
+    </style>
     <body>
         <?php
         include './menu/showmenu.php';
@@ -43,44 +49,46 @@ and open the template in the editor.
             header('Location: articles.php?idarticle=' . $article_id);
         }
         ?>
-        <div class="panel panel-default">
-            <div class = "panel-heading">
-                <h3 class = "panel-title">Nouvelle annonce</h3>
-            </div>
-            <div class="panel-body">
-                <form action="#" method="post" enctype="multipart/form-data">
-                    <label for="title">Libelle :
-                        <input type="text" class="form-control" name='name'/>
-                    </label>
-                    <br/>
-                    <label for="description">Description :<br/>
-                        <textarea name='description' rows="10" cols="50" maxlength="500"></textarea>
-                    </label>
-                    <br/>
-                    <label for="price">Prix :
-                        <input type="text" name='price'/>
-                    </label>
-                    <br/>
-                    <label for="image">Image(s) :
-                        <input type="file" name="<?php echo INPUT; ?>[]" multiple/>
-                    </label>
-                    <br/>
+        <div class="col-md-5 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class = "panel-heading">
+                    <h3 class = "panel-title">Nouvelle annonce</h3>
+                </div>
+                <div class="panel-body">
+                    <form action="#" method="post" enctype="multipart/form-data">
+                        <label for="title">Libelle :
+                            <input type="text" class="form-control" name='name'/>
+                        </label>
+                        <br/>
+                        <label for="description">Description :<br/>
+                            <textarea name='description' rows="10" cols="50" maxlength="500"></textarea>
+                        </label>
+                        <br/>
+                        <label for="price">Prix :
+                            <input type="text" name='price'/>
+                        </label>
+                        <br/>
+                        <label for="image">Image(s) :
+                            <input type="file" name="<?php echo INPUT; ?>[]" multiple/>
+                        </label>
+                        <br/>
 
-                    <label for='mailVisible'>
-                        E-mail visible : <input type="checkbox" name='mailVisible'/>                        
-                    </label>
+                        <label for='mailVisible'>
+                            E-mail visible : <input type="checkbox" name='mailVisible'/>                        
+                        </label>
 
-                    <label for='phoneVisible'>
-                        Numero de Tel. visible : <input type="checkbox" name='phoneVisible'/>                        
-                    </label>
+                        <label for='phoneVisible'>
+                            Numero de Tel. visible : <input type="checkbox" name='phoneVisible'/>                        
+                        </label>
 
-                    <label for='adressVisible'>
-                        Adresse visible : <input type="checkbox" name='adressVisible'/>                        
-                    </label>
-                    <br/>
-                    <button type="submit" class="btn btn-success" name="submit">Envoyer</button>
-                </form>
+                        <label for='adressVisible'>
+                            Adresse visible : <input type="checkbox" name='adressVisible'/>                        
+                        </label>
+                        <br/>
+                        <button type="submit" class="btn btn-success" name="submit">Envoyer</button>
+                    </form>
 
+                </div>
             </div>
         </div>
     </body>

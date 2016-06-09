@@ -41,7 +41,7 @@ and open the template in the editor.
             updateUserAdress(intval($data['id_Adress']), $country, $city, $street);
             updateUserInfo($lastName, $firstName, $gender, $mail, $pwd, $phone, getUserID());
             //updateUserImage(intval($data['id_Images']), $path);
-            header('Location: modification.php');
+            header('Location: userPage.php');
         }
         ?>
         <div class="container" style="margin-top:30px">

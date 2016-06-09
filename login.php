@@ -58,7 +58,7 @@ and open the template in the editor.
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                     <input type="email" class="form-control" id="mail"
-                                           placeholder="Entrez votre adresse email" name="mail">
+                                           placeholder="Entrez votre adresse email" name="mail" required>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -66,7 +66,7 @@ and open the template in the editor.
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                                     <input type="password" class="form-control" id="pwd"
-                                           placeholder="Mot de passe" name="pwd">
+                                           placeholder="Mot de passe" name="pwd" required>
                                 </div>                              
                             </div>
                             <button type="submit" class="btn btn-success" name="login">Connexion</button>

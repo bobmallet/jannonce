@@ -33,15 +33,18 @@ function &myDatabase() {
  * Ajoute une adresse dans la base
  * @staticvar type $ps_adress
  * @staticvar type $ps_id
- * @param type $country
- * @param type $city
- * @param type $street
- * @return type
+ * @param string $country
+ * @param string $city
+ * @param string $street
+ * @return int  => le dernier id ajouté dans la base
  */
 function addAddress($country, $city, $street) {
+
+    //Prepared statements
     static $ps_adress = null;
     static $ps_id = null;
 
+    //query
     $sql_adress = 'insert into adress (adress.city,adress.street,adress.country_iso) values (:city,:street,:iso);';
 
     if ($ps_adress == null) {
@@ -61,15 +64,6 @@ function addAddress($country, $city, $street) {
         $last_id = $ps_id->fetchAll(PDO::FETCH_NUM);
 
         return $last_id[0][0];
-
-        /*
-          $ps_id->bindParam(':country', $data['country'], PDO::PARAM_STR);
-          $ps_id->bindParam(':city', $data['city'], PDO::PARAM_STR);
-          $ps_id->bindParam(':street', $data['street'], PDO::PARAM_STR);
-          $isok = $ps_id->execute();
-          $isok = $ps_id->fetchAll(PDO::FETCH_NUM);
-          $isok = $isok[0][0];
-         * */
     } catch (PDOException $e) {
         $isok = null;
     }
@@ -78,26 +72,25 @@ function addAddress($country, $city, $street) {
 
 /**
  * Insére un nouvel utilisateur dans la base de données
- * @param type $lastName    Le nom de famille
- * @param type $firstName   Le prénom
- * @param type $gender      Le genre
- * @param type $mail        Le email
- * @param type $pwd         Le mot de passe pas encore crypté
- * @param type $phone       
- * @param type $country
- * @param type $city
- * @param type $street
- * @param type $image
+ * @param string $lastName    Le nom de famille
+ * @param string $firstName   Le prénom
+ * @param string $gender      Le genre
+ * @param string $mail        Le email
+ * @param string $pwd         Le mot de passe pas encore crypté
+ * @param string $phone       Le numero de telephone
+ * @param string $country     Le code ISO du pays
+ * @param string $city        Le nom de la ville
+ * @param string $street      Le nom de la rue
+ * @param int $image          L'id de l'image
  * @return boolean  True si correctement ajouté, autrement False.
  */
 function insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street, $image = DEFAULT_IMAGE_ID) {
 
+    //Prepared statements
     static $ps_user = null;
 
-
+    //Query
     $sql_user = 'insert into users (users.firstname,users.lastname,users.gender,users.mail,users.phone,users.banned,users.password,users.id_Images,users.id_Adress, users.privilege) values (:firstname,:lastname,:gender,:mail,:phone,0,:password,:idimage,:idadress, :privilege);';
-
-
 
     if ($ps_user == null) {
         $ps_user = myDatabase()->prepare($sql_user);
@@ -119,11 +112,6 @@ function insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $countr
         $ps_user->bindParam(':idadress', $id_adress, PDO::PARAM_INT);
         $ps_user->bindParam(':privilege', $priv, PDO::PARAM_INT);
 
-        //$ps_user->bindParam(':country', $data['country'], PDO::PARAM_STR);
-        //$ps_user->bindParam(':city', $data['city'], PDO::PARAM_STR);
-        //$ps_user->bindParam(':street', $data['street'], PDO::PARAM_STR);
-
-
         $isok = $ps_user->execute();
     } catch (PDOException $e) {
         $isok = false;
@@ -132,14 +120,18 @@ function insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $countr
 }
 
 /**
- * Verification des identifiants de l'utilisateur 
+ * Verification des identifiants de l'utilisateur
  * @staticvar type $ps
- * @param type $data
- * @return boolean  retourne l'id de l'utilisateur si il existe, sinon retourne FALSE
+ * @param string $mail      L'adresse email
+ * @param string $pwd       Le mot de passe pas encore crypté
+ * @return boolean
  */
 function login($mail, $pwd) {
+
+    //Prepared statement
     static $ps = null;
 
+    //Query
     $sql = 'select users.id, users.password from users where users.mail = :mail';
 
     if ($ps == null) {
@@ -166,13 +158,16 @@ function login($mail, $pwd) {
 }
 
 /**
- * Reoturne un tableau avec les infos de l'utilisateur
+ * Retourne un tableau avec les infos de l'utilisateur
  * @staticvar type $ps
- * @param type $id
- * @return Array
+ * @param int $id   Id de l'utilisateur
+ * @return Array    Tableau associatif contenant les données de l'utilisateur
  */
 function getUserInfo($id) {
+    //Prepared statement
     static $ps = null;
+
+    //Query
     $sql = 'select * from user_info where user_info.id = :id';
 
     if ($ps == null) {
@@ -192,9 +187,9 @@ function getUserInfo($id) {
 }
 
 /**
- * Retourne les nom et le prenom avec le format "Prenom N."
- * @param type $firstname
- * @param type $lastname
+ * Retourne le nom et le prenom avec le format "Prenom N."
+ * @param string $firstname     Nom
+ * @param string $lastname      Prenom
  * @return (string) format Prenom N.
  */
 function formatUserName($firstname, $lastname) {
@@ -204,15 +199,17 @@ function formatUserName($firstname, $lastname) {
 /**
  * Inverse l'etat de bannissement de l'utilisateur
  * @staticvar type $ps
- * @param type $uid
+ * @param int $uid      Identifiant de l'utilisateur
  * @return boolean
  */
 function banUnbanUser($uid) {
     $banstate = getUserInfo($uid)['banned'];
     $finalestate = ($banstate == "0") ? 1 : 0;
 
+    //Prepared statement
     static $ps = null;
 
+    //Query
     $sql = 'UPDATE `users` SET `banned` = :ban WHERE `id` = :id';
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
@@ -230,18 +227,20 @@ function banUnbanUser($uid) {
 /**
  * Modifie les informations de l'utilisateur
  * @staticvar type $ps
- * @param type $lastName
- * @param type $firstName
- * @param type $gender
- * @param type $mail
- * @param type $pwd
- * @param type $phone
- * @param type $id
+ * @param string $lastName      Nom de l'utilisateur
+ * @param string $firstName     Prenom de l'utilisateur
+ * @param Bool $gender          Genre de l'utilisateur (0 pour Femme et 1 pour Homme)
+ * @param string $mail          Email de l'utilisateur
+ * @param string $phone         Numero de telephone de l'utilisateur
+ * @param int $id               Identifiant d el'utilisateur
  * @return boolean
  */
-function updateUserInfo($lastName, $firstName, $gender, $mail, $pwd, $phone, $id) {
+function updateUserInfo($lastName, $firstName, $gender, $mail, $phone, $id) {
+
+    //Prepared statement
     static $ps = null;
 
+    //Query
     $sql = "update users set users.firstname = :firstname ,users.lastname = :lastname ,users.gender = :gender ,users.mail = :mail ,users.phone = :phone where users.id = :id";
 
     if ($ps == null) {
@@ -267,7 +266,7 @@ function updateUserInfo($lastName, $firstName, $gender, $mail, $pwd, $phone, $id
 /**
  * Modifie le chemin de l'avatar de l'utilisateur
  * @staticvar type $ps
- * @param type $id
+ * @param int $id
  * @param type $path
  * @return boolean
  */
@@ -294,15 +293,18 @@ function updateUserImage($id, $path) {
 /**
  * Modifie l'adresse d'un utilisateur
  * @staticvar type $ps
- * @param type $id
- * @param type $countryiso
- * @param type $city
- * @param type $street
+ * @param int $id                   Identifiant de l'utilisateur
+ * @param string $countryiso        Code ISO du pays
+ * @param string $city              Nom de la ville
+ * @param string $street            Nom de la rue
  * @return boolean
  */
 function updateUserAdress($id, $countryiso, $city, $street) {
+
+    //Prepared stateent
     static $ps = null;
 
+    //Query
     $sql = "update adress set adress.city = :city ,adress.street = :street ,adress.country_iso = :iso where adress.id = :id";
 
     if ($ps == null) {
@@ -325,9 +327,9 @@ function updateUserAdress($id, $countryiso, $city, $street) {
 }
 
 /**
- * Retourne un tableau avec tous les utilisateurss
+ * Retourne un tableau avec tous les utilisateurs
  * @staticvar type $ps
- * @return array
+ * @return array        Tableau associatif contenant tous les utilisateurs
  */
 function getAllUser() {
     static $ps = null;
@@ -351,23 +353,25 @@ function getAllUser() {
 //gestion des annonces
 
 /**
- * Insert un nouvel article dans la base de donnée
+ * Insert une nouvelle annonce dans la base de donnée
  * @staticvar type $ps
- * @param type $name
- * @param type $description
- * @param type $price
- * @param type $date
- * @param type $uid
- * @param type $mailvisible
- * @param type $phonevisible
- * @param type $adressvisible
+ * @param string $name          libelle de l'annonce  
+ * @param string $description   Description de l'annonce
+ * @param string $price         Prix de l'annonce   
+ * @param string $date          Date de creation de l'annonce
+ * @param string $uid           Identifiant du créateur de l'annonce
+ * @param bool $mailvisible     Email visible ou non
+ * @param bool $phonevisible    Numero de telephone visible ou non
+ * @param bool $adressvisible   Adresse visible ou non
  * @return boolean
  */
 function insertArticle($name, $description, $price, $date, $uid, $mailvisible, $phonevisible, $adressvisible) {
+
+    //Prepared statements
     static $ps = null;
     static $ps_id = null;
 
-
+    //Query
     $sql = 'insert into articles (name,description,price,state,creationdate,banned,id_Users,mailvisible,phonevisible,adressvisible) values (:name,:description,:price,1,:date,0,:uid,:mvis,:pvis,:avis)';
 
 
@@ -403,21 +407,32 @@ function insertArticle($name, $description, $price, $date, $uid, $mailvisible, $
     return $isok;
 }
 
+/**
+ * Edition des informations d'une annonce
+ * @staticvar type $ps
+ * @param int $idarticle            Identifiant de l'annonce a editer
+ * @param string $name              Libelle del'annonce
+ * @param string $description       Description del'annonce
+ * @param string $price             Prix de l'annonce
+ * @param bool $mailvisible         Email visible ou non
+ * @param bool $phonevisible        Numero de telephone visible ou non
+ * @param bool $adressvisible       Adresse visible ou non
+ * @return boolean
+ */
 function editArticleInfo($idarticle, $name, $description, $price, $mailvisible, $phonevisible, $adressvisible) {
+
+    //Prepared statement
     static $ps = null;
 
-    //$sql = 'insert into articles (name,description,price,state,creationdate,banned,id_Users,mailvisible,phonevisible,adressvisible) values (:name,:description,:price,1,:date,0,:uid,:mvis,:pvis,:avis)';
+    //Query
     $sql = 'update articles set name=:name ,description=:description ,price=:price ,mailvisible=:mvis, phonevisible=:pvis ,adressvisible =:avis where id=:id';
 
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
     }
 
-
-
-
     try {
-        
+
         $ps->bindParam(':name', $name, PDO::PARAM_STR);
         $ps->bindParam(':description', $description, PDO::PARAM_STR);
         $ps->bindParam(':price', $price, PDO::PARAM_STR);
@@ -439,14 +454,15 @@ function editArticleInfo($idarticle, $name, $description, $price, $mailvisible, 
 /**
  * Insert une image de l'article dans la base de données
  * @staticvar type $ps
- * @param type $aid
- * @param type $iid
+ * @param int $aid      Identifiant de l'article
+ * @param int $iid      Identifiant de l'image
  * @return boolean
  */
 function insertArticleImage($aid, $iid) {
-
+    //Prepared statement
     static $ps = null;
 
+    //Query
     $sql = "update images set images.id_articles = :articleid where images.id = :imageid";
 
     if ($ps == null) {
@@ -465,9 +481,9 @@ function insertArticleImage($aid, $iid) {
 }
 
 /**
- * Retourne du code html pour afficher un article
- * @param type $data
- * @param type $imgpath
+ * Retourne du code html pour afficher un article sur la page d'accueil
+ * @param Array $data       Donnée de l'utilisateur (id,name,description,date de creation, price)
+ * @param string $imgpath   Chemin de l'image à afficher
  * @return string
  */
 function articleFormat($data, $imgpath) {
@@ -498,11 +514,14 @@ function articleFormat($data, $imgpath) {
 /**
  * Retourne image des articles en fonction de l'id de l'article
  * @staticvar type $ps
- * @param type $idarticle
+ * @param int $idarticle    Identifiant d el'article
  * @return boolean
  */
 function articleImages($idarticle) {
+    //Prepared statement
     static $ps = null;
+
+    //Query
     $sql = 'SELECT id, path FROM images where images.id_articles = :id';
 
     if ($ps == null) {
@@ -519,12 +538,21 @@ function articleImages($idarticle) {
     return $isok;
 }
 
+/**
+ * Ovre/Ferme un article
+ * @staticvar type $ps
+ * @param int $aid      Identifiant del'article
+ * @return boolean
+ */
 function openCloseArticle($aid) {
+    //Recuperation des infos de l'article
     $banstate = articleInfo($aid)['state'];
     $finalestate = ($banstate == "0") ? 1 : 0;
 
+    //prepared statement
     static $ps = null;
 
+    //Query
     $sql = 'UPDATE `articles` SET `state` = :state WHERE `id` = :id';
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
@@ -539,13 +567,21 @@ function openCloseArticle($aid) {
     return $isok;
 }
 
+/**
+ * Ban/Unban un article
+ * @staticvar type $ps
+ * @param int $aid          Identifiant de l'article
+ * @return boolean
+ */
 function banunbanArticle($aid) {
     $banstate = articleInfo($aid)['banned'];
 
     $finalestate = ($banstate == "0") ? 1 : 0;
 
+    //Prepared statement
     static $ps = null;
 
+    //Query
     $sql = "UPDATE `articles` SET `banned` = :ban WHERE `id` = :id";
 
     if ($ps == null) {
@@ -567,8 +603,11 @@ function banunbanArticle($aid) {
  * @return boolean
  */
 function getAllArticles() {
+
+    //Prepared statement
     static $ps = null;
 
+    //Query
     $sql = 'select id, name as Libelle,description,price as Prix,state as Etat,creationdate as "Date de creation",banned as Bannis from articles';
 
     if ($ps == null) {
@@ -591,8 +630,11 @@ function getAllArticles() {
  * @return boolean
  */
 function listArticles() {
+
+    //Prepared statement
     static $ps = null;
 
+    //Query
     $sql = 'SELECT * FROM articles where state = 1 and banned = 0 order by creationdate DESC';
 
     if ($ps == null) {
@@ -610,14 +652,17 @@ function listArticles() {
 }
 
 /**
- * Recupere toute les annonces d'un utilisateru en particulier
+ * Recupere toutes les annonces d'un utilisateur en particulier
  * @staticvar type $ps
- * @param type $uid
+ * @param int $uid         Identifiant dle'utilisateur
  * @return boolean
  */
 function getUserArticles($uid) {
+
+    //Prepared statement
     static $ps = null;
 
+    //Query
     $sql = 'SELECT * FROM articles where banned = 0 and articles.id_Users = :id order by creationdate';
 
     if ($ps == null) {
@@ -638,11 +683,15 @@ function getUserArticles($uid) {
 /**
  * Retourne les informations d'un article
  * @staticvar type $ps
- * @param type $id
+ * @param int $id       $identifiant de l'article
  * @return boolean
  */
 function articleInfo($id) {
+
+    //Prepared statement
     static $ps = null;
+
+    //Query
     $sql = 'select * from articles where id = :id';
 
     if ($ps == null) {
@@ -664,8 +713,8 @@ function articleInfo($id) {
 
 /**
  * Retourne un string d'un certain nombre de charactère
- * @param type $desc
- * @return type
+ * @param string $desc    Description à raccourcir
+ * @return string
  */
 function descriptionSize($desc) {
     return substr($desc, 0, 50) . "...";
@@ -676,14 +725,18 @@ function descriptionSize($desc) {
 /**
  * Ajoute un commentaire dans la base
  * @staticvar type $ps
- * @param type $uid
- * @param type $aid
- * @param type $date
- * @param type $com
+ * @param int $uid          Identifiant de l'utilisateur
+ * @param int $aid          Identifiant de l'article
+ * @param string $date      Date du commentaire
+ * @param string $com       Texte du commentaire
  * @return boolean
  */
 function addComment($uid, $aid, $date, $com) {
+
+    //Prepared statement
     static $ps = null;
+
+    //Query
     $sql = "insert into comments (comments.id_Users,comments.id_articles,comments.date_com,comments.comm,comments.state,comments.banned) values (:uid,:aid,:date,:com,1,0)";
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
@@ -705,11 +758,15 @@ function addComment($uid, $aid, $date, $com) {
 /**
  * Recupere les commentaires d'une annonce
  * @staticvar type $ps
- * @param type $aid
+ * @param int $aid          Identifiant de l'annonce
  * @return boolean
  */
 function getArticleComments($aid) {
+
+    //Prepared statement
     static $ps = null;
+
+    //Query
     $sql = "select * from comments where id_articles = :id and comments.banned = 0";
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
@@ -727,10 +784,10 @@ function getArticleComments($aid) {
 }
 
 /**
- * Retourne du code html pout afficher le ocmmentaire
- * @param type $data
- * @param type $creatorid
- * @return string
+ * Retourne du code html pout afficher le commentaire
+ * @param Array $data           Données du commentaire
+ * @param int $creatorid        Identifiant du createur de l'article
+ * @return string               Code HTML
  */
 function commentFormat($data, $creatorid) {
     $uid = intval($data['id_Users']);
@@ -797,13 +854,16 @@ function commentFormat($data, $creatorid) {
 /**
  * Inverse l'etat du commentaire (en attente de moderation ou non)
  * @staticvar type $ps
- * @param type $idcomment
- * @param type $state
+ * @param int $idcomment        Identifiant du commentaire
+ * @param bool $state           Valeur a assigner
  * @return boolean
  */
 function changeComState($idcomment, $state) {
+
+    //Prepared statement
     static $ps = null;
 
+    //Query
     $sql = 'update comments set comments.state = :state where comments.id = :id';
 
     if ($ps == null) {
@@ -824,12 +884,15 @@ function changeComState($idcomment, $state) {
 /**
  * Bannis un commentaire
  * @staticvar type $ps
- * @param type $idcomment
+ * @param int $idcomment        Identifiant du commentaire
  * @return boolean
  */
 function banComment($idcomment) {
+
+    //Prepared statement
     static $ps = null;
 
+    //Query
     $sql = 'update comments set comments.banned = 1 where comments.id = :id';
 
     if ($ps == null) {
@@ -852,13 +915,16 @@ function banComment($idcomment) {
  * @staticvar type $ps_id
  * @param string $path
  * @param int $idarticle (a specifier si on souhaite assigner l'image a un article)
- * @return string
+ * @return int      Identifiant de l'image
  */
 function insertImage($path, $idarticle = FALSE) {
+
+    //Prepared statements
     static $ps_image = null;
     static $ps_id = null;
 
 
+    //Query
     if ($idarticle) {
         $sql_image = 'insert into images (path,images.id_articles) values (:path,:id)';
     } else {
@@ -900,7 +966,8 @@ function insertImage($path, $idarticle = FALSE) {
  */
 function imageUpload() {
 
-    $extArray = array('jpg', 'gif', 'png', 'jpeg');    // Extensions autorisées
+    //Extensions autorisées
+    $extArray = array('jpg', 'gif', 'png', 'jpeg');
 
     $ext = '';
     $error = '';
@@ -1022,14 +1089,18 @@ function Array2Html($anArray, $assoc = false) {
     return $output;
 }
 
+
 /**
  * Récupere tous les pays
  * @staticvar type $ps
  * @return boolean
  */
 function getAllCountry() {
+    
+    //Prepared statement
     static $ps = null;
 
+    //Query
     $sql = 'select * from country order by name';
 
     if ($ps == null) {
@@ -1045,10 +1116,11 @@ function getAllCountry() {
     return $isok;
 }
 
+
 /**
  * Retourne du code html pout faire un select avec tous les pays
- * @param type $selectedcountry
- * @return string
+ * @param string $selectedcountry       Nom du pays (a specifier pour definir l'attribut selected)
+ * @return string       Code HTML
  */
 function selectCountry($selectedcountry = null) {
     $output = "\n<select name=\"country\" class=\"form-control\" id=\"country\">";
@@ -1070,24 +1142,41 @@ function selectCountry($selectedcountry = null) {
     return $output;
 }
 
+
 //utilisaé pour les annonces
+
+/**
+ * Parcour le $_FILE pour envoyer toute les images dans un article
+ * @param int $id_article       Identifiant de l'article
+ * @return boolean
+ */
 function multiUpload($id_article) {
 
+    //Nombre d'image 
     $nb = count($_FILES[INPUT]['name']);
     for ($i = 0; $i < $nb; $i++) {
         $name = uniqid();
         $extension_upload = strtolower(substr(strrchr($_FILES[INPUT]['name'][$i], '.'), 1));
         $destination = TARGET . $name . "." . $extension_upload;
+        //deplacement des fichiers
         move_uploaded_file($_FILES[INPUT]['tmp_name'][$i], $destination);
+        //insertion del'image dans la base
         insertImage($destination, $id_article);
     }
     return TRUE;
 }
 
-//supprime toute les images d'un article de la base de donnée
+
+/**
+ * Supprime toutes les images d'un article dans la base de donnée
+ * @staticvar type $ps
+ * @param int $id_article       Identifiant del'article
+ */
 function deleteArticleImages($id_article) {
+    //Prepared statement
     static $ps = null;
 
+    //Query
     $sql = "update images set id_articles=NULL where id=:id";
 
     if ($ps == null) {
@@ -1103,6 +1192,7 @@ function deleteArticleImages($id_article) {
         $ps->execute();
     }
 }
+
 
 function editImagePath($id_image, $newpath) {
     static $ps = null;

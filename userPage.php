@@ -41,11 +41,13 @@ and open the template in the editor.
 
                     <div id='description'>
                         <?php
+                        $gender = ($userinfo['gender'] == "0") ? "Femme":"Homme";
+                        
                         echo 'Nom: ' . $userinfo['lastname'];
                         echo '<br/>';
                         echo 'Prenom: ' . $userinfo['firstname'];
                         echo '<br/>';
-                        echo 'Genre : ' . $userinfo['gender'];
+                        echo 'Genre : ' . $gender;
                         echo '<br/><br/><br/>';
                         ?>
 
