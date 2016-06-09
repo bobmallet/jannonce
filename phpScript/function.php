@@ -1036,3 +1036,20 @@ function selectCountry($selectedcountry = null) {
 
     return $output;
 }
+
+
+
+
+//utilisaé pour les annonces
+function multiUpload($id_article) {
+
+    $nb = count($_FILES[INPUT]['name']);
+    for ($i = 0; $i < $nb; $i++) {
+        $name = uniqid();
+        $extension_upload = strtolower(substr(strrchr($_FILES[INPUT]['name'][$i], '.'), 1));
+        $destination = TARGET . $name . "." . $extension_upload;
+        move_uploaded_file($_FILES[INPUT]['tmp_name'][$i], $destination);
+        insertImage($destination, $id_article);
+    }
+    return TRUE;
+}

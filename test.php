@@ -34,12 +34,32 @@ and open the template in the editor.
         //var_dump(articleInfo(11));
         //banunbanArticle(11);
         //var_dump(articleInfo(15));
-        var_dump(articleInfo(17));
-        openCloseArticle(17);
-        ?>
-
 
         
+
+        function multiUpload($id_article) {
+            
+            $nb = count($_FILES[INPUT]['name']);
+            for ($i = 0; $i < $nb; $i++) {
+                $name = uniqid();
+                $extension_upload = strtolower(substr(strrchr($_FILES[INPUT]['name'][$i], '.'), 1));
+                $destination = TARGET . $name . "." . $extension_upload;
+                move_uploaded_file($_FILES[INPUT]['tmp_name'][$i], $destination);
+                insertImage($destination, $id_article);
+            }
+            return TRUE;
+        }
+
+        if (isset($_REQUEST['submit'])) {
+            multiUpload();
+        }
+        ?>
+
+        <form method="post" action="#" enctype="multipart/form-data">
+            <input type="file" name="imgupload[]" multiple/>
+            <input type="submit" name="submit" value="Envoyer" />
+        </form>
+
 
     </body>
 </html>

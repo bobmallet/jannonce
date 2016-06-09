@@ -36,9 +36,11 @@ and open the template in the editor.
             $avis = (isset($_POST["adressVisible"])) ? TRUE : FALSE;
 
             $article_id = insertArticle($name, $description, $price, $date, $uid, $mvis, $pvis, $avis);
-
-            $id_image = intval(imageUpload());
-            insertArticleImage($article_id, $id_image);            
+            
+            multiUpload($article_id);
+            
+            //$id_image = intval(imageUpload());
+            //insertArticleImage($article_id, $id_image);            
             header('Location: articles.php?idarticle='.$article_id);
         }
         ?>
@@ -61,7 +63,7 @@ and open the template in the editor.
                     </label>
                     <br/>
                     <label for="image">Image(s) :
-                        <input type="file" name="<?php echo INPUT; ?>"/>
+                        <input type="file" name="<?php echo INPUT; ?>[]" multiple/>
                     </label>
                     <br/>
 
