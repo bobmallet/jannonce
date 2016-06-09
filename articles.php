@@ -1,7 +1,11 @@
 <?php
 require_once './phpScript/inc.all.php';
 
+if(isset($_REQUEST['idarticle'])){
 $aid = intval($_REQUEST['idarticle']);
+}  else {
+    header('Location: index.php');
+}
 $articleinfo = articleInfo($aid);
 $banned = intval($articleinfo['banned']);
 
@@ -130,10 +134,11 @@ and open the template in the editor.
                     ?>
 
 
-                    <?php if (getUserID() == $articlecreator) { ?>
+                    <?php if (getUserID() == $articlecreator || getPrivilege() == PRIV_ADMIN) { ?>
                         <form action="#" method="post">
                             <input type="hidden" name="id" value="<?php echo $aid; ?>"/>
                             <button type="submit" class="btn btn-success" name="changestate">Ouvrir/Fermer</button>
+                            <a href="./editArticle.php?aid=<?php echo $aid; ?>" class="btn btn-warning" role="button">Editer l'annonce</a>
                         </form>
                     <?php } ?>
                 </div>

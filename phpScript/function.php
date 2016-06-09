@@ -403,6 +403,39 @@ function insertArticle($name, $description, $price, $date, $uid, $mailvisible, $
     return $isok;
 }
 
+function editArticleInfo($idarticle, $name, $description, $price, $mailvisible, $phonevisible, $adressvisible) {
+    static $ps = null;
+
+    //$sql = 'insert into articles (name,description,price,state,creationdate,banned,id_Users,mailvisible,phonevisible,adressvisible) values (:name,:description,:price,1,:date,0,:uid,:mvis,:pvis,:avis)';
+    $sql = 'update articles set name=:name ,description=:description ,price=:price ,mailvisible=:mvis, phonevisible=:pvis ,adressvisible =:avis where id=:id';
+
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+
+
+
+    try {
+        
+        $ps->bindParam(':name', $name, PDO::PARAM_STR);
+        $ps->bindParam(':description', $description, PDO::PARAM_STR);
+        $ps->bindParam(':price', $price, PDO::PARAM_STR);
+        $ps->bindParam(':mvis', $mailvisible, PDO::PARAM_INT);
+        $ps->bindParam(':pvis', $phonevisible, PDO::PARAM_INT);
+        $ps->bindParam(':avis', $adressvisible, PDO::PARAM_INT);
+        $ps->bindParam(':id', $idarticle, PDO::PARAM_INT);
+
+
+        $isok = $ps->execute();
+
+        return $isok;
+    } catch (PDOException $e) {
+        $isok = false;
+    }
+    return $isok;
+}
+
 /**
  * Insert une image de l'article dans la base de données
  * @staticvar type $ps
@@ -470,7 +503,7 @@ function articleFormat($data, $imgpath) {
  */
 function articleImages($idarticle) {
     static $ps = null;
-    $sql = 'SELECT path FROM images where images.id_articles = :id';
+    $sql = 'SELECT id, path FROM images where images.id_articles = :id';
 
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
@@ -1037,9 +1070,6 @@ function selectCountry($selectedcountry = null) {
     return $output;
 }
 
-
-
-
 //utilisaé pour les annonces
 function multiUpload($id_article) {
 
@@ -1052,4 +1082,45 @@ function multiUpload($id_article) {
         insertImage($destination, $id_article);
     }
     return TRUE;
+}
+
+//supprime toute les images d'un article de la base de donnée
+function deleteArticleImages($id_article) {
+    static $ps = null;
+
+    $sql = "update images set id_articles=NULL where id=:id";
+
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    $imgid = articleImages($id_article);
+
+    foreach ($imgid as $value) {
+        $id = intval($value['id']);
+
+        $ps->bindParam(':id', $id, PDO::PARAM_INT);
+        $ps->execute();
+    }
+}
+
+function editImagePath($id_image, $newpath) {
+    static $ps = null;
+
+    $sql = "update images set images.path = :path where images.id = :id";
+
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+        $ps->bindParam(':path', $newpath, PDO::PARAM_STR);
+        $ps->bindParam(':id', $id_image, PDO::PARAM_INT);
+
+        $isok = $ps->execute();
+    } catch (PDOException $ex) {
+        $isok = false;
+    }
+
+    return $isok;
 }

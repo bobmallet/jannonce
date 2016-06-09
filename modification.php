@@ -96,7 +96,7 @@ and open the template in the editor.
                                     }
                                     ?>>Homme</option>
                                     <option value="0" <?php
-                                    if ($data['gender'] == "1") {
+                                    if ($data['gender'] == "0") {
                                         echo 'selected';
                                     }
                                     ?>>Femme</option>

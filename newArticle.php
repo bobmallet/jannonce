@@ -1,10 +1,9 @@
 <?php
 require './phpScript/inc.all.php';
 
-if(getPrivilege()== PRIV_UNKNOWN){
+if (getPrivilege() == PRIV_UNKNOWN) {
     header('Location: index.php');
 }
-
 ?>
 <!DOCTYPE html>
 <!--
@@ -36,12 +35,12 @@ and open the template in the editor.
             $avis = (isset($_POST["adressVisible"])) ? TRUE : FALSE;
 
             $article_id = insertArticle($name, $description, $price, $date, $uid, $mvis, $pvis, $avis);
-            
+
             multiUpload($article_id);
-            
+
             //$id_image = intval(imageUpload());
             //insertArticleImage($article_id, $id_image);            
-            header('Location: articles.php?idarticle='.$article_id);
+            header('Location: articles.php?idarticle=' . $article_id);
         }
         ?>
         <div class="panel panel-default">
