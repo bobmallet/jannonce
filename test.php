@@ -16,7 +16,7 @@ and open the template in the editor.
         
         //updateUserAdress(50, "MQ", "city", "street");
         //updateUserInfo("lastName", "firstName", 0, "asdfghjkl@gmail.com", "123456", 18);
-        changeUserImage(18, 71);
+        var_dump(articleImages(11));
         ?>
 
         <form method="post" action="#" enctype="multipart/form-data">

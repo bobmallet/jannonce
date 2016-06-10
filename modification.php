@@ -1,12 +1,12 @@
 <?php
 /*
-Fichier: modification.php
-Auteur: Kevin Zaffino
-Date: 15/06/2016
-Version:1.10
-Description: Page d'edition des informations utilisateur
-Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
-*/
+  Fichier: modification.php
+  Auteur: Kevin Zaffino
+  Date: 15/06/2016
+  Version:1.10
+  Description: Page d'edition des informations utilisateur
+  Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
+ */
 require_once './phpScript/inc.all.php';
 if (!isLogged()) {
     header('Location: index.php');
@@ -31,30 +31,25 @@ if (!isLogged()) {
         // Si on a appuyé sur le bouton Valider
         if (isset($_REQUEST['change'])) {
 
-            $lastName = filter_var($_REQUEST['lastname'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $firstName = filter_var($_REQUEST['firstname'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $mail = filter_var($_REQUEST['mail'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $lastName = filter_var($_REQUEST['lastname'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $firstName = filter_var($_REQUEST['firstname'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $mail = filter_var($_REQUEST['mail'], FILTER_SANITIZE_SPECIAL_CHARS);
             //$pwd = filter_var($_REQUEST['pwd'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $phone = filter_var($_REQUEST['phone'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $country = filter_var($_REQUEST['country'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $city = filter_var($_REQUEST['city'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $street = filter_var($_REQUEST['street'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $gender = filter_var($_REQUEST['gender'],FILTER_SANITIZE_SPECIAL_CHARS);
-            
-            if($_FILES[INPUT]['name']!= ''){
+            $phone = filter_var($_REQUEST['phone'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $country = filter_var($_REQUEST['country'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $city = filter_var($_REQUEST['city'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $street = filter_var($_REQUEST['street'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $gender = filter_var($_REQUEST['gender'], FILTER_SANITIZE_SPECIAL_CHARS);
+
+            if ($_FILES[INPUT]['name'] != '') {
+                deleteFile(getImagePath());
                 $id_image = intval(imageUpload());
                 changeUserImage(getUserID(), $id_image);
                 $userinfo = getUserInfo(getUserID());
                 setImagePath($userinfo['path']);
             }
-            
+
             checkAccountEdit($country, $city, $street, $data['id_Adress'], $lastName, $firstName, $gender, $mail, $phone);
-            //updateUserAdress(intval($data['id_Adress']), $country, $city, $street);
-            //updateUserInfo($lastName, $firstName, $gender, $mail,$phone, getUserID());
-            
-                       
-            
-            //header('Location: userPage.php');
         }
         ?>
         <div class="container" style="margin-top:30px">
@@ -89,9 +84,9 @@ if (!isLogged()) {
                                     <!--<label for="country">Pays :
                                         <input type="text" class="form-control" id='country'>
                                     </label>-->
-                                    <?php
-                                    echo selectCountry($data['country']);
-                                    ?>
+<?php
+echo selectCountry($data['country']);
+?>
                                     <label for="city">Ville :
                                         <input type="text" class="form-control" name="city" id='city' value="<?php echo $data['city']; ?>">
                                     </label>
@@ -107,12 +102,12 @@ if (!isLogged()) {
                                     if ($data['gender'] == "1") {
                                         echo 'selected';
                                     }
-                                    ?>>Homme</option>
+?>>Homme</option>
                                     <option value="0" <?php
-                                    if ($data['gender'] == "0") {
-                                        echo 'selected';
-                                    }
-                                    ?>>Femme</option>
+                                            if ($data['gender'] == "0") {
+                                                echo 'selected';
+                                            }
+                                            ?>>Femme</option>
                                 </select>
                             </label>
                             <br/>

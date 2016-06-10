@@ -979,6 +979,9 @@ function multiUpload($id_article) {
  * @param int $id_article       Identifiant del'article
  */
 function deleteArticleImages($id_article) {
+    
+    
+    /*
     //Prepared statement
     static $ps = null;
 
@@ -997,6 +1000,16 @@ function deleteArticleImages($id_article) {
         $ps->bindParam(':id', $id, PDO::PARAM_INT);
         $ps->execute();
     }
+     * 
+     */
+    
+    $articleimage = articleImages($id_article);
+    
+    foreach ($articleimage as $value){
+        $id = intval($value['id']);
+        deleteFile(deleteImageEntry($id));
+    }
+    
 }
 
 function editImagePath($id_image, $newpath) {
@@ -1039,4 +1052,40 @@ function changeUserImage($user_id, $image_id) {
     }
 
     return $isok;
+}
+
+function deleteImageEntry($image_id) {
+
+    static $ps_path = null;
+    static $ps_delete = null;
+
+    $sql_path = "SELECT path FROM images where id=:id;";
+    $sql_delete = "DELETE from images WHERE id=:id";
+
+
+    if ($ps_path == null) {
+        $ps_path = myDatabase()->prepare($sql_path);
+    }
+
+    if ($ps_delete == null) {
+        $ps_delete = myDatabase()->prepare($sql_delete);
+    }
+
+    try {
+        $ps_path->bindParam(':id', $image_id, PDO::PARAM_INT);
+        $path = $ps_path->execute();
+        $path = $ps_path->fetchAll(PDO::FETCH_ASSOC);
+
+
+        $ps_delete->bindParam(':id', $image_id, PDO::PARAM_INT);
+        $delete = $ps_delete->execute();
+    } catch (PDOException $ex) {
+        $path = false;
+    }
+
+    return $path[0]['path'];
+}
+
+function deleteFile($path) {
+    unlink($path);
 }

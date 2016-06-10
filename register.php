@@ -31,7 +31,7 @@ if (isLogged()) {
 
             $lastName = filter_var($_REQUEST['lastname'],FILTER_SANITIZE_SPECIAL_CHARS);
             $firstName = filter_var($_REQUEST['firstname'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $mail = filter_var($_REQUEST['mail'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $mail = filter_var($_REQUEST['mail'],FILTER_SANITIZE_EMAIL);
             $pwd = filter_var($_REQUEST['pwd'],FILTER_SANITIZE_SPECIAL_CHARS);
             $phone = filter_var($_REQUEST['phone'],FILTER_SANITIZE_SPECIAL_CHARS);
             $country = filter_var($_REQUEST['country'],FILTER_SANITIZE_SPECIAL_CHARS);
@@ -60,10 +60,10 @@ if (isLogged()) {
                             </label>
 
                             <label for="mail">E-mail :
-                                <input type="mail" class="form-control" name="mail" id='mail'>
+                                <input type="email" class="form-control" name="mail" id='mail'>
                             </label>
                             <label for="pwd">mdp :
-                                <input type="text" class="form-control" name="pwd" id='pwd'>
+                                <input type="password" class="form-control" name="pwd" id='pwd'>
                             </label>
                             <label for="phone">Tel. :
                                 <input type="text" class="form-control" name="phone" id='phone'>

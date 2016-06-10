@@ -24,7 +24,7 @@ require_once './phpScript/inc.all.php';
 
         if (isset($_REQUEST['login'])) {
             
-            $mail = filter_var($_REQUEST['mail'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $mail = filter_var($_REQUEST['mail'],FILTER_SANITIZE_EMAIL);
             $pwd = filter_var($_REQUEST['pwd'],FILTER_SANITIZE_SPECIAL_CHARS);
             
  /*           
