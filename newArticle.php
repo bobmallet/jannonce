@@ -32,23 +32,22 @@ if (getPrivilege() == PRIV_UNKNOWN) {
         include './menu/showmenu.php';
 
         if (isset($_REQUEST['submit'])) {
-            $name = filter_input(INPUT_POST, 'name');
-            $description = filter_input(INPUT_POST, 'description');
-            $price = filter_input(INPUT_POST, 'price');
-            $images = "";
+            
+            $name = filter_var($_REQUEST['name'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $description = filter_var($_REQUEST['description'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $price = filter_var($_REQUEST['price'],FILTER_SANITIZE_SPECIAL_CHARS);
+            
             $date = date('Y-m-d H:i:s');
-            $uid = getUserID();
+            
 
             $mvis = (isset($_POST["mailVisible"])) ? TRUE : FALSE;
             $pvis = (isset($_POST["phoneVisible"])) ? TRUE : FALSE;
             $avis = (isset($_POST["adressVisible"])) ? TRUE : FALSE;
 
-            $article_id = insertArticle($name, $description, $price, $date, $uid, $mvis, $pvis, $avis);
-
+            $article_id = checkNewArticle($name, $description, $price, $date, $mvis, $pvis, $avis);
+            
             multiUpload($article_id);
-
-            //$id_image = intval(imageUpload());
-            //insertArticleImage($article_id, $id_image);            
+           
             header('Location: articles.php?idarticle=' . $article_id);
         }
         ?>
@@ -60,19 +59,19 @@ if (getPrivilege() == PRIV_UNKNOWN) {
                 <div class="panel-body">
                     <form action="#" method="post" enctype="multipart/form-data">
                         <label for="title">Libelle :
-                            <input type="text" class="form-control" name='name'/>
+                            <input type="text" class="form-control" name='name' required/>
                         </label>
                         <br/>
                         <label for="description">Description :<br/>
-                            <textarea name='description' rows="10" cols="50" maxlength="500"></textarea>
+                            <textarea name='description' rows="10" cols="50" maxlength="500" required></textarea>
                         </label>
                         <br/>
                         <label for="price">Prix :
-                            <input type="text" name='price'/>
+                            <input type="text" name='price' required/>
                         </label>
                         <br/>
                         <label for="image">Image(s) :
-                            <input type="file" name="<?php echo INPUT; ?>[]" multiple/>
+                            <input type="file" name="<?php echo INPUT; ?>[]" multiple required/>
                         </label>
                         <br/>
 

@@ -160,6 +160,11 @@ function login($mail, $pwd) {
     return $isok;
 }
 
+function logOut(){
+    destroySession();
+    header('Location: index.php');
+}
+
 /**
  * Retourne un tableau avec les infos de l'utilisateur
  * @staticvar type $ps

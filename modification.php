@@ -24,7 +24,7 @@ if (!isLogged()) {
     <body>
         <?php
         include './menu/showmenu.php';
-        var_dump(getUserInfo(getUserID()));
+        //var_dump(getUserInfo(getUserID()));
         //var_dump($_POST);
 
         $data = getUserInfo(getUserID());
@@ -41,6 +41,8 @@ if (!isLogged()) {
             $city = filter_input(INPUT_POST, 'city');
             $street = filter_input(INPUT_POST, 'street');
             $gender = intval(filter_input(INPUT_POST, 'gender'));
+            
+            
             updateUserAdress(intval($data['id_Adress']), $country, $city, $street);
             updateUserInfo($lastName, $firstName, $gender, $mail, $pwd, $phone, getUserID());
             //updateUserImage(intval($data['id_Images']), $path);

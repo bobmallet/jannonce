@@ -11,8 +11,12 @@ Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
 
 
 if (isset($_REQUEST['logout'])) {
+    /*
     destroySession();
     header('Location: index.php');
+    */
+   logOut();
+     
 }
 
 

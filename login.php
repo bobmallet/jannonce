@@ -24,11 +24,12 @@ require_once './phpScript/inc.all.php';
 
         if (isset($_REQUEST['login'])) {
             
+            $mail = filter_var($_REQUEST['mail'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $pwd = filter_var($_REQUEST['pwd'],FILTER_SANITIZE_SPECIAL_CHARS);
             
-            
+ /*           
             $mail = filter_input(INPUT_POST, 'mail');
             $pwd = filter_input(INPUT_POST, 'pwd');
-
 
             if (login($mail, $pwd)) {
                 $userinfo = getUserInfo(login($mail, $pwd));
@@ -46,10 +47,15 @@ require_once './phpScript/inc.all.php';
                 header('Location: index.php');
             } else {
                 $error = "Identifiants incorrect";
-            }
+            } 
+            */
             
+            $error = checkLogin($mail, $pwd);
             
         }
+ 
+            
+ 
         ?>
         <div class="container" style="margin-top:30px">
             <div class="col-md-4 col-md-offset-4">

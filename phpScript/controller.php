@@ -1,25 +1,16 @@
 <?php
-/*
-Fichier: controller.php
-Auteur: Kevin Zaffino
-Date: 15/06/2016
-Version:1.10
-Description: Gere les input du site
-Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
-*/
-
-//require_once './inc.all.php';
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+  Fichier: controller.php
+  Auteur: Kevin Zaffino
+  Date: 15/06/2016
+  Version:1.10
+  Description: Gere les input du site
+  Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
  */
 
-
-/*
 function checkLogin($mail, $pwd) {
-    $error = TRUE;
+    $msg = TRUE;
     if (login($mail, $pwd)) {
         $userinfo = getUserInfo(login($mail, $pwd));
         $adress = $userinfo['street'] . " " . $userinfo['city'] . ", " . $userinfo['country'];
@@ -35,8 +26,27 @@ function checkLogin($mail, $pwd) {
 
         header('Location: index.php');
     } else {
-        $error = "Identifiants incorrect";
+        $msg = "Identifiants incorrect";
     }
-    return $error;
+    return $msg;
 }
-*/
+
+function checkRegister($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street, $id_image) {
+
+    insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street, $id_image);
+    header('Location: login.php');
+}
+
+function checkNewArticle($name, $description, $price, $date, $mvis, $pvis, $avis) {
+    $uid = getUserID();
+    return insertArticle($name, $description, $price, $date, $uid, $mvis, $pvis, $avis);
+}
+
+function checkEditArticle($id, $name, $description, $price, $mvis, $pvis, $avis) {
+    editArticleInfo($id, $name, $description, $price, $mvis, $pvis, $avis);
+    header('Location: articles.php?idarticle=' . $id);
+}
+
+function checkAccountEdit(){
+    
+}

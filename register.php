@@ -1,15 +1,15 @@
 <?php
 /*
-Fichier: register.php
-Auteur: Kevin Zaffino
-Date: 15/06/2016
-Version:1.10
-Description: Page d'enregistrement
-Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
-*/
+  Fichier: register.php
+  Auteur: Kevin Zaffino
+  Date: 15/06/2016
+  Version:1.10
+  Description: Page d'enregistrement
+  Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
+ */
 require_once './phpScript/inc.all.php';
 
-if(isLogged()){
+if (isLogged()) {
     header('Location: index.php');
 }
 ?>
@@ -24,27 +24,24 @@ if(isLogged()){
     </head>
     <body>
         <?php
-        
         include './menu/showmenu.php';
 
         // Si on a appuyé sur le bouton Valider
         if (isset($_REQUEST['register'])) {
-            //var_dump($_FILES);
-            
-              $lastName = filter_input(INPUT_POST, 'lastname');
-              $firstName = filter_input(INPUT_POST, 'firstname');
-              $mail = filter_input(INPUT_POST, 'mail');
-              $pwd = filter_input(INPUT_POST, 'pwd');
-              $phone = filter_input(INPUT_POST, 'phone');
-              $country = filter_input(INPUT_POST, 'country');
-              $city = filter_input(INPUT_POST, 'city');
-              $street = filter_input(INPUT_POST, 'street');
-              $gender = filter_input(INPUT_POST, 'gender');
-              $id_image = intval(imageUpload());
-              
-              insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street,$id_image);
 
-             header('Location: login.php');
+            $lastName = filter_var($_REQUEST['lastname'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $firstName = filter_var($_REQUEST['firstname'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $mail = filter_var($_REQUEST['mail'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $pwd = filter_var($_REQUEST['pwd'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $phone = filter_var($_REQUEST['phone'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $country = filter_var($_REQUEST['country'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $city = filter_var($_REQUEST['city'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $street = filter_var($_REQUEST['street'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $gender = filter_var($_REQUEST['gender'],FILTER_SANITIZE_SPECIAL_CHARS);
+
+            $id_image = intval(imageUpload());
+
+            checkRegister($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street, $id_image);
         }
         ?>
         <div class="container" style="margin-top:30px">
