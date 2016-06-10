@@ -1,4 +1,12 @@
 <?php
+/*
+Fichier: controller.php
+Auteur: Kevin Zaffino
+Date: 15/06/2016
+Version:1.10
+Description: Gere les input du site
+Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
+*/
 
 //require_once './inc.all.php';
 

@@ -1,4 +1,12 @@
 <?php
+/*
+Fichier: sessions.php
+Auteur: Kevin Zaffino
+Date: 15/06/2016
+Version:1.10
+Description: Gere les sessions
+Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
+*/
 session_start();
 ?>
 

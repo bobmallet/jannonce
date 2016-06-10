@@ -1,12 +1,16 @@
 <?php
+/*
+Fichier: about.php
+Auteur: Kevin Zaffino
+Date: 15/06/2016
+Version:1.10
+Description: Page "a propos" du site
+Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
+*/
+
 require_once './phpScript/inc.all.php';
 ?>
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <meta charset="UTF-8">
