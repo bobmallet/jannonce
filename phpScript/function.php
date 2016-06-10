@@ -1,12 +1,13 @@
 <?php
+
 /*
-Fichier: function.php
-Auteur: Kevin Zaffino
-Date: 15/06/2016
-Version:1.10
-Description: Contient les différentes fonctions
-Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
-*/
+  Fichier: function.php
+  Auteur: Kevin Zaffino
+  Date: 15/06/2016
+  Version:1.10
+  Description: Contient les différentes fonctions
+  Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
+ */
 
 require_once './phpScript/mysql.inc.php';
 
@@ -163,7 +164,7 @@ function login($mail, $pwd) {
 /**
  * Deconnect l'utilisateur
  */
-function logOut(){
+function logOut() {
     destroySession();
     header('Location: index.php');
 }
@@ -1010,6 +1011,27 @@ function editImagePath($id_image, $newpath) {
     try {
         $ps->bindParam(':path', $newpath, PDO::PARAM_STR);
         $ps->bindParam(':id', $id_image, PDO::PARAM_INT);
+
+        $isok = $ps->execute();
+    } catch (PDOException $ex) {
+        $isok = false;
+    }
+
+    return $isok;
+}
+
+function changeUserImage($user_id, $image_id) {
+    static $ps = null;
+
+    $sql = "update users set users.id_Images = :iid where users.id = :uid";
+
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+        $ps->bindParam(':iid', $image_id, PDO::PARAM_INT);
+        $ps->bindParam(':uid', $user_id, PDO::PARAM_INT);
 
         $isok = $ps->execute();
     } catch (PDOException $ex) {

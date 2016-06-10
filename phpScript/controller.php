@@ -1,5 +1,4 @@
 <?php
-
 /*
   Fichier: controller.php
   Auteur: Kevin Zaffino
@@ -47,6 +46,8 @@ function checkEditArticle($id, $name, $description, $price, $mvis, $pvis, $avis)
     header('Location: articles.php?idarticle=' . $id);
 }
 
-function checkAccountEdit(){
-    
+function checkAccountEdit($country, $city, $street, $adressid, $lastName, $firstName, $gender, $mail, $phone) {
+    updateUserAdress($adressid, $country, $city, $street);
+    updateUserInfo($lastName, $firstName, $gender, $mail, $phone, getUserID());
+    header('Location: userPage.php');
 }

@@ -24,29 +24,37 @@ if (!isLogged()) {
     <body>
         <?php
         include './menu/showmenu.php';
-        //var_dump(getUserInfo(getUserID()));
-        //var_dump($_POST);
+
 
         $data = getUserInfo(getUserID());
 
         // Si on a appuyé sur le bouton Valider
         if (isset($_REQUEST['change'])) {
 
-            $lastName = filter_input(INPUT_POST, 'lastname');
-            $firstName = filter_input(INPUT_POST, 'firstname');
-            $mail = filter_input(INPUT_POST, 'mail');
-            $pwd = filter_input(INPUT_POST, 'pwd');
-            $phone = filter_input(INPUT_POST, 'phone');
-            $country = filter_input(INPUT_POST, 'country');
-            $city = filter_input(INPUT_POST, 'city');
-            $street = filter_input(INPUT_POST, 'street');
-            $gender = intval(filter_input(INPUT_POST, 'gender'));
+            $lastName = filter_var($_REQUEST['lastname'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $firstName = filter_var($_REQUEST['firstname'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $mail = filter_var($_REQUEST['mail'],FILTER_SANITIZE_SPECIAL_CHARS);
+            //$pwd = filter_var($_REQUEST['pwd'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $phone = filter_var($_REQUEST['phone'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $country = filter_var($_REQUEST['country'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $city = filter_var($_REQUEST['city'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $street = filter_var($_REQUEST['street'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $gender = filter_var($_REQUEST['gender'],FILTER_SANITIZE_SPECIAL_CHARS);
             
+            if($_FILES[INPUT]['name']!= ''){
+                $id_image = intval(imageUpload());
+                changeUserImage(getUserID(), $id_image);
+                $userinfo = getUserInfo(getUserID());
+                setImagePath($userinfo['path']);
+            }
             
-            updateUserAdress(intval($data['id_Adress']), $country, $city, $street);
-            updateUserInfo($lastName, $firstName, $gender, $mail, $pwd, $phone, getUserID());
-            //updateUserImage(intval($data['id_Images']), $path);
-            header('Location: userPage.php');
+            checkAccountEdit($country, $city, $street, $data['id_Adress'], $lastName, $firstName, $gender, $mail, $phone);
+            //updateUserAdress(intval($data['id_Adress']), $country, $city, $street);
+            //updateUserInfo($lastName, $firstName, $gender, $mail,$phone, getUserID());
+            
+                       
+            
+            //header('Location: userPage.php');
         }
         ?>
         <div class="container" style="margin-top:30px">
@@ -111,7 +119,7 @@ if (!isLogged()) {
 
 
                             <label for="image">Image de profil :
-                                <input type="file" name="image" class="form-control" name="image" id='image'/>
+                                <input type="file" class="form-control" name="<?php echo INPUT; ?>" id='image'/>
                             </label>
                             <br/>
                             <button type="submit" class="btn btn-success" name="change">Valider</button>
