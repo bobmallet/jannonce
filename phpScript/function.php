@@ -174,6 +174,8 @@ function getUserInfo($id) {
         $ps = myDatabase()->prepare($sql);
     }
 
+    
+    
     try {
         $ps->bindParam(':id', $id, PDO::PARAM_INT);
 
