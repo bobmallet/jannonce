@@ -160,6 +160,9 @@ function login($mail, $pwd) {
     return $isok;
 }
 
+/**
+ * Deconnect l'utilisateur
+ */
 function logOut(){
     destroySession();
     header('Location: index.php');
