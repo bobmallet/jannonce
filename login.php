@@ -60,7 +60,7 @@ if (isLogged()) {
             <div class="col-md-4 col-md-offset-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <form role="form" method="post" action="#">
+                        <form method="post" action="#">
                             <div class="form-group">
                                 <label for="mail" class="sr-only">Email address</label>
                                 <div class="input-group">

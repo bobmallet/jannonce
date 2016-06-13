@@ -60,7 +60,7 @@ if (isLogged()) {
                         <h3 class = "panel-title">Inscription</h3>
                     </div>
                     <div class="panel-body">
-                        <form role="form" method="post" action="#" enctype="multipart/form-data">
+                        <form method="post" action="#" enctype="multipart/form-data">
                             <label for="lastname">Nom* :
                                 <input type="text" class="form-control" name="lastname" id='lastname' required>
                             </label>
@@ -89,9 +89,6 @@ if (isLogged()) {
 
                             <label for="adress">Adresse :
                                 <div id='adress'>
-                                    <!--<label for="country">Pays :
-                                        <input type="text" class="form-control" id='country'>
-                                    </label>-->
                                     <?php
                                     echo selectCountry();
                                     ?>
@@ -105,7 +102,7 @@ if (isLogged()) {
                             </label>
 
                             <label for="gender">Genre :
-                                <select name="gender" class="form-control" name="gender" id="gender">
+                                <select name="gender" class="form-control" id="gender">
                                     <option value="1">Homme</option>
                                     <option value="0">Femme</option>
                                 </select>
@@ -124,10 +121,8 @@ if (isLogged()) {
             </div>
         </div>
 
-    </div>
-</div>
 
 
 
-</body>
+    </body>
 </html>
