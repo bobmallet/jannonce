@@ -93,10 +93,12 @@ function commentFormat($data, $creatorid) {
 
     $btn = "";
 
-    if (getUserID() == $creatorid) {
+    //Seulement le créateur ou les admin
+    if (getUserID() == $creatorid || getPrivilege() == PRIV_ADMIN) {
         $btn .= "<input type=\"submit\" name=\"state\" class=\"btn btn-warning\" value=\"!\" />";
     }
 
+    //seulement les admin
     if (getPrivilege() == PRIV_ADMIN) {
         $btn .= "<input type=\"submit\" name=\"ban\" class=\"btn btn-danger\" value=\"X\"/>";
     }
