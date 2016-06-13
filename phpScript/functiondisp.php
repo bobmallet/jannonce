@@ -26,6 +26,12 @@ function formatUserName($firstname, $lastname) {
  * @return string
  */
 function articleFormat($data, $imgpath) {
+    
+    $creator_id = intval($data['id_Users']);
+    $creator_firstname = getUserInfo($creator_id)['firstname'];
+    $creator_lastname = getUserInfo($creator_id)['lastname'];
+    $creatorname = formatUserName($creator_firstname, $creator_lastname);
+    
     $output = "\n<li class=\"media well\">";
     $output .= "\n<div class=\"pull-left col-lg-2\">";
     $output .= "\n<a href=\"articles.php?idarticle=" . $data['id'] . "\" class=\"thumbnail\">";
@@ -38,7 +44,7 @@ function articleFormat($data, $imgpath) {
     $output .= "\n<p>" . descriptionSize($data['description']) . "</p>";
     $output .= "\n</div>";
     $output .= "\n<div class=\"col-lg-4\">";
-    $output .= "\nCréateur de l'annonce : ";
+    $output .= "\nCréateur de l'annonce : ". $creatorname;
     $output .= "\n<br/><br/>";
     $output .= "\nLe " . $data['creationdate'];
     $output .= "\n<br/><br/>";

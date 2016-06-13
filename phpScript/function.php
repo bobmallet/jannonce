@@ -151,6 +151,8 @@ function login($mail, $pwd) {
         if (isset($isok[0])) {
             if ($isok[0]['password'] == $pwd_sha1) {
                 $isok = intval($isok[0]['id']);
+            } else {
+                $isok = FALSE;
             }
         } else {
             $isok = FALSE;
@@ -979,37 +981,12 @@ function multiUpload($id_article) {
  * @param int $id_article       Identifiant del'article
  */
 function deleteArticleImages($id_article) {
-    
-    
-    /*
-    //Prepared statement
-    static $ps = null;
-
-    //Query
-    $sql = "update images set id_articles=NULL where id=:id";
-
-    if ($ps == null) {
-        $ps = myDatabase()->prepare($sql);
-    }
-
-    $imgid = articleImages($id_article);
-
-    foreach ($imgid as $value) {
-        $id = intval($value['id']);
-
-        $ps->bindParam(':id', $id, PDO::PARAM_INT);
-        $ps->execute();
-    }
-     * 
-     */
-    
     $articleimage = articleImages($id_article);
-    
-    foreach ($articleimage as $value){
+
+    foreach ($articleimage as $value) {
         $id = intval($value['id']);
         deleteFile(deleteImageEntry($id));
     }
-    
 }
 
 function editImagePath($id_image, $newpath) {
@@ -1087,5 +1064,7 @@ function deleteImageEntry($image_id) {
 }
 
 function deleteFile($path) {
-    unlink($path);
+    if (file_exists($path)) {
+        unlink($path);
+    }
 }

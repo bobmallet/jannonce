@@ -1,12 +1,12 @@
 <?php
 /*
-Fichier: newArticle.php
-Auteur: Kevin Zaffino
-Date: 15/06/2016
-Version:1.10
-Description: Page de creation d'annonce
-Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
-*/
+  Fichier: newArticle.php
+  Auteur: Kevin Zaffino
+  Date: 15/06/2016
+  Version:1.10
+  Description: Page de creation d'annonce
+  Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
+ */
 require './phpScript/inc.all.php';
 
 if (getPrivilege() == PRIV_UNKNOWN) {
@@ -32,22 +32,22 @@ if (getPrivilege() == PRIV_UNKNOWN) {
         include './menu/showmenu.php';
 
         if (isset($_REQUEST['submit'])) {
-            
-            $name = filter_var($_REQUEST['name'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $description = filter_var($_REQUEST['description'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $price = filter_var($_REQUEST['price'],FILTER_SANITIZE_SPECIAL_CHARS);
-            
+
+            $name = filter_var($_REQUEST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $description = filter_var($_REQUEST['description'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $price = filter_var($_REQUEST['price'], FILTER_SANITIZE_SPECIAL_CHARS);
+
             $date = date('Y-m-d H:i:s');
-            
+
 
             $mvis = (isset($_POST["mailVisible"])) ? TRUE : FALSE;
             $pvis = (isset($_POST["phoneVisible"])) ? TRUE : FALSE;
             $avis = (isset($_POST["adressVisible"])) ? TRUE : FALSE;
 
             $article_id = checkNewArticle($name, $description, $price, $date, $mvis, $pvis, $avis);
-            
+
             multiUpload($article_id);
-           
+
             header('Location: articles.php?idarticle=' . $article_id);
         }
         ?>
@@ -71,7 +71,7 @@ if (getPrivilege() == PRIV_UNKNOWN) {
                         </label>
                         <br/>
                         <label for="image">Image(s) :
-                            <input type="file" name="<?php echo INPUT; ?>[]" multiple required/>
+                            <input type="file" name="<?php echo INPUT; ?>[]" multiple accept="image/*" required/>
                         </label>
                         <br/>
 

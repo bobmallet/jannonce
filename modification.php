@@ -25,8 +25,8 @@ if (!isLogged()) {
         <?php
         include './menu/showmenu.php';
 
-
         $data = getUserInfo(getUserID());
+
 
         // Si on a appuyé sur le bouton Valider
         if (isset($_REQUEST['change'])) {
@@ -61,14 +61,14 @@ if (!isLogged()) {
                     <div class="panel-body">
                         <form role="form" method="post" action="#" enctype="multipart/form-data">
                             <label for="lastname">Nom :
-                                <input type="text" class="form-control" name="lastname" id='lastname' value="<?php echo $data['lastname']; ?>">
+                                <input type="text" class="form-control" name="lastname" id='lastname' value="<?php echo $data['lastname']; ?>" required/>
                             </label>
                             <label for="firstname">Prenom :
-                                <input type="text" class="form-control" name="firstname" id='firstname' value="<?php echo $data['firstname']; ?>">
+                                <input type="text" class="form-control" name="firstname" id='firstname' value="<?php echo $data['firstname']; ?>" required/>
                             </label>
 
                             <label for="mail">E-mail :
-                                <input type="mail" class="form-control" name="mail" id='mail' value="<?php echo $data['mail']; ?>">
+                                <input type="mail" class="form-control" name="mail" id='mail' value="<?php echo $data['mail']; ?>" required />
                             </label>
                             <!--
                             <label for="pwd">mdp :
@@ -84,9 +84,9 @@ if (!isLogged()) {
                                     <!--<label for="country">Pays :
                                         <input type="text" class="form-control" id='country'>
                                     </label>-->
-<?php
-echo selectCountry($data['country']);
-?>
+                                    <?php
+                                    echo selectCountry($data['country']);
+                                    ?>
                                     <label for="city">Ville :
                                         <input type="text" class="form-control" name="city" id='city' value="<?php echo $data['city']; ?>">
                                     </label>
@@ -102,19 +102,19 @@ echo selectCountry($data['country']);
                                     if ($data['gender'] == "1") {
                                         echo 'selected';
                                     }
-?>>Homme</option>
+                                    ?>>Homme</option>
                                     <option value="0" <?php
-                                            if ($data['gender'] == "0") {
-                                                echo 'selected';
-                                            }
-                                            ?>>Femme</option>
+                                    if ($data['gender'] == "0") {
+                                        echo 'selected';
+                                    }
+                                    ?>>Femme</option>
                                 </select>
                             </label>
                             <br/>
 
 
                             <label for="image">Image de profil :
-                                <input type="file" class="form-control" name="<?php echo INPUT; ?>" id='image'/>
+                                <input type="file" class="form-control" name="<?php echo INPUT; ?>" id='image' accept="image/*"/>
                             </label>
                             <br/>
                             <button type="submit" class="btn btn-success" name="change">Valider</button>

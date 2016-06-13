@@ -26,22 +26,31 @@ if (isLogged()) {
         <?php
         include './menu/showmenu.php';
 
+        //$mailverif = "";
+        $error = "";
+
         // Si on a appuyé sur le bouton Valider
         if (isset($_REQUEST['register'])) {
 
-            $lastName = filter_var($_REQUEST['lastname'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $firstName = filter_var($_REQUEST['firstname'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $mail = filter_var($_REQUEST['mail'],FILTER_SANITIZE_EMAIL);
-            $pwd = filter_var($_REQUEST['pwd'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $phone = filter_var($_REQUEST['phone'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $country = filter_var($_REQUEST['country'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $city = filter_var($_REQUEST['city'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $street = filter_var($_REQUEST['street'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $gender = filter_var($_REQUEST['gender'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $lastName = filter_var($_REQUEST['lastname'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $firstName = filter_var($_REQUEST['firstname'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $mail = filter_var($_REQUEST['mail'], FILTER_SANITIZE_EMAIL);
+            $pwd = filter_var($_REQUEST['pwd'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $phone = filter_var($_REQUEST['phone'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $country = filter_var($_REQUEST['country'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $city = filter_var($_REQUEST['city'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $street = filter_var($_REQUEST['street'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $gender = filter_var($_REQUEST['gender'], FILTER_SANITIZE_SPECIAL_CHARS);
 
-            $id_image = intval(imageUpload());
+            //$id_image = "qq";
+            if ($_FILES[INPUT]['name'] != '') {
+                $id_image = intval(imageUpload());
+            } else {
+                $id_image = DEFAULT_IMAGE_ID;
+            }
 
-            checkRegister($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street, $id_image);
+            $mailverif = checkRegister($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street, $id_image);
+            //var_dump($mailverif);
         }
         ?>
         <div class="container" style="margin-top:30px">
@@ -53,17 +62,26 @@ if (isLogged()) {
                     <div class="panel-body">
                         <form role="form" method="post" action="#" enctype="multipart/form-data">
                             <label for="lastname">Nom :
-                                <input type="text" class="form-control" name="lastname" id='lastname'>
+                                <input type="text" class="form-control" name="lastname" id='lastname' required>
                             </label>
                             <label for="firstname">Prenom :
-                                <input type="text" class="form-control" name="firstname" id='firstname'>
+                                <input type="text" class="form-control" name="firstname" id='firstname' required>
                             </label>
 
                             <label for="mail">E-mail :
-                                <input type="email" class="form-control" name="mail" id='mail'>
+                                <input type="email" class="form-control" name="mail" id='mail' required>
                             </label>
+
+                            <?php if (!$mailverif) { ?>
+
+                                <div class="alert alert-warning">
+                                    <strong>Attention!</strong> Adresse email déja utilisée.
+                                </div>
+
+                            <?php } ?>
+
                             <label for="pwd">mdp :
-                                <input type="password" class="form-control" name="pwd" id='pwd'>
+                                <input type="password" class="form-control" name="pwd" id='pwd' required>
                             </label>
                             <label for="phone">Tel. :
                                 <input type="text" class="form-control" name="phone" id='phone'>
@@ -96,7 +114,7 @@ if (isLogged()) {
 
 
                             <label for="image">Image de profil :
-                                <input type="file" class="form-control" name="<?php echo INPUT; ?>" id='image'/>
+                                <input type="file" class="form-control" name="<?php echo INPUT; ?>" id='image' accept="image/*"/>
                             </label>
                             <br/>
                             <button type="submit" class="btn btn-success" name="register">Valider</button>

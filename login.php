@@ -1,13 +1,16 @@
 <?php
 /*
-Fichier: login.php
-Auteur: Kevin Zaffino
-Date: 15/06/2016
-Version:1.10
-Description: Page de login du site
-Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
-*/
+  Fichier: login.php
+  Auteur: Kevin Zaffino
+  Date: 15/06/2016
+  Version:1.10
+  Description: Page de login du site
+  Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
+ */
 require_once './phpScript/inc.all.php';
+if (isLogged()) {
+    header('Location: index.php');
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,39 +26,35 @@ require_once './phpScript/inc.all.php';
         $error = "";
 
         if (isset($_REQUEST['login'])) {
-            
-            $mail = filter_var($_REQUEST['mail'],FILTER_SANITIZE_EMAIL);
-            $pwd = filter_var($_REQUEST['pwd'],FILTER_SANITIZE_SPECIAL_CHARS);
-            
- /*           
-            $mail = filter_input(INPUT_POST, 'mail');
-            $pwd = filter_input(INPUT_POST, 'pwd');
 
-            if (login($mail, $pwd)) {
-                $userinfo = getUserInfo(login($mail, $pwd));
-                $adress = $userinfo['street'] . " " . $userinfo['city'] . ", " . $userinfo['country'];
-                //var_dump($userinfo);
-                setPrivilege(intval($userinfo['privilege']));
-                setImagePath($userinfo['path']);
-                setUserID(intval($userinfo['id']));
-                setUserName(formatUserName($userinfo['firstname'], $userinfo['lastname']));
-                setUserMail($mail);
-                setUserTel($userinfo['phone']);
-                setUserAdress($adress);
-                setLogged();
+            $mail = filter_var($_REQUEST['mail'], FILTER_SANITIZE_EMAIL);
+            $pwd = filter_var($_REQUEST['pwd'], FILTER_SANITIZE_SPECIAL_CHARS);
 
-                header('Location: index.php');
-            } else {
-                $error = "Identifiants incorrect";
-            } 
-            */
-            
+            /*
+              $mail = filter_input(INPUT_POST, 'mail');
+              $pwd = filter_input(INPUT_POST, 'pwd');
+
+              if (login($mail, $pwd)) {
+              $userinfo = getUserInfo(login($mail, $pwd));
+              $adress = $userinfo['street'] . " " . $userinfo['city'] . ", " . $userinfo['country'];
+              //var_dump($userinfo);
+              setPrivilege(intval($userinfo['privilege']));
+              setImagePath($userinfo['path']);
+              setUserID(intval($userinfo['id']));
+              setUserName(formatUserName($userinfo['firstname'], $userinfo['lastname']));
+              setUserMail($mail);
+              setUserTel($userinfo['phone']);
+              setUserAdress($adress);
+              setLogged();
+
+              header('Location: index.php');
+              } else {
+              $error = "Identifiants incorrect";
+              }
+             */
+
             $error = checkLogin($mail, $pwd);
-            
         }
- 
-            
- 
         ?>
         <div class="container" style="margin-top:30px">
             <div class="col-md-4 col-md-offset-4">
@@ -83,7 +82,12 @@ require_once './phpScript/inc.all.php';
                         </form>
                     </div>
                 </div>
-                <?php echo $error; ?>
+                <?php if($error){ ?>
+                <div class="alert alert-warning">
+                    <strong>Attention!</strong> Identifiants incorrects.
+                </div>
+                
+                <?php } //echo $error; ?>
             </div>
         </div>
     </body>

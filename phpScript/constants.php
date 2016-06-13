@@ -14,7 +14,7 @@ define('PRIV_USER', 1);
 define('PRIV_UNKNOWN', 0);
 
 //image par defaut de l'utilisateur
-define('DEFAULT_IMAGE_ID', 5);
+define('DEFAULT_IMAGE_ID', 19);
 
 //Upload d'image
 define('INPUT', 'imgupload');

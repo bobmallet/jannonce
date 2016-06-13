@@ -33,9 +33,9 @@ if (getUserID() != $uidarticle && getPrivilege() != PRIV_ADMIN) {
         $article = articleInfo($aid);
 
         if (isset($_REQUEST['submit'])) {
-            $name = filter_var($_REQUEST['name'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $description = filter_var($_REQUEST['description'],FILTER_SANITIZE_SPECIAL_CHARS);
-            $price = filter_var($_REQUEST['price'],FILTER_SANITIZE_SPECIAL_CHARS);
+            $name = filter_var($_REQUEST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $description = filter_var($_REQUEST['description'], FILTER_SANITIZE_SPECIAL_CHARS);
+            $price = filter_var($_REQUEST['price'], FILTER_SANITIZE_SPECIAL_CHARS);
 
             $date = date('Y-m-d H:i:s');
             //$uid = getUserID();
@@ -45,7 +45,7 @@ if (getUserID() != $uidarticle && getPrivilege() != PRIV_ADMIN) {
             $avis = (isset($_POST["adressVisible"])) ? TRUE : FALSE;
 
 
-            if (isset($_FILES)) {
+            if ($_FILES[INPUT]['name'][0] != '') {                
                 deleteArticleImages($aid);
                 multiUpload($aid);
             }
@@ -61,28 +61,28 @@ if (getUserID() != $uidarticle && getPrivilege() != PRIV_ADMIN) {
                 <div class="panel-body">
                     <form action="#" method="post" enctype="multipart/form-data">
                         <label for="title">Libelle :
-                            <input type="text" class="form-control" name='name' value="<?php echo $article['name']; ?>" />
+                            <input type="text" class="form-control" name='name' value="<?php echo $article['name']; ?>" required/>
                         </label>
                         <br/>
                         <label for="description">Description :<br/>
-                            <textarea name='description' rows="10" cols="50" maxlength="500" ><?php echo $article['description']; ?></textarea>
+                            <textarea name='description' rows="10" cols="50" maxlength="500" required><?php echo $article['description']; ?></textarea>
                         </label>
                         <br/>
                         <label for="price">Prix :
-                            <input type="text" name='price' value="<?php echo $article['price']; ?>"/>
+                            <input type="text" name='price' value="<?php echo $article['price']; ?>" required/>
                         </label>
                         <br/>
                         <label for="image">Image(s) (Les anciennes images seront supprimées) :
-                            <input type="file" name="<?php echo INPUT; ?>[]" multiple/>
+                            <input type="file" name="<?php echo INPUT; ?>[]" multiple accept="image/*"/>
                         </label>
                         <br/>
 
                         <label for='mailVisible'>
                             E-mail visible : <input type="checkbox" name='mailVisible' <?php
-        if ($article['mailvisible'] == 1) {
-            echo 'checked';
-        }
-        ?>/>                        
+                            if ($article['mailvisible'] == 1) {
+                                echo 'checked';
+                            }
+                            ?>/>                        
                         </label>
 
                         <label for='phoneVisible'>

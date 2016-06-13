@@ -8,6 +8,9 @@ Description: Page d'affichage des images d'annonce
 Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
 */
 require_once './phpScript/inc.all.php';
+if (!isset($_REQUEST['id'])) {
+    header('Location: index.php');
+}
 ?>
 <!DOCTYPE html>
 <html>

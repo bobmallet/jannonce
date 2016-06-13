@@ -1,12 +1,12 @@
 <?php
 /*
-Fichier: userPage.php
-Auteur: Kevin Zaffino
-Date: 15/06/2016
-Version:1.10
-Description: Page d'information personnel
-Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
-*/
+  Fichier: userPage.php
+  Auteur: Kevin Zaffino
+  Date: 15/06/2016
+  Version:1.10
+  Description: Page d'information personnel
+  Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
+ */
 require_once './phpScript/inc.all.php';
 if (!isLogged()) {
     header('Location: index.php');
@@ -44,8 +44,8 @@ if (!isLogged()) {
 
                     <div id='description'>
                         <?php
-                        $gender = ($userinfo['gender'] == "0") ? "Femme":"Homme";
-                        
+                        $gender = ($userinfo['gender'] == "0") ? "Femme" : "Homme";
+
                         echo 'Nom: ' . $userinfo['lastname'];
                         echo '<br/>';
                         echo 'Prenom: ' . $userinfo['firstname'];

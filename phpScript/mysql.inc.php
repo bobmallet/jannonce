@@ -11,8 +11,8 @@ Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
 //constantes de base de données
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'jannonce_db');
-define('DB_USER', 'root');
-define('DB_PASSWORD', '');
+define('DB_USER', 'jannonce_admin');
+define('DB_PASSWORD', 'Superadmin');
 
 ?>
 
