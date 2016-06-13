@@ -30,29 +30,6 @@ if (isLogged()) {
             $mail = filter_var($_REQUEST['mail'], FILTER_SANITIZE_EMAIL);
             $pwd = filter_var($_REQUEST['pwd'], FILTER_SANITIZE_SPECIAL_CHARS);
 
-            /*
-              $mail = filter_input(INPUT_POST, 'mail');
-              $pwd = filter_input(INPUT_POST, 'pwd');
-
-              if (login($mail, $pwd)) {
-              $userinfo = getUserInfo(login($mail, $pwd));
-              $adress = $userinfo['street'] . " " . $userinfo['city'] . ", " . $userinfo['country'];
-              //var_dump($userinfo);
-              setPrivilege(intval($userinfo['privilege']));
-              setImagePath($userinfo['path']);
-              setUserID(intval($userinfo['id']));
-              setUserName(formatUserName($userinfo['firstname'], $userinfo['lastname']));
-              setUserMail($mail);
-              setUserTel($userinfo['phone']);
-              setUserAdress($adress);
-              setLogged();
-
-              header('Location: index.php');
-              } else {
-              $error = "Identifiants incorrect";
-              }
-             */
-
             $error = checkLogin($mail, $pwd);
         }
         ?>
@@ -87,7 +64,7 @@ if (isLogged()) {
                     <strong>Attention!</strong> Identifiants incorrects.
                 </div>
                 
-                <?php } //echo $error; ?>
+                <?php } ?>
             </div>
         </div>
     </body>

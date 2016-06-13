@@ -50,7 +50,6 @@ if (isLogged()) {
             }
 
             $mailverif = checkRegister($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street, $id_image);
-            //var_dump($mailverif);
         }
         ?>
         <div class="container" style="margin-top:30px">
@@ -73,11 +72,9 @@ if (isLogged()) {
                             </label>
 
                             <?php if (!$mailverif) { ?>
-
                                 <div class="alert alert-warning">
                                     <strong>Attention!</strong> Adresse email déja utilisée.
                                 </div>
-
                             <?php } ?>
 
                             <label for="pwd">mdp* :
