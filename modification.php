@@ -56,7 +56,7 @@ if (!isLogged()) {
             <div class="col-md-5 col-md-offset-3">
                 <div class="panel panel-default">
                     <div class = "panel-heading">
-                        <h3 class = "panel-title">Inscription</h3>
+                        <h3 class = "panel-title">Modification</h3>
                     </div>
                     <div class="panel-body">
                         <form role="form" method="post" action="#" enctype="multipart/form-data">

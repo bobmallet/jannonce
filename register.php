@@ -26,7 +26,7 @@ if (isLogged()) {
         <?php
         include './menu/showmenu.php';
 
-        //$mailverif = "";
+        $mailverif = TRUE;
         $error = "";
 
         // Si on a appuyé sur le bouton Valider
@@ -61,14 +61,14 @@ if (isLogged()) {
                     </div>
                     <div class="panel-body">
                         <form role="form" method="post" action="#" enctype="multipart/form-data">
-                            <label for="lastname">Nom :
+                            <label for="lastname">Nom* :
                                 <input type="text" class="form-control" name="lastname" id='lastname' required>
                             </label>
-                            <label for="firstname">Prenom :
+                            <label for="firstname">Prenom* :
                                 <input type="text" class="form-control" name="firstname" id='firstname' required>
                             </label>
 
-                            <label for="mail">E-mail :
+                            <label for="mail">E-mail* :
                                 <input type="email" class="form-control" name="mail" id='mail' required>
                             </label>
 
@@ -80,8 +80,8 @@ if (isLogged()) {
 
                             <?php } ?>
 
-                            <label for="pwd">mdp :
-                                <input type="password" class="form-control" name="pwd" id='pwd' required>
+                            <label for="pwd">mdp* :
+                                <input type="password" class="form-control" name="pwd" id='pwd' pattern=".{3,}" required title="3 characters minimum">
                             </label>
                             <label for="phone">Tel. :
                                 <input type="text" class="form-control" name="phone" id='phone'>

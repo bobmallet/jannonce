@@ -39,7 +39,9 @@ function articleFormat($data, $imgpath) {
     $output .= "\n</a>";
     $output .= "\n</div>";
     $output .= "<div class=\"col-lg-6\">";
+    $output .= "\n<a href=\"articles.php?idarticle=" . $data['id'] . "\">";
     $output .= "\n<b>" . $data['name'] . "</b>";
+    $output .= "\n</a>";
     $output .= "<br/><br/>";
     $output .= "\n<p>" . descriptionSize($data['description']) . "</p>";
     $output .= "\n</div>";
