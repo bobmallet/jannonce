@@ -5,8 +5,8 @@
   Auteur: Kevin Zaffino
   Date: 15/06/2016
   Version:1.10
-  Description: Contient les différentes fonctions
-  Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
+  Description: Contient les différentes fonctions de traitement
+  Copyright (TPI 2016 - Kevin Zaffino © 2016)
  */
 
 require_once './phpScript/mysql.inc.php';
@@ -75,7 +75,7 @@ function addAddress($country, $city, $street) {
 }
 
 /**
- * Insére un nouvel utilisateur dans la base de données
+ * Insere un nouvel utilisateur dans la base de données
  * @param string $lastName    Le nom de famille
  * @param string $firstName   Le prénom
  * @param string $gender      Le genre
@@ -164,7 +164,7 @@ function login($mail, $pwd) {
 }
 
 /**
- * Deconnect l'utilisateur
+ * Deconnecte l'utilisateur
  */
 function logOut() {
     destroySession();
@@ -356,8 +356,6 @@ function getAllUser() {
     return $isok;
 }
 
-//gestion des annonces
-
 /**
  * Insert une nouvelle annonce dans la base de donnée
  * @staticvar type $ps
@@ -514,7 +512,7 @@ function articleImages($idarticle) {
 }
 
 /**
- * Ovre/Ferme un article
+ * Ouvre/Ferme un article
  * @staticvar type $ps
  * @param int $aid      Identifiant del'article
  * @return boolean
@@ -685,8 +683,6 @@ function articleInfo($id) {
 
     return $isok;
 }
-
-//gestion des commentaires
 
 /**
  * Ajoute un commentaire dans la base
@@ -904,25 +900,23 @@ function imageUpload() {
                         if (move_uploaded_file($_FILES[INPUT]['tmp_name'], TARGET . $imageName)) {
                             $path = TARGET . $imageName;
                             return insertImage($path);
-                            //$error = 'Upload réussi !';
-//return TRUE;
                         } else {
-                            return $error = 'Problème lors de l\'upload !';
+                            return 'Problème lors de l\'upload !';
                         }
                     } else {
-                        return $error = 'Une erreur interne a empêché l\'upload de l\'image';
+                        return 'Une erreur interne a empêché l\'upload de l\'image';
                     }
                 } else {
-                    return $error = 'Erreur dans les dimensions de l\'image !';
+                    return 'Erreur dans les dimensions de l\'image !';
                 }
             } else {
-                return $error = 'Le fichier à uploader n\'est pas une image !';
+                return 'Le fichier à uploader n\'est pas une image !';
             }
         } else {
-            return $error = 'L\'extension du fichier est incorrecte !';
+            return 'L\'extension du fichier est incorrecte !';
         }
     } else {
-        return $error = 'Image non renseignée!';
+        return 'Image non renseignée!';
     }
 }
 

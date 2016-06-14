@@ -5,7 +5,7 @@
   Date: 15/06/2016
   Version:1.10
   Description: Page d'edition d'annonce
-  Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
+  Copyright (TPI 2016 - Kevin Zaffino © 2016)
  */
 require './phpScript/inc.all.php';
 

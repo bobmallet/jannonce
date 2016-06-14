@@ -1,11 +1,12 @@
 <?php
+
 /*
   Fichier: controller.php
   Auteur: Kevin Zaffino
   Date: 15/06/2016
   Version:1.10
   Description: Gere les input du site
-  Copyright (Ex: TPI 2016 - Kevin Zaffino © 2016)
+  Copyright (TPI 2016 - Kevin Zaffino © 2016)
  */
 
 /**
@@ -18,11 +19,11 @@ function checkLogin($mail, $pwd) {
     $msg = TRUE;
     if (login($mail, $pwd)) {
         $userinfo = getUserInfo(login($mail, $pwd));
-        if($userinfo['banned']=='1'){
+        if ($userinfo['banned'] == '1') {
             return "error";
         }
         $adress = $userinfo['street'] . " " . $userinfo['city'] . ", " . $userinfo['country'];
-        
+
         setPrivilege(intval($userinfo['privilege']));
         setImagePath($userinfo['path']);
         setUserID(intval($userinfo['id']));
@@ -55,12 +56,11 @@ function checkLogin($mail, $pwd) {
  */
 function checkRegister($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street, $id_image) {
 
-    if(!insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street, $id_image)){
-        return FALSE;   
-    }  else {
+    if (!insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $country, $city, $street, $id_image)) {
+        return FALSE;
+    } else {
         header('Location: login.php');
     }
-    
 }
 
 /**
