@@ -45,7 +45,7 @@ if (getUserID() != $uidarticle && getPrivilege() != PRIV_ADMIN) {
             $avis = (isset($_POST["adressVisible"])) ? TRUE : FALSE;
 
 
-            if ($_FILES[INPUT]['name'][0] != '') {                
+            if ($_FILES[INPUT]['name'][0] != '') {
                 deleteArticleImages($aid);
                 multiUpload($aid);
             }
@@ -103,7 +103,6 @@ if (getUserID() != $uidarticle && getPrivilege() != PRIV_ADMIN) {
                         <br/>
                         <button type="submit" class="btn btn-success" name="submit">Envoyer</button>
                     </form>
-
                 </div>
             </div>
         </div>

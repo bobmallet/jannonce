@@ -19,9 +19,7 @@ if (!isset($_REQUEST['id'])) {
         <title>articleImages</title>
         <base target="_parent" />
     </head>
-
     <body>
-
         <?php
         $id = intval($_REQUEST['id']);
         $img = articleImages($id);
@@ -30,6 +28,5 @@ if (!isset($_REQUEST['id'])) {
             echo '<a href="' . $value['path'] . '"><img alt="Image" src="' . $value['path'] . '" width="100%"></a>';
         }
         ?>
-
     </body>
 </html>

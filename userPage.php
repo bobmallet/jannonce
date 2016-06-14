@@ -24,7 +24,6 @@ if (!isLogged()) {
         <?php
         include './menu/showmenu.php';
         $userinfo = getUserInfo($_SESSION['uid']);
-        //var_dump($userinfo);
         ?>
 
         <div class="panel-info" id='information'>
@@ -32,16 +31,12 @@ if (!isLogged()) {
                 <h3 class = "panel-title">Information personnelle</h3>
             </div>
             <div class="panel-body">
-
                 <div class="pull-left col-lg-2">
                     <a href="#" class="thumbnail">
                         <img alt="Image" src="<?php echo $userinfo['path']; ?>" width="300px">
                     </a>
-
-
                 </div>
                 <div class="col-lg-4">
-
                     <div id='description'>
                         <?php
                         $gender = ($userinfo['gender'] == "0") ? "Femme" : "Homme";
@@ -75,10 +70,7 @@ if (!isLogged()) {
                         </div>
                     </div>
                 </div>
-
             </div>
-
-
         </div>
 
         <div id="articles" class = "panel panel-primary">
@@ -93,105 +85,6 @@ if (!isLogged()) {
                         print articleFormat($value, $path);
                     }
                     ?>
-                    <!-- Forum Post -->
-                    <!--
-                    <li class="media well">
-
-                        <div class="pull-left col-lg-2">
-                            <a href="#" class="thumbnail">
-                                <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
-                            </a>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <b>Libelle </b>
-                            <br/><br/>
-                            <p>Debut description sdfsrvwscfewrgsexarewf...</p>
-                        </div>
-
-
-                        <div class="col-lg-4">
-                            Createur de l'annonce : Prenom N.
-                            <br/><br/>
-                            Le 00/00/0000
-                            <br/><br/>
-                            Prix : 000
-                        </div>
-                    </li>
-
-                    <li class="media well">
-
-                        <div class="pull-left col-lg-2">
-                            <a href="#" class="thumbnail">
-                                <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
-                            </a>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <b>Libelle </b>
-                            <br/><br/>
-                            <p>Debut description sdfsrvwscfewrgsexarewf...</p>
-                        </div>
-
-
-                        <div class="col-lg-4">
-                            Createur de l'annonce : Prenom N.
-                            <br/><br/>
-                            Le 00/00/0000
-                            <br/><br/>
-                            Prix : 000
-                        </div>
-                    </li>
-
-                    <li class="media well">
-
-                        <div class="pull-left col-lg-2">
-                            <a href="#" class="thumbnail">
-                                <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
-                            </a>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <b>Libelle </b>
-                            <br/><br/>
-                            <p>Debut description sdfsrvwscfewrgsexarewf...</p>
-                        </div>
-
-
-                        <div class="col-lg-4">
-                            Createur de l'annonce : Prenom N.
-                            <br/><br/>
-                            Le 00/00/0000
-                            <br/><br/>
-                            Prix : 000
-                        </div>
-                    </li>
-
-                    <li class="media well">
-
-                        <div class="pull-left col-lg-2">
-                            <a href="#" class="thumbnail">
-                                <img alt="Image" src="http://i.imgur.com/tAHVmXi.jpg">
-                            </a>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <b>Libelle </b>
-                            <br/><br/>
-                            <p>Debut description sdfsrvwscfewrgsexarewf...</p>
-                        </div>
-
-
-                        <div class="col-lg-4">
-                            Createur de l'annonce : Prenom N.
-                            <br/><br/>
-                            Le 00/00/0000
-                            <br/><br/>
-                            Prix : 000
-                        </div>
-                    </li>
-                    -->
-
                 </ul>
             </div>
         </div>

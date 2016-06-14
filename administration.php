@@ -25,11 +25,6 @@ if(getPrivilege() != PRIV_ADMIN){
         include './menu/showmenu.php';
         ?>
 
-
-
-
-
-
         <?php
         if (isset($_REQUEST['banuser'])) {
             $uid = intval($_REQUEST['uid']);

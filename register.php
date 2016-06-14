@@ -117,9 +117,5 @@ if (isLogged()) {
                 </div>
             </div>
         </div>
-
-
-
-
     </body>
 </html>

@@ -36,8 +36,6 @@ if ($banned) {
             }
         </style>
 
-
-
         <?php
         include './menu/showmenu.php';
         
@@ -67,10 +65,6 @@ if ($banned) {
         }
 
         if (isset($_REQUEST['state'])) {
-            //var_dump($_REQUEST['idcom']);
-            //var_dump(explode(",",$_REQUEST['idcom'] ));
-            //$ucom = intval(explode(",",$_REQUEST['idcom'])[0]);
-            //$acom = intval(explode(",",$_REQUEST['idcom'])[1]);
             $idcom = intval($_REQUEST['idcom']);
             $comstate = intval($_REQUEST['comstate']);
 
@@ -136,7 +130,6 @@ if ($banned) {
                     }
                     ?>
 
-
                     <?php if (getUserID() == $articlecreator || getPrivilege() == PRIV_ADMIN) { ?>
                         <form action="#" method="post">
                             <input type="hidden" name="id" value="<?php echo $aid; ?>"/>
@@ -148,7 +141,7 @@ if ($banned) {
 
             </div>
         </div>
-        <!--##############################################################################################-->
+
         <div id="articles" class = "panel panel-primary">
             <div class = "panel-heading">
                 <h3 class = "panel-title">Commentaire(s)</h3>
@@ -162,10 +155,7 @@ if ($banned) {
                         }
                         ?>
 
-
-
                         <?php if (getPrivilege() != PRIV_UNKNOWN && $state == 1) { ?>
-
                             <li class="media well">
                                 <div class="pull-left user-info col-lg-1" href="#">
                                     <img class="avatar img-circle img-thumbnail" src="<?php echo getImagePath(); ?>"
@@ -186,8 +176,6 @@ if ($banned) {
                                 </div>
                             </li>                           
                         <?php } ?>
-
-
                     </ul>
                 </div>
             </div>

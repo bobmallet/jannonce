@@ -1,5 +1,4 @@
 <?php
-
 /*
   Fichier: function.php
   Auteur: Kevin Zaffino
@@ -30,8 +29,6 @@ function &myDatabase() {
     }
     return $dbc;
 }
-
-//Gestion Utilisateurs
 
 /**
  * Ajoute une adresse dans la base
@@ -946,10 +943,8 @@ function getAllCountry() {
     return $isok;
 }
 
-//utilisaé pour les annonces
-
 /**
- * Parcour le $_FILE pour envoyer toute les images dans un article
+ * Parcours le $_FILE pour envoyer toute les images dans un article
  * @param int $id_article       Identifiant de l'article
  * @return boolean
  */
@@ -1004,6 +999,13 @@ function editImagePath($id_image, $newpath) {
     return $isok;
 }
 
+/**
+ * Modifie l'id de l'image d'un utilisateur avec un id donné
+ * @staticvar type $ps
+ * @param int $user_id
+ * @param int $image_id
+ * @return boolean
+ */
 function changeUserImage($user_id, $image_id) {
     static $ps = null;
 
@@ -1025,6 +1027,13 @@ function changeUserImage($user_id, $image_id) {
     return $isok;
 }
 
+/**
+ * Supprime une image de la base de données
+ * @staticvar type $ps_path
+ * @staticvar type $ps_delete
+ * @param int $image_id
+ * @return boolean
+ */
 function deleteImageEntry($image_id) {
 
     static $ps_path = null;
@@ -1057,6 +1066,10 @@ function deleteImageEntry($image_id) {
     return $path[0]['path'];
 }
 
+/**
+ * Supprime un fichier
+ * @param string $path   Emplacement du fichier a supprimer
+ */
 function deleteFile($path) {
     if (file_exists($path)) {
         unlink($path);

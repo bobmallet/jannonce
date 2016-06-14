@@ -39,7 +39,6 @@ if (getPrivilege() == PRIV_UNKNOWN) {
 
             $date = date('Y-m-d H:i:s');
 
-
             $mvis = (isset($_POST["mailVisible"])) ? TRUE : FALSE;
             $pvis = (isset($_POST["phoneVisible"])) ? TRUE : FALSE;
             $avis = (isset($_POST["adressVisible"])) ? TRUE : FALSE;
@@ -89,7 +88,6 @@ if (getPrivilege() == PRIV_UNKNOWN) {
                         <br/>
                         <button type="submit" class="btn btn-success" name="submit">Envoyer</button>
                     </form>
-
                 </div>
             </div>
         </div>

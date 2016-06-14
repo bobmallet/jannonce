@@ -70,20 +70,13 @@ if (!isLogged()) {
                             <label for="mail">E-mail :
                                 <input type="mail" class="form-control" name="mail" id='mail' value="<?php echo $data['mail']; ?>" required />
                             </label>
-                            <!--
-                            <label for="pwd">mdp :
-                                <input type="text" class="form-control" name="pwd" id='pwd'>
-                            </label>
-                            -->
+                            
                             <label for="phone">Tel. :
                                 <input type="text" class="form-control" name="phone" id='phone' value="<?php echo $data['phone']; ?>">
                             </label>
 
                             <label for="adress">Adresse :
                                 <div id='adress'>
-                                    <!--<label for="country">Pays :
-                                        <input type="text" class="form-control" id='country'>
-                                    </label>-->
                                     <?php
                                     echo selectCountry($data['country']);
                                     ?>
