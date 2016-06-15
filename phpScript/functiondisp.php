@@ -1,12 +1,13 @@
 <?php
+
 /*
-Fichier: functiondisp.php
-Auteur: Kevin Zaffino
-Date: 15/06/2016
-Version:1.10
-Description: Contient les fonction d'affichage du site
-Copyright (TPI 2016 - Kevin Zaffino © 2016)
-*/
+  Fichier: functiondisp.php
+  Auteur: Kevin Zaffino
+  Date: 15/06/2016
+  Version:1.10
+  Description: Contient les fonction d'affichage du site
+  Copyright (TPI 2016 - Kevin Zaffino © 2016)
+ */
 
 /**
  * Retourne le nom et le prenom avec le format "Prenom N."
@@ -18,7 +19,6 @@ function formatUserName($firstname, $lastname) {
     return ucfirst($firstname) . " " . substr(ucfirst($lastname), 0, 1) . ".";
 }
 
-
 /**
  * Retourne du code html pour afficher un article sur la page d'accueil
  * @param Array $data       Donnée de l'utilisateur (id,name,description,date de creation, price)
@@ -26,12 +26,12 @@ function formatUserName($firstname, $lastname) {
  * @return string
  */
 function articleFormat($data, $imgpath) {
-    
+
     $creator_id = intval($data['id_Users']);
     $creator_firstname = getUserInfo($creator_id)['firstname'];
     $creator_lastname = getUserInfo($creator_id)['lastname'];
     $creatorname = formatUserName($creator_firstname, $creator_lastname);
-    
+
     $output = "\n<li class=\"media well\">";
     $output .= "\n<div class=\"pull-left col-lg-2\">";
     $output .= "\n<a href=\"articles.php?idarticle=" . $data['id'] . "\" class=\"thumbnail\">";
@@ -46,7 +46,7 @@ function articleFormat($data, $imgpath) {
     $output .= "\n<p>" . descriptionSize($data['description']) . "</p>";
     $output .= "\n</div>";
     $output .= "\n<div class=\"col-lg-4\">";
-    $output .= "\nCréateur de l'annonce : ". $creatorname;
+    $output .= "\nCréateur de l'annonce : " . $creatorname;
     $output .= "\n<br/><br/>";
     $output .= "\nLe " . $data['creationdate'];
     $output .= "\n<br/><br/>";
@@ -66,7 +66,6 @@ function articleFormat($data, $imgpath) {
 function descriptionSize($desc) {
     return substr($desc, 0, 50) . "...";
 }
-
 
 /**
  * Retourne du code html pout afficher le commentaire
@@ -138,7 +137,6 @@ function commentFormat($data, $creatorid) {
     return $output;
 }
 
-
 /**
  * Converti un tableau php en table html.
  * Le paramètre facultatif $assoc permet d'afficher une ligne d'entete si le tableau est associatif.
@@ -199,7 +197,6 @@ function Array2Html($anArray, $assoc = false) {
     $output .= "\n</table>";
     return $output;
 }
-
 
 /**
  * Retourne du code html pout faire un select avec tous les pays

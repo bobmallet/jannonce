@@ -1,4 +1,5 @@
 <?php
+
 /*
   Fichier: function.php
   Auteur: Kevin Zaffino
@@ -13,7 +14,7 @@ require_once './phpScript/mysql.inc.php';
 /**
  * Créé un pointeur sur la base
  * @staticvar type $dbc
- * @return \PDO
+ * @return PDO
  */
 function &myDatabase() {
     static $dbc = null;
@@ -97,10 +98,14 @@ function insertUser($lastName, $firstName, $gender, $mail, $pwd, $phone, $countr
         $ps_user = myDatabase()->prepare($sql_user);
     }
 
+    //ajout et récuperation de l'identifiant de l'adresse
     $id_adress = intval(addAddress($country, $city, $street));
 
+    //cryptage du mot de passe
     $pwd_sha1 = sha1($pwd);
+
     $priv = PRIV_USER;
+
     try {
 
         $ps_user->bindParam(':firstname', $firstName, PDO::PARAM_STR);
@@ -139,6 +144,7 @@ function login($mail, $pwd) {
         $ps = myDatabase()->prepare($sql);
     }
 
+    //cryptage du mot de passe
     $pwd_sha1 = sha1($pwd);
 
     try {
@@ -184,8 +190,6 @@ function getUserInfo($id) {
     if ($ps == null) {
         $ps = myDatabase()->prepare($sql);
     }
-
-
 
     try {
         $ps->bindParam(':id', $id, PDO::PARAM_INT);
@@ -320,7 +324,6 @@ function updateUserAdress($id, $countryiso, $city, $street) {
         $ps->bindParam(':street', $street, PDO::PARAM_STR);
         $ps->bindParam(':iso', $countryiso, PDO::PARAM_STR);
         $ps->bindParam(':id', $id, PDO::PARAM_INT);
-
 
         $isok = $ps->execute();
     } catch (PDOException $e) {
@@ -482,9 +485,9 @@ function insertArticleImage($aid, $iid) {
 }
 
 /**
- * Retourne image des articles en fonction de l'id de l'article
+ * Retourne les images des articles en fonction de l'id de l'article
  * @staticvar type $ps
- * @param int $idarticle    Identifiant d el'article
+ * @param int $idarticle    Identifiant de l'article
  * @return boolean
  */
 function articleImages($idarticle) {
@@ -544,8 +547,10 @@ function openCloseArticle($aid) {
  * @return boolean
  */
 function banunbanArticle($aid) {
+    //Recuperation de l'etat actuel
     $banstate = articleInfo($aid)['banned'];
 
+    //inversement de l'etat
     $finalestate = ($banstate == "0") ? 1 : 0;
 
     //Prepared statement
@@ -743,7 +748,7 @@ function getArticleComments($aid) {
 }
 
 /**
- * Inverse l'etat du commentaire (en attente de moderation ou non)
+ * met a jour l'etat du commentaire (en attente de moderation ou non)
  * @staticvar type $ps
  * @param int $idcomment        Identifiant du commentaire
  * @param bool $state           Valeur a assigner
@@ -804,9 +809,9 @@ function banComment($idcomment) {
  * Insert une image dans la base de donnée et retourne son id
  * @staticvar type $ps_image
  * @staticvar type $ps_id
- * @param string $path
- * @param int $idarticle (a specifier si on souhaite assigner l'image a un article)
- * @return int      Identifiant de l'image
+ * @param string $path           Chemin de l'image
+ * @param int $idarticle        (a specifier si on souhaite assigner l'image a un article)
+ * @return int                   Identifiant de l'image
  */
 function insertImage($path, $idarticle = FALSE) {
 
@@ -896,6 +901,8 @@ function imageUpload() {
 
                         if (move_uploaded_file($_FILES[INPUT]['tmp_name'], TARGET . $imageName)) {
                             $path = TARGET . $imageName;
+
+                            //insertion dans la base de donnée et retour de l'id
                             return insertImage($path);
                         } else {
                             return 'Problème lors de l\'upload !';
@@ -978,6 +985,13 @@ function deleteArticleImages($id_article) {
     }
 }
 
+/**
+ * Modifie le chemin d'une image dans la base d edonnée
+ * @staticvar type $ps
+ * @param type $id_image    Identifiant d el'image a modifier
+ * @param type $newpath     Nouveau chemin
+ * @return boolean
+ */
 function editImagePath($id_image, $newpath) {
     static $ps = null;
 
@@ -1002,8 +1016,8 @@ function editImagePath($id_image, $newpath) {
 /**
  * Modifie l'id de l'image d'un utilisateur avec un id donné
  * @staticvar type $ps
- * @param int $user_id
- * @param int $image_id
+ * @param int $user_id      Identifiant d el'utilisateur
+ * @param int $image_id     Identifiant d el'image a attribuer
  * @return boolean
  */
 function changeUserImage($user_id, $image_id) {
@@ -1031,7 +1045,7 @@ function changeUserImage($user_id, $image_id) {
  * Supprime une image de la base de données
  * @staticvar type $ps_path
  * @staticvar type $ps_delete
- * @param int $image_id
+ * @param int $image_id     Identifiant de l'image
  * @return boolean
  */
 function deleteImageEntry($image_id) {
