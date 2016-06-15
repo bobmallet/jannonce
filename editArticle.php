@@ -7,6 +7,7 @@
   Description: Page d'edition d'annonce
   Copyright (TPI 2016 - Kevin Zaffino © 2016)
  */
+
 require './phpScript/inc.all.php';
 
 $aid = intval($_REQUEST['aid']);

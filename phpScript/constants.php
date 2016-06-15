@@ -17,7 +17,7 @@ define('PRIV_UNKNOWN', 0);
 define('DEFAULT_IMAGE_ID', 19);
 
 //Upload d'image
-define('INPUT', 'imgupload');
+define('INPUT', 'imgupload');   // Nom de l'input du fichier
 define('TARGET', './img/');     // Repertoire cible
 define('MAX_SIZE', 10000000);   // Taille max en octets du fichier
 define('WIDTH_MAX', 5000);      // Largeur max de l'image en pixels

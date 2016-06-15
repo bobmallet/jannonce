@@ -19,7 +19,3 @@ require_once './phpScript/functiondisp.php';
 //Le controleur
 require_once './phpScript/controller.php';
 
-?>
-
-
-

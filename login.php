@@ -7,7 +7,10 @@
   Description: Page de login du site
   Copyright (TPI 2016 - Kevin Zaffino © 2016)
  */
+
 require_once './phpScript/inc.all.php';
+
+//Acces unique aux utilisateurs authentifiés
 if (isLogged()) {
     header('Location: index.php');
 }
@@ -59,11 +62,11 @@ if (isLogged()) {
                         </form>
                     </div>
                 </div>
-                <?php if($error){ ?>
-                <div class="alert alert-warning">
-                    <strong>Attention!</strong> Identifiants incorrects.
-                </div>
-                
+                <?php if ($error) { ?>
+                    <div class="alert alert-warning">
+                        <strong>Attention!</strong> Identifiants incorrects.
+                    </div>
+
                 <?php } ?>
             </div>
         </div>

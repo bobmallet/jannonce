@@ -111,3 +111,4 @@ function checkAccountEdit($country, $city, $street, $adressid, $lastName, $first
     updateUserInfo($lastName, $firstName, $gender, $mail, $phone, getUserID());
     header('Location: userPage.php');
 }
+

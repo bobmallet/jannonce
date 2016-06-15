@@ -14,7 +14,6 @@ define('DB_NAME', 'jannonce_db');
 define('DB_USER', 'jannonce_admin');
 define('DB_PASSWORD', 'Superadmin');
 
-?>
 
 
 

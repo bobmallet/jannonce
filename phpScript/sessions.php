@@ -7,6 +7,7 @@ Version:1.10
 Description: Gere les sessions
 Copyright (TPI 2016 - Kevin Zaffino © 2016)
 */
+
 session_start();
 ?>
 

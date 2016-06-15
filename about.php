@@ -1,12 +1,12 @@
 <?php
 /*
-Fichier: about.php
-Auteur: Kevin Zaffino
-Date: 15/06/2016
-Version:1.10
-Description: Page "a propos" du site
-Copyright (TPI 2016 - Kevin Zaffino © 2016)
-*/
+  Fichier: about.php
+  Auteur: Kevin Zaffino
+  Date: 15/06/2016
+  Version:1.10
+  Description: Page "a propos" du site
+  Copyright (TPI 2016 - Kevin Zaffino © 2016)
+ */
 
 require_once './phpScript/inc.all.php';
 ?>

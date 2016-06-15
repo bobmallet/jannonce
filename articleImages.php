@@ -8,6 +8,8 @@
   Copyright (TPI 2016 - Kevin Zaffino © 2016)
  */
 require_once './phpScript/inc.all.php';
+
+//Uniquement si le parametre "id" existe
 if (!isset($_REQUEST['id'])) {
     header('Location: index.php');
 }
@@ -23,7 +25,8 @@ if (!isset($_REQUEST['id'])) {
         <?php
         $id = intval($_REQUEST['id']);
         $img = articleImages($id);
-
+        
+        //Affichage des images
         foreach ($img as $value) {
             echo '<a href="' . $value['path'] . '"><img alt="Image" src="' . $value['path'] . '" width="100%"></a>';
         }

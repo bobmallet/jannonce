@@ -1,17 +1,18 @@
 <?php
 /*
-Fichier: articles.php
-Auteur: Kevin Zaffino
-Date: 15/06/2016
-Version:1.10
-Description: Page d'annonce du site
-Copyright (TPI 2016 - Kevin Zaffino © 2016)
-*/
+  Fichier: articles.php
+  Auteur: Kevin Zaffino
+  Date: 15/06/2016
+  Version:1.10
+  Description: Page d'annonce du site
+  Copyright (TPI 2016 - Kevin Zaffino © 2016)
+ */
+
 require_once './phpScript/inc.all.php';
 
-if(isset($_REQUEST['idarticle'])){
-$aid = intval($_REQUEST['idarticle']);
-}  else {
+if (isset($_REQUEST['idarticle'])) {
+    $aid = intval($_REQUEST['idarticle']);
+} else {
     header('Location: index.php');
 }
 $articleinfo = articleInfo($aid);
@@ -38,7 +39,7 @@ if ($banned) {
 
         <?php
         include './menu/showmenu.php';
-        
+
         $aid = intval($_REQUEST['idarticle']);
         $articlecreator = intval(articleInfo($aid)['id_Users']);
         $articleinfo = articleInfo($aid);
@@ -51,12 +52,12 @@ if ($banned) {
         $vphone = intval($articleinfo['phonevisible']);
         $vadress = intval($articleinfo['adressvisible']);
 
-        if(isset($_REQUEST['changestate'])){
+        if (isset($_REQUEST['changestate'])) {
             openCloseArticle($aid);
             header('Location: #');
         }
-        
-        
+
+
         if (isset($_REQUEST['post'])) {
             $com = filter_input(INPUT_POST, 'txt');
             $date = date("Y-m-d H:i:s");

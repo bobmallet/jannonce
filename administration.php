@@ -1,14 +1,17 @@
 <?php
 /*
-Fichier: administation.php
-Auteur: Kevin Zaffino
-Date: 15/06/2016
-Version:1.10
-Description: Page d'administration du site
-Copyright (TPI 2016 - Kevin Zaffino © 2016)
-*/
+  Fichier: administation.php
+  Auteur: Kevin Zaffino
+  Date: 15/06/2016
+  Version:1.10
+  Description: Page d'administration du site
+  Copyright (TPI 2016 - Kevin Zaffino © 2016)
+ */
+
 require_once './phpScript/inc.all.php';
-if(getPrivilege() != PRIV_ADMIN){
+
+//Acces unique aux administrateurs
+if (getPrivilege() != PRIV_ADMIN) {
     header('Location: index.php');
 }
 ?>

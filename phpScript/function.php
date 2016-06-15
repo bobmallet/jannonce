@@ -31,6 +31,9 @@ function &myDatabase() {
     return $dbc;
 }
 
+
+//Gestion des Utilisateurs
+
 /**
  * Ajoute une adresse dans la base
  * @staticvar type $ps_adress
@@ -355,6 +358,62 @@ function getAllUser() {
 
     return $isok;
 }
+
+/**
+ * Modifie l'id de l'image d'un utilisateur avec un id donné
+ * @staticvar type $ps
+ * @param int $user_id      Identifiant d el'utilisateur
+ * @param int $image_id     Identifiant d el'image a attribuer
+ * @return boolean
+ */
+function changeUserImage($user_id, $image_id) {
+    static $ps = null;
+
+    $sql = "update users set users.id_Images = :iid where users.id = :uid";
+
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+        $ps->bindParam(':iid', $image_id, PDO::PARAM_INT);
+        $ps->bindParam(':uid', $user_id, PDO::PARAM_INT);
+
+        $isok = $ps->execute();
+    } catch (PDOException $ex) {
+        $isok = false;
+    }
+
+    return $isok;
+}
+
+/**
+ * Récupere tous les pays
+ * @staticvar type $ps
+ * @return boolean
+ */
+function getAllCountry() {
+
+    //Prepared statement
+    static $ps = null;
+
+    //Query
+    $sql = 'select * from country order by name';
+
+    if ($ps == null) {
+        $ps = myDatabase()->prepare($sql);
+    }
+
+    try {
+        $isok = $ps->execute();
+        $isok = $isok = $ps->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        $isok = false;
+    }
+    return $isok;
+}
+
+//Gestion des annonces
 
 /**
  * Insert une nouvelle annonce dans la base de donnée
@@ -687,6 +746,22 @@ function articleInfo($id) {
 }
 
 /**
+ * Supprime toutes les images d'un article dans la base de donnée
+ * @staticvar type $ps
+ * @param int $id_article       Identifiant del'article
+ */
+function deleteArticleImages($id_article) {
+    $articleimage = articleImages($id_article);
+
+    foreach ($articleimage as $value) {
+        $id = intval($value['id']);
+        deleteFile(deleteImageEntry($id));
+    }
+}
+
+//Gestion des commentaires
+
+/**
  * Ajoute un commentaire dans la base
  * @staticvar type $ps
  * @param int $uid          Identifiant de l'utilisateur
@@ -804,6 +879,8 @@ function banComment($idcomment) {
 
     return $isok;
 }
+
+//Gestion des images
 
 /**
  * Insert une image dans la base de donnée et retourne son id
@@ -925,32 +1002,6 @@ function imageUpload() {
 }
 
 /**
- * Récupere tous les pays
- * @staticvar type $ps
- * @return boolean
- */
-function getAllCountry() {
-
-    //Prepared statement
-    static $ps = null;
-
-    //Query
-    $sql = 'select * from country order by name';
-
-    if ($ps == null) {
-        $ps = myDatabase()->prepare($sql);
-    }
-
-    try {
-        $isok = $ps->execute();
-        $isok = $isok = $ps->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        $isok = false;
-    }
-    return $isok;
-}
-
-/**
  * Parcours le $_FILE pour envoyer toute les images dans un article
  * @param int $id_article       Identifiant de l'article
  * @return boolean
@@ -972,20 +1023,6 @@ function multiUpload($id_article) {
 }
 
 /**
- * Supprime toutes les images d'un article dans la base de donnée
- * @staticvar type $ps
- * @param int $id_article       Identifiant del'article
- */
-function deleteArticleImages($id_article) {
-    $articleimage = articleImages($id_article);
-
-    foreach ($articleimage as $value) {
-        $id = intval($value['id']);
-        deleteFile(deleteImageEntry($id));
-    }
-}
-
-/**
  * Modifie le chemin d'une image dans la base d edonnée
  * @staticvar type $ps
  * @param type $id_image    Identifiant d el'image a modifier
@@ -1004,34 +1041,6 @@ function editImagePath($id_image, $newpath) {
     try {
         $ps->bindParam(':path', $newpath, PDO::PARAM_STR);
         $ps->bindParam(':id', $id_image, PDO::PARAM_INT);
-
-        $isok = $ps->execute();
-    } catch (PDOException $ex) {
-        $isok = false;
-    }
-
-    return $isok;
-}
-
-/**
- * Modifie l'id de l'image d'un utilisateur avec un id donné
- * @staticvar type $ps
- * @param int $user_id      Identifiant d el'utilisateur
- * @param int $image_id     Identifiant d el'image a attribuer
- * @return boolean
- */
-function changeUserImage($user_id, $image_id) {
-    static $ps = null;
-
-    $sql = "update users set users.id_Images = :iid where users.id = :uid";
-
-    if ($ps == null) {
-        $ps = myDatabase()->prepare($sql);
-    }
-
-    try {
-        $ps->bindParam(':iid', $image_id, PDO::PARAM_INT);
-        $ps->bindParam(':uid', $user_id, PDO::PARAM_INT);
 
         $isok = $ps->execute();
     } catch (PDOException $ex) {

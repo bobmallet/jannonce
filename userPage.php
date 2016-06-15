@@ -8,6 +8,8 @@
   Copyright (TPI 2016 - Kevin Zaffino © 2016)
  */
 require_once './phpScript/inc.all.php';
+
+//Acces unique aux utilisateurs
 if (!isLogged()) {
     header('Location: index.php');
 }

@@ -9,7 +9,8 @@
  */
 require './phpScript/inc.all.php';
 
-if (getPrivilege() == PRIV_UNKNOWN) {
+//Acces unique aux utilisateurs authentifiés
+if (!isLogged()) {
     header('Location: index.php');
 }
 ?>
